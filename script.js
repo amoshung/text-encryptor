@@ -48,9 +48,26 @@ function convertByChars(text) {
     const charsPerLine = parseInt(document.getElementById("charsPerLine").value);
     if (charsPerLine < 1) return text;
 
-    // 補足空格
-    const paddedText = padTextWithFullWidthSpace(text, charsPerLine);
-    return createVerticalText(paddedText, charsPerLine);
+    // 補足空格，確保文字長度能被每行字數整除
+    const totalLines = Math.ceil(text.length / charsPerLine);
+    const totalChars = totalLines * charsPerLine;
+    const paddedText = padTextWithFullWidthSpace(text, totalChars);
+    
+    // 建立矩陣儲存文字
+    const matrix = [];
+    for (let i = 0; i < charsPerLine; i++) {
+        matrix[i] = new Array(totalLines).fill('　');
+    }
+    
+    // 填充矩陣（由右至左，由上至下）
+    for (let i = 0; i < paddedText.length; i++) {
+        const col = totalLines - 1 - Math.floor(i / charsPerLine);
+        const row = i % charsPerLine;
+        matrix[row][col] = paddedText[i];
+    }
+    
+    // 轉換為直書格式
+    return matrix.map(row => row.join('')).join('\n');
 }
 
 // 依照總行數轉換
@@ -58,10 +75,9 @@ function convertByLines(text) {
     const totalLines = parseInt(document.getElementById("totalLines").value);
     if (totalLines < 1) return text;
 
-    // 計算每行應有的字數
+    // 計算每行應有的字數（向上取整）
     const charsPerLine = Math.ceil(text.length / totalLines);
-    const paddedText = padTextWithFullWidthSpace(text, charsPerLine * totalLines);
-    return createVerticalText(paddedText, charsPerLine);
+    return convertByChars(text, charsPerLine);
 }
 
 // 使用全形空格補足文字
