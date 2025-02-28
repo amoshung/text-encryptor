@@ -38,70 +38,88 @@ function verticalText() {
     }
 
     const result = document.getElementById("byCharsOption").checked ? 
-        convertByChars(input) : convertByLines(input);
+        byChars() : byLines();
     
     document.getElementById("outputText").value = result;
 }
 
-// 依照每行字數轉換
-function convertByChars(text) {
-    const charsPerLine = parseInt(document.getElementById("charsPerLine").value);
-    if (charsPerLine < 1) return text;
+function byLines() {
+    var userText = document.getElementById("inputText").value;
+    var lines = document.getElementById("totalLines").value;
 
-    // 補足空格，確保文字長度能被每行字數整除
-    const totalLines = Math.ceil(text.length / charsPerLine);
-    const totalChars = totalLines * charsPerLine;
-    const paddedText = padTextWithFullWidthSpace(text, totalChars);
-    
-    // 建立矩陣儲存文字
-    const matrix = [];
-    for (let i = 0; i < charsPerLine; i++) {
-        matrix[i] = new Array(totalLines).fill('　');
-    }
-    
-    // 填充矩陣（由右至左，由上至下）
-    for (let i = 0; i < paddedText.length; i++) {
-        const col = totalLines - 1 - Math.floor(i / charsPerLine);
-        const row = i % charsPerLine;
-        matrix[row][col] = paddedText[i];
-    }
-    
-    // 轉換為直書格式
-    return matrix.map(row => row.join('')).join('\n');
-}
+    if(userText.length % lines != 0) {
+        var totalLength = userText.length;
+        while(totalLength % lines != 0) {
+            totalLength++;
+        }
+        var spaceNum = totalLength - userText.length;
 
-// 依照總行數轉換
-function convertByLines(text) {
-    const totalLines = parseInt(document.getElementById("totalLines").value);
-    if (totalLines < 1) return text;
-
-    // 計算每行應有的字數（向上取整）
-    const charsPerLine = Math.ceil(text.length / totalLines);
-    return convertByChars(text, charsPerLine);
-}
-
-// 使用全形空格補足文字
-function padTextWithFullWidthSpace(text, targetLength) {
-    return text.padEnd(targetLength, '　');
-}
-
-// 建立直書文字
-function createVerticalText(text, charsPerLine) {
-    const chars = text.split('');
-    const lines = Math.ceil(text.length / charsPerLine);
-    const matrix = Array.from({ length: charsPerLine }, () => new Array(lines));
-
-    // 填充矩陣
-    for (let i = 0; i < chars.length; i++) {
-        const row = i % charsPerLine;
-        const col = Math.floor(i / charsPerLine);
-        matrix[row][col] = chars[i];
+        for (var i = 0; i < spaceNum; i++) {
+            userText += '　';
+        }
     }
 
-    // 轉換為直書格式
-    return matrix
-        .map(line => line.join(''))
-        .join('\n');
+    var lineLength = userText.length / lines;
+    var matrix = new Array(lines);
+    for(var i = 0; i < lines; i++) {
+        matrix[i] = new Array(lineLength);
+    }
+
+    var count = 0;
+    for(var i = 0; i < lines; i++) {
+        for(var j = 0; j < lineLength; j++) {
+            matrix[i][j] = userText.charAt(count);
+            count++;
+        }
+    }
+
+    var result = "";
+    for(var i = 0; i < lineLength; i++) {
+        for(var j = lines - 1; j >= 0; j--) {
+            result += matrix[j][i];
+            result += " ";
+        }
+        result += '\n';
+    }
+
+    return result;
+}
+
+function byChars() {
+    var userText = document.getElementById("inputText").value;
+    var lineLength = document.getElementById("charsPerLine").value;
+
+    if(userText.length % lineLength != 0) {
+        var spaceNum = lineLength - (userText.length % lineLength);
+        for (var i = 0; i < spaceNum; i++) {
+            userText += '　';
+        }   
+    }
+
+    var lines = userText.length / lineLength;
+    var matrix = new Array(lines);
+    for(var i = 0; i < lines; i++) {
+        matrix[i] = new Array(lineLength);
+    }
+
+    var count = 0;
+    for(var i = 0; i < lines; i++) {
+        for(var j = 0; j < lineLength; j++) {
+            matrix[i][j] = userText.charAt(count);
+            count++;
+        }
+    }
+
+    var result = "";
+    for(var i = 0; i < lineLength; i++) {
+        for(var j = lines - 1; j >= 0; j--) {
+            result += matrix[j][i];
+            result += " ";
+        }
+        result += '\n';
+    }
+
+    return result;
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
