@@ -27,43 +27,65 @@ function zeroWidthAnt() {
     document.getElementById("outputText").value = result;
 }
 
-// 直書加密 (每個段落轉換為直書)
+// 直書轉換函數
 function verticalText() {
-    let input = document.getElementById("inputText").value;
+    const input = document.getElementById("inputText").value;
     document.getElementById("warning").style.display = "none";
     
     if (!isMostlyChinese(input)) {
         document.getElementById("warning").style.display = "block";
         return;
     }
+
+    const result = document.getElementById("byCharsOption").checked ? 
+        convertByChars(input) : convertByLines(input);
     
-    // 將輸入文字分割成字符陣列
-    const chars = input.split('');
-    const lineLength = 10; // 預設每行10個字
-    let result = [];
-    
-    // 計算需要多少行
-    const numLines = Math.ceil(chars.length / lineLength);
-    
-    // 初始化結果陣列
-    for (let i = 0; i < lineLength; i++) {
-        result[i] = [];
-    }
-    
-    // 填充字符
+    document.getElementById("outputText").value = result;
+}
+
+// 依照每行字數轉換
+function convertByChars(text) {
+    const charsPerLine = parseInt(document.getElementById("charsPerLine").value);
+    if (charsPerLine < 1) return text;
+
+    // 補足空格
+    const paddedText = padTextWithFullWidthSpace(text, charsPerLine);
+    return createVerticalText(paddedText, charsPerLine);
+}
+
+// 依照總行數轉換
+function convertByLines(text) {
+    const totalLines = parseInt(document.getElementById("totalLines").value);
+    if (totalLines < 1) return text;
+
+    // 計算每行應有的字數
+    const charsPerLine = Math.ceil(text.length / totalLines);
+    const paddedText = padTextWithFullWidthSpace(text, charsPerLine * totalLines);
+    return createVerticalText(paddedText, charsPerLine);
+}
+
+// 使用全形空格補足文字
+function padTextWithFullWidthSpace(text, targetLength) {
+    return text.padEnd(targetLength, '　');
+}
+
+// 建立直書文字
+function createVerticalText(text, charsPerLine) {
+    const chars = text.split('');
+    const lines = Math.ceil(text.length / charsPerLine);
+    const matrix = Array.from({ length: charsPerLine }, () => new Array(lines));
+
+    // 填充矩陣
     for (let i = 0; i < chars.length; i++) {
-        const row = i % lineLength;
-        const col = Math.floor(i / lineLength);
-        result[row][col] = chars[i];
+        const row = i % charsPerLine;
+        const col = Math.floor(i / charsPerLine);
+        matrix[row][col] = chars[i];
     }
-    
-    // 將每行轉換為字串，並用全形空格填充空位
-    const verticalLines = result.map(line => {
-        return line.join('').padEnd(numLines, '　');
-    });
-    
-    // 將所有行組合成最終結果
-    document.getElementById("outputText").value = verticalLines.join('\n');
+
+    // 轉換為直書格式
+    return matrix
+        .map(line => line.join(''))
+        .join('\n');
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
