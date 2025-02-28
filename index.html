@@ -74,6 +74,16 @@
         <h2>輸入原文</h2>
         <textarea id="inputText" placeholder="請在此輸入中文文字..."></textarea>
         <p id="warning">⚠️ 請輸入中文，否則無法轉換！</p>
+        <div class="vertical-options">
+            <label>
+                <input type="radio" name="verticalType" id="byCharsOption" checked>
+                每行 <input type="number" id="charsPerLine" value="6" min="1"> 個字
+            </label>
+            <label>
+                <input type="radio" name="verticalType" id="byLinesOption">
+                共 <input type="number" id="totalLines" value="12" min="1"> 行
+            </label>
+        </div>
         <div class="button-group">
             <button onclick="zeroWidthAnt()">零寬字元螞蟻字加密</button>
             <button onclick="verticalText()">直書加密</button>
