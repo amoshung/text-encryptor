@@ -44,19 +44,57 @@ function verticalText() {
     for (let paragraph of paragraphs) {
         if (!paragraph.trim()) continue;
         
-        // 將段落分成固定寬度的直行
-        let chars = paragraph.split('');
-        let columns = [];
-        let columnWidth = 8; // 每行最多8個字
+        // 將段落分成不超過64個中文字的部分
+        let subParagraphs = [];
+        let currentLength = 0;
+        let currentSubParagraph = '';
         
-        // 由右至左建立直行
-        for (let i = 0; i < chars.length; i += columnWidth) {
-            let column = chars.slice(i, i + columnWidth);
-            columns.unshift(column.join('\n')); // 注意這裡用 unshift 來實現由右至左
+        for (let char of paragraph) {
+            if (/[\u4e00-\u9fa5]/.test(char)) {
+                currentLength++;
+            }
+            currentSubParagraph += char;
+            
+            if (currentLength >= 64) {
+                subParagraphs.push(currentSubParagraph);
+                currentSubParagraph = '';
+                currentLength = 0;
+            }
         }
         
-        // 將該段落的直行加入結果
-        result.push(columns.join('　')); // 使用全形空格分隔直行
+        if (currentSubParagraph) {
+            subParagraphs.push(currentSubParagraph);
+        }
+        
+        for (let subParagraph of subParagraphs) {
+            // 將段落分成直行
+            let chars = subParagraph.split('');
+            let maxColumns = Math.ceil(chars.length / 10);
+            let verticalLines = Array.from({ length: 10 }, () => Array(maxColumns).fill(' '));
+            
+            // 填充字元到直行中
+            for (let i = 0; i < chars.length; i++) {
+                let lineIndex = Math.floor(i / 10);
+                let charIndex = i % 10;
+                verticalLines[charIndex][lineIndex] = chars[i];
+            }
+            
+            // 將直行轉換為文字
+            let verticalTexts = verticalLines.map(line => {
+                return line.join('　'); // 使用全形空格作為分隔
+            });
+            
+            // 將該段落的直行加入結果（由右至左排列）
+            result.push(verticalTexts.reverse().join('\n'));
+            
+            // 插入1x10的空白列作為段落分隔
+            result.push('\n\n\n\n\n\n\n\n\n\n');
+        }
+    }
+    
+    // 移除最後一個多餘的空白列
+    if (result.length > 0) {
+        result.pop();
     }
     
     // 段落之間加入空行
