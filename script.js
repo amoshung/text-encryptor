@@ -30,75 +30,40 @@ function zeroWidthAnt() {
 // 直書加密 (每個段落轉換為直書)
 function verticalText() {
     let input = document.getElementById("inputText").value;
+    document.getElementById("warning").style.display = "none";
+    
     if (!isMostlyChinese(input)) {
         document.getElementById("warning").style.display = "block";
         return;
-    } else {
-        document.getElementById("warning").style.display = "none";
     }
     
-    // 先依照原有的換行符號分段
-    let paragraphs = input.split("\n");
+    // 將輸入文字分割成字符陣列
+    const chars = input.split('');
+    const lineLength = 10; // 預設每行10個字
     let result = [];
     
-    for (let paragraph of paragraphs) {
-        if (!paragraph.trim()) continue;
-        
-        // 將段落分成不超過64個中文字的部分
-        let subParagraphs = [];
-        let currentLength = 0;
-        let currentSubParagraph = '';
-        
-        for (let char of paragraph) {
-            if (/[\u4e00-\u9fa5]/.test(char)) {
-                currentLength++;
-            }
-            currentSubParagraph += char;
-            
-            if (currentLength >= 64) {
-                subParagraphs.push(currentSubParagraph);
-                currentSubParagraph = '';
-                currentLength = 0;
-            }
-        }
-        
-        if (currentSubParagraph) {
-            subParagraphs.push(currentSubParagraph);
-        }
-        
-        for (let subParagraph of subParagraphs) {
-            // 將段落分成直行
-            let chars = subParagraph.split('');
-            let maxColumns = Math.ceil(chars.length / 10);
-            let verticalLines = Array.from({ length: 10 }, () => Array(maxColumns).fill(' '));
-            
-            // 填充字元到直行中
-            for (let i = 0; i < chars.length; i++) {
-                let lineIndex = Math.floor(i / 10);
-                let charIndex = i % 10;
-                verticalLines[charIndex][lineIndex] = chars[i];
-            }
-            
-            // 將直行轉換為文字
-            let verticalTexts = verticalLines.map(line => {
-                return line.join('　'); // 使用全形空格作為分隔
-            });
-            
-            // 將該段落的直行加入結果（由右至左排列）
-            result.push(verticalTexts.reverse().join('\n'));
-            
-            // 插入1x10的空白列作為段落分隔
-            result.push('\n\n\n\n\n\n\n\n\n\n');
-        }
+    // 計算需要多少行
+    const numLines = Math.ceil(chars.length / lineLength);
+    
+    // 初始化結果陣列
+    for (let i = 0; i < lineLength; i++) {
+        result[i] = [];
     }
     
-    // 移除最後一個多餘的空白列
-    if (result.length > 0) {
-        result.pop();
+    // 填充字符
+    for (let i = 0; i < chars.length; i++) {
+        const row = i % lineLength;
+        const col = Math.floor(i / lineLength);
+        result[row][col] = chars[i];
     }
     
-    // 段落之間加入空行
-    document.getElementById("outputText").value = result.join('\n\n');
+    // 將每行轉換為字串，並用全形空格填充空位
+    const verticalLines = result.map(line => {
+        return line.join('').padEnd(numLines, '　');
+    });
+    
+    // 將所有行組合成最終結果
+    document.getElementById("outputText").value = verticalLines.join('\n');
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
