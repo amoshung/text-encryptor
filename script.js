@@ -37,8 +37,30 @@ function verticalText() {
         document.getElementById("warning").style.display = "none";
     }
     
-    let lines = input.split("\n").map(line => line.split("").join("\n"));
-    document.getElementById("outputText").value = lines.join("\n\n");
+    // 先依照原有的換行符號分段
+    let paragraphs = input.split("\n");
+    let result = [];
+    
+    for (let paragraph of paragraphs) {
+        if (!paragraph.trim()) continue;
+        
+        // 將段落分成固定寬度的直行
+        let chars = paragraph.split('');
+        let columns = [];
+        let columnWidth = 8; // 每行最多8個字
+        
+        // 由右至左建立直行
+        for (let i = 0; i < chars.length; i += columnWidth) {
+            let column = chars.slice(i, i + columnWidth);
+            columns.unshift(column.join('\n')); // 注意這裡用 unshift 來實現由右至左
+        }
+        
+        // 將該段落的直行加入結果
+        result.push(columns.join('　')); // 使用全形空格分隔直行
+    }
+    
+    // 段落之間加入空行
+    document.getElementById("outputText").value = result.join('\n\n');
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
