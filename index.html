@@ -122,8 +122,21 @@
         <h1>反偵測中文字加密器</h1>
     </div>
 
-    <div class="headline" id="headline">
-        <!-- 釣魚化的標題將顯示在這裡 -->
+    <!-- 新增的雙欄結構 -->
+    <div class="content">
+        <div id="title-left-panel">
+            <h2>輸入原文標題</h2>
+            <textarea id="inputTitle" placeholder="請在此輸入標題..."></textarea>
+            <div class="button-group">
+                <button onclick="transformTitle()">轉換標題</button>
+            </div>
+        </div>
+
+        <div id="title-right-panel">
+            <h2>轉換後的標題</h2>
+            <textarea id="outputTitle" readonly></textarea>
+            <button onclick="copyTitleToClipboard()">複製結果</button>
+        </div>
     </div>
 
     <div class="content">

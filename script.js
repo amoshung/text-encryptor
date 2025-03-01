@@ -246,7 +246,7 @@ function insertClickbait(text) {
         "本以為...沒想到，", "反轉，", "意想不到，", "180度大轉變，", "竟然大反轉，",
         "峰迴路轉，", "急轉直下，", "戲劇性的變化，", "出乎意料，", "有夠諷刺，",
         "必看，", "千萬不要錯過，", "一定要知道，", "趕快分享，", "不看後悔，",
-        "速看，", "立即行動，", "不得不看，", "人人必懂，", "馬上收藏，"
+        "速看，", "立即行動，", "不得不看，", "人人必懂，", "馬上收藏"
     ];
     
     let lastInsertedIndex = -1; // 用於跟踪上一次插入的位置
@@ -268,4 +268,66 @@ function insertZeroWidth(text) {
         const zw = zwChars[Math.floor(Math.random() * zwChars.length)];
         return char + zw;
     }).join('');
+}
+
+function transformTitle() {
+    let inputTitle = document.getElementById("inputTitle").value;
+    
+    const shocking_title_keywords_restructured = {
+        opening_keywords: [
+            "震驚", "驚呆", "嚇壞", "傻眼", "不可思議", 
+            "目瞪口呆", "瞠目結舌", "看傻了", "嚇到吃手手", "愣住了",
+            "驚呼連連", "瞪大眼睛", "太誇張", "大吃一驚", "嚇死人",
+            "快訊", "獨家", "緊急通知", "最新消息", "即刻生效", 
+            "剛剛發生", "突發狀況", "火速傳出", "搶先看", "趕快行動",
+            "史上最", "前所未有", "罕見", "破天荒", "太可怕了",
+            "極度危險", "超級嚴重", "超級無敵", "極度震驚"
+        ],
+        middle_keywords: [
+            "心碎", "淚崩", "怒了", "不忍了", "痛哭流涕",
+            "崩潰", "氣炸", "心疼", "淚灑現場", "含淚",
+            "悲痛欲絕", "潸然淚下", "怒火中燒", "滿腔怒火", "喜極而泣",
+            "竟然", "居然", "結果出乎意料", "後果不堪設想", "下場超慘", 
+            "慘不忍睹", "始料未及", "不堪入目", "出乎意料", "萬萬沒想到",
+            "超乎想像", "徹底爆炸", "無法相信", "非常誇張", "難以置信",
+            "天理難容",
+            "秘密曝光", "內幕揭露", "背後真相是", "神秘面紗揭開", 
+            "暗藏玄機", "揭開真相", "驚天內幕", "一手資料",
+            "反轉", "意想不到", "180度大轉變", "竟然大反轉", 
+            "峰迴路轉", "急轉直下", "戲劇性的變化", "有夠諷刺"
+        ],
+        ending_keywords: [
+            "原來如此", "真相大白", "結局神反轉", "終於漏餡", "終極真相",
+            "你絕對想不到", "終於真相了", "不為人知的秘密", "不可告人", 
+            "鮮為人知", "隱藏多年", "獨家爆料",
+            "現在才知道", "馬上就要", "限時公開", "晚了就沒了", "最後機會",
+            "本以為...沒想到",
+            "必看", "千萬不要錯過", "一定要知道", "趕快分享", "不看後悔",
+            "速看", "立即行動", "不得不看", "人人必懂", "馬上收藏"
+        ]
+    };
+
+    // 隨機選擇開頭、中間和結尾的關鍵字
+    const startKeyword = shocking_title_keywords_restructured.opening_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.opening_keywords.length)];
+    const middleKeyword = shocking_title_keywords_restructured.middle_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.middle_keywords.length)];
+    const endKeyword = shocking_title_keywords_restructured.ending_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.ending_keywords.length)];
+
+    // 將標題限制在三行內
+    const lines = inputTitle.split('\n').slice(0, 3).map(line => line.trim());
+    const transformedTitle = `${startKeyword} ${lines.join(' ')} ${middleKeyword} ${endKeyword}`;
+
+    document.getElementById("outputTitle").value = transformedTitle;
+}
+
+function copyTitleToClipboard() {
+    const outputTitle = document.getElementById("outputTitle");
+    outputTitle.select();
+    document.execCommand("copy");
+
+    // 顯示複製成功提示
+    const originalText = outputTitle.value;
+    outputTitle.value = "複製成功！";
+    setTimeout(() => {
+        outputTitle.value = originalText;
+    }, 1000);
 }
