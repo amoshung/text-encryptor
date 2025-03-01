@@ -83,43 +83,49 @@ function byChars() {
     // 將文字分段，並移除空段落
     var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
     
-    // 將所有段落合併成一個字串
-    var fullText = paragraphs.join('');
+    // 處理每個段落並收集結果
+    var allResults = [];
     
-    // 計算需要的行數
-    var totalLines = Math.ceil(fullText.length / charsPerLine);
+    for (let paragraph of paragraphs) {
+        // 計算當前段落需要的行數
+        var totalLines = Math.ceil(paragraph.length / charsPerLine);
+        
+        // 補足空格
+        while (paragraph.length < totalLines * charsPerLine) {
+            paragraph += '　';
+        }
+
+        // 建立矩陣並填充全形空格
+        var matrix = [];
+        for (let i = 0; i < totalLines; i++) {
+            matrix[i] = [];
+            for (let j = 0; j < charsPerLine; j++) {
+                let charIndex = i * charsPerLine + j;
+                matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : '　';
+            }
+        }
+
+        // 生成當前段落的直書結果
+        var result = [];
+        for (let i = 0; i < charsPerLine; i++) {
+            let line = [];
+            for (let j = totalLines - 1; j >= 0; j--) {
+                line.push(matrix[j][i]);
+            }
+            result.push(line.join('\u200B'));
+        }
+        
+        // 將當前段落的結果加入總結果
+        allResults.push(result.join('\n'));
+    }
     
-    // 補足空格
-    while (fullText.length < totalLines * charsPerLine) {
-        fullText += '　';
-    }
-
-    // 建立矩陣並填充全形空格
-    var matrix = [];
-    for (let i = 0; i < totalLines; i++) {
-        matrix[i] = [];
-        for (let j = 0; j < charsPerLine; j++) {
-            let charIndex = i * charsPerLine + j;
-            matrix[i][j] = charIndex < fullText.length ? fullText[charIndex] : '　';
-        }
-    }
-
-    // 生成結果
-    var result = [];
-    for (let i = 0; i < charsPerLine; i++) {
-        let line = [];
-        for (let j = totalLines - 1; j >= 0; j--) {
-            line.push(matrix[j][i]);
-        }
-        result.push(line.join('\u200B'));
-    }
-
-    return result.join('\n');
+    // 用兩個換行符號連接各段落的結果
+    return allResults.join('\n\n');
 }
 
 function byLines() {
     var userText = document.getElementById("inputText").value;
-    var lines = parseInt(document.getElementById("totalLines").value);
+    var totalLines = parseInt(document.getElementById("totalLines").value);
 
     // 先進行 UTF-8 和全形轉換
     userText = halfToFull(userText);
@@ -127,44 +133,46 @@ function byLines() {
     // 將文字分段，並移除空段落
     var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
     
-    // 將所有段落合併成一個字串
-    var fullText = paragraphs.join('');
+    // 處理每個段落並收集結果
+    var allResults = [];
     
-    // 計算每行字數
-    var charsPerLine = Math.ceil(fullText.length / lines);
-    
-    // 補足空格
-    while (fullText.length < charsPerLine * lines) {
-        fullText += '　';
-    }
-
-    // 建立矩陣並填充全形空格
-    var matrix = Array(lines).fill().map(() => Array(charsPerLine).fill('　'));
-
-    // 填充矩陣
-    var count = 0;
-    for(var i = 0; i < lines && count < fullText.length; i++) {
-        for(var j = 0; j < charsPerLine && count < fullText.length; j++) {
-            matrix[i][j] = fullText.charAt(count);
-            count++;
+    for (let paragraph of paragraphs) {
+        // 計算每行應有的字數
+        var charsPerLine = Math.ceil(paragraph.length / totalLines);
+        
+        // 補足空格
+        while (paragraph.length < charsPerLine * totalLines) {
+            paragraph += '　';
         }
-    }
 
-    // 生成結果
-    var result = "";
-    for(var i = 0; i < charsPerLine; i++) {
-        for(var j = lines - 1; j >= 0; j--) {
-            result += matrix[j][i];
-            if (j > 0) {
-                result += '\u200B';
+        // 建立矩陣並填充全形空格
+        var matrix = Array(totalLines).fill().map(() => Array(charsPerLine).fill('　'));
+
+        // 填充矩陣
+        var count = 0;
+        for(var i = 0; i < totalLines && count < paragraph.length; i++) {
+            for(var j = 0; j < charsPerLine && count < paragraph.length; j++) {
+                matrix[i][j] = paragraph.charAt(count);
+                count++;
             }
         }
-        if (i < charsPerLine - 1) {
-            result += '\n';
-        }
-    }
 
-    return result.trim();
+        // 生成當前段落的結果
+        var result = [];
+        for(var i = 0; i < charsPerLine; i++) {
+            let line = [];
+            for(var j = totalLines - 1; j >= 0; j--) {
+                line.push(matrix[j][i]);
+            }
+            result.push(line.join('\u200B'));
+        }
+        
+        // 將當前段落的結果加入總結果
+        allResults.push(result.join('\n'));
+    }
+    
+    // 用兩個換行符號連接各段落的結果
+    return allResults.join('\n\n');
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
