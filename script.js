@@ -198,6 +198,11 @@ function decrypt() {
     document.getElementById("outputText").value = result;
 }
 
+function generateClickbaitHeadline(text) {
+    const headline = insertClickbait(text);
+    document.getElementById("headline").textContent = headline;
+}
+
 function transformText() {
     let input = document.getElementById("inputText").value;
     document.getElementById("warning").style.display = "none";
@@ -213,6 +218,9 @@ function transformText() {
     }
 
     document.getElementById("outputText").value = input;
+
+    // 生成釣魚化的標題
+    generateClickbaitHeadline(input);
 }
 
 function insertClickbait(text) {
