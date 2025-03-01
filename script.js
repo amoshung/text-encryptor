@@ -242,9 +242,9 @@ function transformText() {
     // 移除所有半形空白
     input = input.replace(/ /g, '');
     
-    // 移除 emoji 和特殊符號
-    // 保留中文、英文、數字、常用標點符號
-    input = input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9，。、；：！？（）「」『』《》〈〉【】—…·]/g, '');
+    // 移除 emoji
+    // Unicode 範圍包含了大多數的 emoji 字符
+    input = input.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu, '');
 
     const clickbaitOption = document.getElementById("clickbaitInsertOption");
     const verticalOption = document.getElementById("verticalTextOption");
