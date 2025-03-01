@@ -202,10 +202,13 @@ function transformText() {
     let input = document.getElementById("inputText").value;
     document.getElementById("warning").style.display = "none";
 
-    if (document.getElementById("clickbaitInsertOption").checked) {
+    const clickbaitOption = document.getElementById("clickbaitInsertOption");
+    const verticalOption = document.getElementById("verticalTextOption");
+
+    if (clickbaitOption && clickbaitOption.checked) {
         input = insertClickbait(input);
     }
-    if (document.getElementById("verticalTextOption").checked) {
+    if (verticalOption && verticalOption.checked) {
         input = verticalText(input);
     }
 
