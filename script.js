@@ -242,8 +242,10 @@ function transformText() {
     // 移除所有半形空白
     input = input.replace(/ /g, '');
     
+    // 轉換日期格式（在移除 emoji 之前處理）
+    input = convertDateFormat(input);
+    
     // 移除 emoji
-    // Unicode 範圍包含了大多數的 emoji 字符
     input = input.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu, '');
 
     const clickbaitOption = document.getElementById("clickbaitInsertOption");
@@ -257,6 +259,41 @@ function transformText() {
     }
 
     document.getElementById("outputText").value = input;
+}
+
+function convertDateFormat(text) {
+    const numberToChineseMap = {
+        '0': '零', '1': '一', '2': '二', '3': '三', '4': '四',
+        '5': '五', '6': '六', '7': '七', '8': '八', '9': '九',
+        '10': '十', '11': '十一', '12': '十二'
+    };
+
+    // 匹配 1-12/1-31 的格式
+    return text.replace(/(\d{1,2})\/(\d{1,2})/g, (match, month, day) => {
+        // 檢查月份和日期是否有效
+        const monthNum = parseInt(month);
+        const dayNum = parseInt(day);
+        
+        if (monthNum >= 1 && monthNum <= 12 && dayNum >= 1 && dayNum <= 31) {
+            // 轉換月份
+            let monthStr = numberToChineseMap[monthNum];
+            
+            // 轉換日期
+            let dayStr = '';
+            if (dayNum <= 10) {
+                dayStr = numberToChineseMap[dayNum];
+            } else if (dayNum < 20) {
+                dayStr = '十' + (dayNum % 10 === 0 ? '' : numberToChineseMap[dayNum % 10]);
+            } else if (dayNum < 30) {
+                dayStr = '二十' + (dayNum % 10 === 0 ? '' : numberToChineseMap[dayNum % 10]);
+            } else {
+                dayStr = '三十' + (dayNum % 10 === 0 ? '' : numberToChineseMap[dayNum % 10]);
+            }
+            
+            return `${monthStr}月${dayStr}號`;
+        }
+        return match; // 如果不是有效日期，保持原樣
+    });
 }
 
 function insertClickbait(text) {
