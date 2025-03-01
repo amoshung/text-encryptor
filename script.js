@@ -249,9 +249,13 @@ function insertClickbait(text) {
         "必看，", "千萬不要錯過，", "一定要知道，", "趕快分享，", "不看後悔，",
         "速看，", "立即行動，", "不得不看，", "人人必懂，", "馬上收藏，"
     ];
-    return text.split('').map((char, index, arr) => {
-        if (char === '，' && Math.random() < 0.1) { // 10% 機率在逗號後插入
+    
+    let lastInsertedIndex = -1; // 用於跟踪上一次插入的位置
+
+    return text.split('').map((char, index) => {
+        if (char === '，' && Math.random() < 0.1 && lastInsertedIndex !== index - 1) {
             const randomKeyword = shocking_title_keywords[Math.floor(Math.random() * shocking_title_keywords.length)];
+            lastInsertedIndex = index; // 更新上一次插入的位置
             return char + randomKeyword;
         }
         return char;
