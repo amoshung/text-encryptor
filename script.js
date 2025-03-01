@@ -223,6 +223,9 @@ function copyToClipboard() {
     outputText.value = "複製成功！";
     setTimeout(() => {
         outputText.value = originalText;
+        // 恢復原本的高度
+        outputText.style.height = 'auto';
+        outputText.style.height = outputText.scrollHeight + 'px';
     }, 1000);
 }
 
@@ -248,32 +251,6 @@ function transformText() {
     // 移除 emoji
     input = input.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu, '');
 
-    // 處理短段落
-    let paragraphs = input.split('\n');
-    let mergedParagraphs = [];
-    let currentParagraph = '';
-
-    for (let i = 0; i < paragraphs.length; i++) {
-        let paragraph = paragraphs[i].trim();
-        
-        // 計算中文字元數量
-        let chineseCount = (paragraph.match(/[\u4e00-\u9fa5]/g) || []).length;
-        
-        if (chineseCount < 10 && i < paragraphs.length - 1) {
-            // 如果是短段落且不是最後一段，則與下一段合併
-            currentParagraph += paragraph;
-        } else if (currentParagraph) {
-            // 如果有累積的段落，加入當前段落並儲存
-            mergedParagraphs.push(currentParagraph + paragraph);
-            currentParagraph = '';
-        } else {
-            // 直接儲存當前段落
-            mergedParagraphs.push(paragraph);
-        }
-    }
-
-    input = mergedParagraphs.join('\n');
-
     const clickbaitOption = document.getElementById("clickbaitInsertOption");
     const verticalOption = document.getElementById("verticalTextOption");
 
@@ -285,6 +262,11 @@ function transformText() {
     }
 
     document.getElementById("outputText").value = input;
+    
+    // 自動調整輸出文本框的高度
+    const outputTextarea = document.getElementById("outputText");
+    outputTextarea.style.height = 'auto';
+    outputTextarea.style.height = outputTextarea.scrollHeight + 'px';
 }
 
 function convertDateFormat(text) {
@@ -421,6 +403,11 @@ function transformTitle() {
     const transformedTitle = `${startKeyword1} ${startKeyword2}\n${middleText}\n${endKeyword1} ${endKeyword2}`;
 
     document.getElementById("outputTitle").value = transformedTitle;
+    
+    // 自動調整輸出文本框的高度
+    const outputTitlearea = document.getElementById("outputTitle");
+    outputTitlearea.style.height = 'auto';
+    outputTitlearea.style.height = outputTitlearea.scrollHeight + 'px';
 }
 
 function copyTitleToClipboard() {
@@ -428,10 +415,12 @@ function copyTitleToClipboard() {
     outputTitle.select();
     document.execCommand("copy");
 
-    // 顯示複製成功提示
     const originalText = outputTitle.value;
     outputTitle.value = "複製成功！";
     setTimeout(() => {
         outputTitle.value = originalText;
+        // 恢復原本的高度
+        outputTitle.style.height = 'auto';
+        outputTitle.style.height = outputTitle.scrollHeight + 'px';
     }, 1000);
 }
