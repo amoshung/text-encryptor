@@ -336,14 +336,19 @@ function transformTitle() {
         ]
     };
 
-    // 隨機選擇開頭、中間和結尾的關鍵字
-    const startKeyword = shocking_title_keywords_restructured.opening_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.opening_keywords.length)];
-    const middleKeyword = shocking_title_keywords_restructured.middle_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.middle_keywords.length)];
-    const endKeyword = shocking_title_keywords_restructured.ending_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.ending_keywords.length)];
+    // 隨機選擇開頭的兩個關鍵字
+    const startKeyword1 = shocking_title_keywords_restructured.opening_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.opening_keywords.length)];
+    const startKeyword2 = shocking_title_keywords_restructured.opening_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.opening_keywords.length)];
+    
+    // 隨機選擇結尾的兩個關鍵字
+    const endKeyword1 = shocking_title_keywords_restructured.ending_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.ending_keywords.length)];
+    const endKeyword2 = shocking_title_keywords_restructured.ending_keywords[Math.floor(Math.random() * shocking_title_keywords_restructured.ending_keywords.length)];
 
-    // 將標題限制在三行內
-    const lines = inputTitle.split('\n').slice(0, 3).map(line => line.trim());
-    const transformedTitle = `${startKeyword} ${lines.join(' ')} ${middleKeyword} ${endKeyword}`;
+    // 將輸入的文字放在中間
+    const middleText = inputTitle.trim();
+    
+    // 組合成三行的結構
+    const transformedTitle = `${startKeyword1} ${startKeyword2}\n${middleText}\n${endKeyword1} ${endKeyword2}`;
 
     document.getElementById("outputTitle").value = transformedTitle;
 }
