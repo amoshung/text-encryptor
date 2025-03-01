@@ -254,7 +254,7 @@ function insertClickbait(text) {
     const probability = parseFloat(document.getElementById("clickbaitProbability").value);
 
     return text.split('').map((char, index) => {
-        if (char === '，' && Math.random() < probability && lastInsertedIndex !== index - 1) {
+        if ((char === '，' || char === '、' || char === '。') && Math.random() < probability && lastInsertedIndex !== index - 1) {
             const randomKeyword = shocking_title_keywords[Math.floor(Math.random() * shocking_title_keywords.length)];
             lastInsertedIndex = index; // 更新上一次插入的位置
             return char + randomKeyword;
