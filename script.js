@@ -97,7 +97,7 @@ function byLines() {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
             if (j > 0) {
-                result += " ";
+                result += '\u200B'; // 使用零寬空格
             }
         }
         if (i < lineLength - 1) {
@@ -141,7 +141,7 @@ function byChars() {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
             if (j > 0) {
-                result += " ";
+                result += '\u200B'; // 使用零寬空格
             }
         }
         if (i < lineLength - 1) {
