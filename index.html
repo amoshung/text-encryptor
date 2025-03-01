@@ -122,12 +122,12 @@
             <div class="vertical-options">
                 <label>直書轉換規則</label>
                 <label>
-                    <input type="radio" name="verticalType" id="byCharsOption" checked>
-                    每行 <input type="number" id="charsPerLine" value="6" min="1"> 個字
+                    <input type="radio" name="verticalType" id="byLinesOption">
+                    共 <input type="number" id="totalLines" value="12" min="6"> 行
                 </label>
                 <label>
-                    <input type="radio" name="verticalType" id="byLinesOption">
-                    共 <input type="number" id="totalLines" value="12" min="1"> 行
+                    <input type="radio" name="verticalType" id="byCharsOption" checked>
+                    每行 <input type="number" id="charsPerLine" value="12" min="6"> 個字
                 </label>
             </div>
             <div class="vertical-options">
@@ -150,10 +150,6 @@
                 <label>
                     <input type="checkbox" id="clickbaitInsertOption">
                     釣魚文穿插
-                </label>
-                <label>
-                    <input type="checkbox" id="zeroWidthInsertOption">
-                    零寬字元穿插
                 </label>
                 <label>
                     <input type="checkbox" id="verticalTextOption">
