@@ -105,7 +105,7 @@ function byLines() {
         }
     }
 
-    return result;
+    return result.trim();
 }
 
 function byChars() {
@@ -149,7 +149,7 @@ function byChars() {
         }
     }
 
-    return result;
+    return result.trim();
 }
 
 // 零寬字元加密 (隨機插入零寬字元)
