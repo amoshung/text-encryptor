@@ -61,7 +61,7 @@ function halfToFull(text) {
 
 function byChars() {
     var userText = document.getElementById("inputText").value;
-    var lineLength = document.getElementById("charsPerLine").value;
+    var charsPerLine = parseInt(document.getElementById("charsPerLine").value);
 
     // 先進行全形轉換
     userText = halfToFull(userText);
@@ -73,35 +73,34 @@ function byChars() {
     var fullText = paragraphs.join('');
     
     // 計算需要的行數
-    var lines = Math.ceil(fullText.length / lineLength);
+    var totalLines = Math.ceil(fullText.length / charsPerLine);
     
-    // 建立矩陣並填充全形空格
-    var matrix = Array(lines).fill().map(() => Array(lineLength).fill('　'));
+    // 補足空格
+    while (fullText.length < totalLines * charsPerLine) {
+        fullText += '　';
+    }
 
-    // 填充矩陣
-    var count = 0;
-    for(var i = 0; i < lines && count < fullText.length; i++) {
-        for(var j = 0; j < lineLength && count < fullText.length; j++) {
-            matrix[i][j] = fullText.charAt(count);
-            count++;
+    // 建立矩陣並填充全形空格
+    var matrix = [];
+    for (let i = 0; i < totalLines; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < charsPerLine; j++) {
+            let charIndex = i * charsPerLine + j;
+            matrix[i][j] = charIndex < fullText.length ? fullText[charIndex] : '　';
         }
     }
 
     // 生成結果
-    var result = "";
-    for(var i = 0; i < lineLength; i++) {
-        for(var j = lines - 1; j >= 0; j--) {
-            result += matrix[j][i];
-            if (j > 0) {
-                result += '\u200B';
-            }
+    var result = [];
+    for (let i = 0; i < charsPerLine; i++) {
+        let line = [];
+        for (let j = totalLines - 1; j >= 0; j--) {
+            line.push(matrix[j][i]);
         }
-        if (i < lineLength - 1) {
-            result += '\n';
-        }
+        result.push(line.join('\u200B'));
     }
 
-    return result.trim();
+    return result.join('\n');
 }
 
 function byLines() {
