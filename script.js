@@ -205,11 +205,11 @@ function transformText() {
     if (document.getElementById("clickbaitInsertOption").checked) {
         input = insertClickbait(input);
     }
-    if (document.getElementById("zeroWidthInsertOption").checked) {
-        input = insertZeroWidth(input);
-    }
     if (document.getElementById("verticalTextOption").checked) {
         input = verticalText(input);
+    }
+    if (document.getElementById("zeroWidthInsertOption").checked) {
+        input = insertZeroWidth(input);
     }
 
     document.getElementById("outputText").value = input;
