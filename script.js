@@ -28,19 +28,10 @@ function zeroWidthAnt() {
 }
 
 // 直書轉換函數
-function verticalText() {
-    const input = document.getElementById("inputText").value;
-    document.getElementById("warning").style.display = "none";
-    
-    if (!isMostlyChinese(input)) {
-        document.getElementById("warning").style.display = "block";
-        return;
-    }
-
+function verticalText(input) {
     const result = document.getElementById("byCharsOption").checked ? 
-        byChars() : byLines();
-    
-    document.getElementById("outputText").value = result;
+        byChars(input) : byLines(input);
+    return result;
 }
 
 // UTF-8 轉換函數
@@ -83,8 +74,8 @@ function halfToFull(text) {
     return result;
 }
 
-function byChars() {
-    var userText = document.getElementById("inputText").value;
+function byChars(input) {
+    var userText = input;
     var charsPerLine = parseInt(document.getElementById("charsPerLine").value);
 
     // 先進行 UTF-8 和全形轉換
@@ -133,8 +124,8 @@ function byChars() {
     return allResults.join('\n\n');
 }
 
-function byLines() {
-    var userText = document.getElementById("inputText").value;
+function byLines(input) {
+    var userText = input;
     var totalLines = parseInt(document.getElementById("totalLines").value);
 
     // 先進行 UTF-8 和全形轉換
