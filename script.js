@@ -43,8 +43,22 @@ function verticalText() {
     document.getElementById("outputText").value = result;
 }
 
-// 半形轉全形函數
+// UTF-8 轉換函數
+function toUTF8(text) {
+    try {
+        // 先將文字轉為 UTF-8 編碼
+        return decodeURIComponent(encodeURIComponent(text));
+    } catch (e) {
+        console.error('UTF-8 轉換錯誤:', e);
+        return text; // 如果轉換失敗，返回原始文字
+    }
+}
+
+// 半形轉全形函數（更新版）
 function halfToFull(text) {
+    // 先進行 UTF-8 轉換
+    text = toUTF8(text);
+    
     let result = "";
     for (let i = 0; i < text.length; i++) {
         let code = text.charCodeAt(i);
@@ -63,7 +77,7 @@ function byChars() {
     var userText = document.getElementById("inputText").value;
     var charsPerLine = parseInt(document.getElementById("charsPerLine").value);
 
-    // 先進行全形轉換
+    // 先進行 UTF-8 和全形轉換
     userText = halfToFull(userText);
 
     // 將文字分段，並移除空段落
@@ -107,7 +121,7 @@ function byLines() {
     var userText = document.getElementById("inputText").value;
     var lines = parseInt(document.getElementById("totalLines").value);
 
-    // 先進行全形轉換
+    // 先進行 UTF-8 和全形轉換
     userText = halfToFull(userText);
 
     // 將文字分段，並移除空段落
