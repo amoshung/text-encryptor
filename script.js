@@ -241,6 +241,10 @@ function transformText() {
 
     // 移除所有半形空白
     input = input.replace(/ /g, '');
+    
+    // 移除 emoji 和特殊符號
+    // 保留中文、英文、數字、常用標點符號
+    input = input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9，。、；：！？（）「」『』《》〈〉【】—…·]/g, '');
 
     const clickbaitOption = document.getElementById("clickbaitInsertOption");
     const verticalOption = document.getElementById("verticalTextOption");
