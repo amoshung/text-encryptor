@@ -118,19 +118,21 @@
             
             <div class="vertical-options">
                 <label>
-                    <input type="radio" name="verticalType" id="byCharsOption" checked>
-                    每行 <input type="number" id="charsPerLine" value="6" min="1"> 個字
+                    <input type="checkbox" id="verticalTextOption">
+                    直書轉換
                 </label>
                 <label>
-                    <input type="radio" name="verticalType" id="byLinesOption">
-                    共 <input type="number" id="totalLines" value="12" min="1"> 行
+                    <input type="checkbox" id="zeroWidthInsertOption">
+                    零寬字元穿插
+                </label>
+                <label>
+                    <input type="checkbox" id="clickbaitInsertOption">
+                    釣魚文穿插
                 </label>
             </div>
             
             <div class="button-group">
-                <button onclick="verticalText()">直書轉換</button>
-                <button onclick="zeroWidthAnt()">零寬螞蟻字加密</button>
-                <button onclick="zeroWidthEncrypt()">零寬字元加密</button>
+                <button onclick="transformText()">轉換</button>
             </div>
         </div>
         
