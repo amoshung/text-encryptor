@@ -69,19 +69,15 @@ function byChars() {
     // 將文字分段，並移除空段落
     var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
     
-    // 計算總共需要的行數
-    var totalChars = paragraphs.join('').length;
-    var lines = Math.ceil(totalChars / lineLength);
-    
-    // 建立矩陣
-    var matrix = new Array(lines);
-    for(var i = 0; i < lines; i++) {
-        matrix[i] = new Array(lineLength).fill('　');
-    }
-
     // 將所有段落合併成一個字串
     var fullText = paragraphs.join('');
     
+    // 計算需要的行數
+    var lines = Math.ceil(fullText.length / lineLength);
+    
+    // 建立矩陣並填充全形空格
+    var matrix = Array(lines).fill().map(() => Array(lineLength).fill('　'));
+
     // 填充矩陣
     var count = 0;
     for(var i = 0; i < lines && count < fullText.length; i++) {
@@ -110,7 +106,7 @@ function byChars() {
 
 function byLines() {
     var userText = document.getElementById("inputText").value;
-    var lines = document.getElementById("totalLines").value;
+    var lines = parseInt(document.getElementById("totalLines").value);
 
     // 先進行全形轉換
     userText = halfToFull(userText);
@@ -121,41 +117,36 @@ function byLines() {
     // 將所有段落合併成一個字串
     var fullText = paragraphs.join('');
     
+    // 計算每行字數
+    var charsPerLine = Math.ceil(fullText.length / lines);
+    
     // 補足空格
-    if(fullText.length % lines != 0) {
-        var totalLength = fullText.length;
-        while(totalLength % lines != 0) {
-            totalLength++;
-        }
-        var spaceNum = totalLength - fullText.length;
-        for (var i = 0; i < spaceNum; i++) {
-            fullText += '　';
-        }
+    while (fullText.length < charsPerLine * lines) {
+        fullText += '　';
     }
 
-    var lineLength = fullText.length / lines;
-    var matrix = new Array(lines);
-    for(var i = 0; i < lines; i++) {
-        matrix[i] = new Array(lineLength);
-    }
+    // 建立矩陣並填充全形空格
+    var matrix = Array(lines).fill().map(() => Array(charsPerLine).fill('　'));
 
+    // 填充矩陣
     var count = 0;
-    for(var i = 0; i < lines; i++) {
-        for(var j = 0; j < lineLength; j++) {
+    for(var i = 0; i < lines && count < fullText.length; i++) {
+        for(var j = 0; j < charsPerLine && count < fullText.length; j++) {
             matrix[i][j] = fullText.charAt(count);
             count++;
         }
     }
 
+    // 生成結果
     var result = "";
-    for(var i = 0; i < lineLength; i++) {
+    for(var i = 0; i < charsPerLine; i++) {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
             if (j > 0) {
                 result += '\u200B';
             }
         }
-        if (i < lineLength - 1) {
+        if (i < charsPerLine - 1) {
             result += '\n';
         }
     }
