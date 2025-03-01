@@ -74,12 +74,45 @@ function halfToFull(text) {
     return result;
 }
 
+// 標點符號轉換函數 - 將橫書標點轉為直書標點
+function convertPunctuationToVertical(text) {
+    const horizontalToVertical = {
+        '，': '︐', // 逗號
+        '。': '︒', // 句號
+        '、': '︑', // 頓號
+        '：': '︓', // 冒號
+        '；': '︔', // 分號
+        '！': '︕', // 驚嘆號
+        '？': '︖', // 問號
+        '（': '︵', // 左圓括號
+        '）': '︶', // 右圓括號
+        '「': '﹁', // 左單引號
+        '」': '﹂', // 右單引號
+        '『': '﹃', // 左雙引號
+        '』': '﹄', // 右雙引號
+        '《': '︽', // 左書名號
+        '》': '︾', // 右書名號
+        '〈': '︿', // 左尖括號
+        '〉': '﹀', // 右尖括號
+        '【': '︻', // 左方括號
+        '】': '︼', // 右方括號
+        '—': '︱', // 破折號
+        '…': '︙', // 省略號
+        '·': '・'  // 間隔號
+    };
+
+    return text.split('').map(char => horizontalToVertical[char] || char).join('');
+}
+
 function byChars(input) {
     var userText = input;
     var charsPerLine = parseInt(document.getElementById("charsPerLine").value);
 
     // 先進行 UTF-8 和全形轉換
     userText = halfToFull(userText);
+    
+    // 將標點符號轉換為直書版本
+    userText = convertPunctuationToVertical(userText);
 
     // 將文字分段，並移除空段落
     var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
@@ -130,6 +163,9 @@ function byLines(input) {
 
     // 先進行 UTF-8 和全形轉換
     userText = halfToFull(userText);
+    
+    // 將標點符號轉換為直書版本
+    userText = convertPunctuationToVertical(userText);
 
     // 將文字分段，並移除空段落
     var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
@@ -198,10 +234,6 @@ function decrypt() {
     document.getElementById("outputText").value = result;
 }
 
-function generateClickbaitHeadline(text) {
-    const headline = insertClickbait(text);
-    document.getElementById("headline").textContent = headline;
-}
 
 function transformText() {
     let input = document.getElementById("inputText").value;
@@ -218,9 +250,6 @@ function transformText() {
     }
 
     document.getElementById("outputText").value = input;
-
-    // 生成釣魚化的標題
-    generateClickbaitHeadline(input);
 }
 
 function insertClickbait(text) {
