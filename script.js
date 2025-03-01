@@ -59,45 +59,45 @@ function halfToFull(text) {
     return result;
 }
 
-function byLines() {
+function byChars() {
     var userText = document.getElementById("inputText").value;
-    var lines = document.getElementById("totalLines").value;
+    var lineLength = document.getElementById("charsPerLine").value;
 
     // 先進行全形轉換
     userText = halfToFull(userText);
 
-    if(userText.length % lines != 0) {
-        var totalLength = userText.length;
-        while(totalLength % lines != 0) {
-            totalLength++;
-        }
-        var spaceNum = totalLength - userText.length;
-
-        for (var i = 0; i < spaceNum; i++) {
-            userText += '　';
-        }
-    }
-
-    var lineLength = userText.length / lines;
+    // 將文字分段，並移除空段落
+    var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
+    
+    // 計算總共需要的行數
+    var totalChars = paragraphs.join('').length;
+    var lines = Math.ceil(totalChars / lineLength);
+    
+    // 建立矩陣
     var matrix = new Array(lines);
     for(var i = 0; i < lines; i++) {
-        matrix[i] = new Array(lineLength);
+        matrix[i] = new Array(lineLength).fill('　');
     }
 
+    // 將所有段落合併成一個字串
+    var fullText = paragraphs.join('');
+    
+    // 填充矩陣
     var count = 0;
-    for(var i = 0; i < lines; i++) {
-        for(var j = 0; j < lineLength; j++) {
-            matrix[i][j] = userText.charAt(count);
+    for(var i = 0; i < lines && count < fullText.length; i++) {
+        for(var j = 0; j < lineLength && count < fullText.length; j++) {
+            matrix[i][j] = fullText.charAt(count);
             count++;
         }
     }
 
+    // 生成結果
     var result = "";
     for(var i = 0; i < lineLength; i++) {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
             if (j > 0) {
-                result += '\u200B'; // 使用零寬空格
+                result += '\u200B';
             }
         }
         if (i < lineLength - 1) {
@@ -108,21 +108,32 @@ function byLines() {
     return result.trim();
 }
 
-function byChars() {
+function byLines() {
     var userText = document.getElementById("inputText").value;
-    var lineLength = document.getElementById("charsPerLine").value;
+    var lines = document.getElementById("totalLines").value;
 
     // 先進行全形轉換
     userText = halfToFull(userText);
 
-    if(userText.length % lineLength != 0) {
-        var spaceNum = lineLength - (userText.length % lineLength);
+    // 將文字分段，並移除空段落
+    var paragraphs = userText.split('\n').filter(p => p.trim().length > 0);
+    
+    // 將所有段落合併成一個字串
+    var fullText = paragraphs.join('');
+    
+    // 補足空格
+    if(fullText.length % lines != 0) {
+        var totalLength = fullText.length;
+        while(totalLength % lines != 0) {
+            totalLength++;
+        }
+        var spaceNum = totalLength - fullText.length;
         for (var i = 0; i < spaceNum; i++) {
-            userText += '　';
-        }   
+            fullText += '　';
+        }
     }
 
-    var lines = userText.length / lineLength;
+    var lineLength = fullText.length / lines;
     var matrix = new Array(lines);
     for(var i = 0; i < lines; i++) {
         matrix[i] = new Array(lineLength);
@@ -131,7 +142,7 @@ function byChars() {
     var count = 0;
     for(var i = 0; i < lines; i++) {
         for(var j = 0; j < lineLength; j++) {
-            matrix[i][j] = userText.charAt(count);
+            matrix[i][j] = fullText.charAt(count);
             count++;
         }
     }
@@ -141,7 +152,7 @@ function byChars() {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
             if (j > 0) {
-                result += '\u200B'; // 使用零寬空格
+                result += '\u200B';
             }
         }
         if (i < lineLength - 1) {
