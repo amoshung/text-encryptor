@@ -58,7 +58,17 @@ function toUTF8(text) {
 function halfToFull(text) {
     // 先進行 UTF-8 轉換
     text = toUTF8(text);
-    
+
+    // 移除所有超連結
+    text = text.replace(/<a[^>]*>(.*?)<\/a>/gi, '$1');
+
+    // 阿拉伯數字轉換為中文數字
+    const arabicToChinese = {
+        '0': '零', '1': '一', '2': '二', '3': '三', '4': '四',
+        '5': '五', '6': '六', '7': '七', '8': '八', '9': '九'
+    };
+    text = text.replace(/[0-9]/g, match => arabicToChinese[match]);
+
     let result = "";
     for (let i = 0; i < text.length; i++) {
         let code = text.charCodeAt(i);
