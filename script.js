@@ -208,9 +208,6 @@ function transformText() {
     if (document.getElementById("verticalTextOption").checked) {
         input = verticalText(input);
     }
-    if (document.getElementById("zeroWidthInsertOption").checked) {
-        input = insertZeroWidth(input);
-    }
 
     document.getElementById("outputText").value = input;
 }
