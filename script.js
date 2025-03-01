@@ -239,6 +239,9 @@ function transformText() {
     let input = document.getElementById("inputText").value;
     document.getElementById("warning").style.display = "none";
 
+    // 移除所有半形空白
+    input = input.replace(/ /g, '');
+
     const clickbaitOption = document.getElementById("clickbaitInsertOption");
     const verticalOption = document.getElementById("verticalTextOption");
 
