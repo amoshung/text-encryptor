@@ -255,24 +255,34 @@ function transformText() {
     let paragraphs = input.split('\n');
     let mergedParagraphs = [];
     let currentParagraph = '';
+    let currentLength = 0;
 
     for (let i = 0; i < paragraphs.length; i++) {
         let paragraph = paragraphs[i].trim();
         
-        // 計算中文字元數量
-        let chineseCount = (paragraph.match(/[\u4e00-\u9fa5]/g) || []).length;
+        // 如果當前段落為空，跳過
+        if (paragraph.length === 0) continue;
         
-        if (chineseCount < 16 && i < paragraphs.length - 1) {
-            // 如果是短段落且不是最後一段，則與下一段合併
+        // 計算當前累積段落的長度
+        currentLength = currentParagraph.length + paragraph.length;
+        
+        if (currentLength < 120) {
+            // 如果累積長度小於120，繼續聚合
             currentParagraph += paragraph;
-        } else if (currentParagraph) {
-            // 如果有累積的段落，加入當前段落並儲存
-            mergedParagraphs.push(currentParagraph + paragraph);
-            currentParagraph = '';
         } else {
-            // 直接儲存當前段落
-            mergedParagraphs.push(paragraph);
+            // 如果累積長度達到或超過120
+            if (currentParagraph) {
+                // 如果有累積的段落，先儲存
+                mergedParagraphs.push(currentParagraph);
+            }
+            // 開始新的累積
+            currentParagraph = paragraph;
         }
+    }
+    
+    // 處理最後剩餘的段落
+    if (currentParagraph) {
+        mergedParagraphs.push(currentParagraph);
     }
 
     input = mergedParagraphs.join('\n');
