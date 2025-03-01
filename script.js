@@ -43,9 +43,28 @@ function verticalText() {
     document.getElementById("outputText").value = result;
 }
 
+// 半形轉全形函數
+function halfToFull(text) {
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+        let code = text.charCodeAt(i);
+        if (code === 32) { // 空格轉換
+            result += '　';
+        } else if (code >= 33 && code <= 126) { // ASCII 字元轉換
+            result += String.fromCharCode(code + 65248);
+        } else {
+            result += text.charAt(i);
+        }
+    }
+    return result;
+}
+
 function byLines() {
     var userText = document.getElementById("inputText").value;
     var lines = document.getElementById("totalLines").value;
+
+    // 先進行全形轉換
+    userText = halfToFull(userText);
 
     if(userText.length % lines != 0) {
         var totalLength = userText.length;
@@ -77,9 +96,13 @@ function byLines() {
     for(var i = 0; i < lineLength; i++) {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
-            result += " ";
+            if (j > 0) {
+                result += " ";
+            }
         }
-        result += '\n';
+        if (i < lineLength - 1) {
+            result += '\n';
+        }
     }
 
     return result;
@@ -88,6 +111,9 @@ function byLines() {
 function byChars() {
     var userText = document.getElementById("inputText").value;
     var lineLength = document.getElementById("charsPerLine").value;
+
+    // 先進行全形轉換
+    userText = halfToFull(userText);
 
     if(userText.length % lineLength != 0) {
         var spaceNum = lineLength - (userText.length % lineLength);
@@ -114,9 +140,13 @@ function byChars() {
     for(var i = 0; i < lineLength; i++) {
         for(var j = lines - 1; j >= 0; j--) {
             result += matrix[j][i];
-            result += " ";
+            if (j > 0) {
+                result += " ";
+            }
         }
-        result += '\n';
+        if (i < lineLength - 1) {
+            result += '\n';
+        }
     }
 
     return result;
