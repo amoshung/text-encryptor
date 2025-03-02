@@ -58,7 +58,7 @@
             font-size: 16px;
         }
 
-        .input-item input, .input-item select {
+        .input-item input, .input-item select, .input-item textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -68,17 +68,28 @@
             display: block;
         }
 
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-size: 16px;
+        .input-item textarea {
+            min-height: 80px;
+            resize: vertical;
         }
 
-        .checkbox-label input[type="checkbox"] {
-            margin-right: 10px;
-            width: 20px;
-            height: 20px;
+        .title-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .title-result {
+            margin-top: 15px;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .title-result p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
         }
 
         .button-container {
@@ -203,6 +214,20 @@
     </div>
 
     <div class="top-panel">
+        <div class="title-section">
+            <div class="input-item">
+                <label for="newsTitle">新聞標題</label>
+                <input type="text" id="newsTitle" placeholder="請輸入新聞標題...">
+            </div>
+            <div class="button-container">
+                <button id="transformTitleBtn">標題驚悚化</button>
+            </div>
+            <div class="title-result">
+                <p>驚悚化結果：</p>
+                <textarea id="shockingTitle" readonly></textarea>
+            </div>
+        </div>
+
         <div class="input-group">
             <div class="input-item">
                 <label for="blockCount">垂直布局幾個區塊</label>
@@ -221,15 +246,9 @@
                     <option value="25">25%</option>
                 </select>
             </div>
-            <div class="input-item">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="clickbaitTitle">
-                    標題是否要驚悚化
-                </label>
-            </div>
         </div>
         <div class="button-container">
-            <button id="generateLayout">排版生成</button>
+            <button id="generateLayout">新聞排版生成</button>
         </div>
     </div>
 
@@ -249,17 +268,20 @@
     </div>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const blockCountInput = document.getElementById('blockCount');
             const lineLengthInput = document.getElementById('lineLength');
             const titleWidthSelect = document.getElementById('titleWidth');
-            const clickbaitTitleCheckbox = document.getElementById('clickbaitTitle');
             const generateLayoutButton = document.getElementById('generateLayout');
             const downloadImageButton = document.getElementById('downloadImage');
             const contentArea = document.getElementById('contentArea');
             const leftContent = document.getElementById('leftContent');
             const rightContent = document.getElementById('rightContent');
+            const newsTitleInput = document.getElementById('newsTitle');
+            const shockingTitleOutput = document.getElementById('shockingTitle');
+            const transformTitleBtn = document.getElementById('transformTitleBtn');
 
             // 初始化布局
             generateLayout();
@@ -270,9 +292,33 @@
             // 生成圖片下載按鈕點擊事件
             downloadImageButton.addEventListener('click', generateAndDownloadImage);
 
+            // 標題驚悚化按鈕點擊事件
+            transformTitleBtn.addEventListener('click', function() {
+                const title = newsTitleInput.value.trim();
+                if (title) {
+                    // 使用 script.js 中的 transformTitle 函數
+                    // 由於 transformTitle 是針對特定 DOM 元素的，我們需要模擬這個過程
+                    document.getElementById('inputTitle') = {
+                        value: title
+                    };
+                    
+                    // 調用 transformTitle 函數
+                    transformTitle();
+                    
+                    // 獲取結果並顯示
+                    const result = document.getElementById('outputTitle').value;
+                    shockingTitleOutput.value = result;
+                    
+                    // 更新右側標題
+                    rightContent.textContent = result.split('\n')[1] || result; // 取中間行或整個結果
+                } else {
+                    alert('請輸入新聞標題');
+                }
+            });
+
             // 生成布局函數
             function generateLayout() {
-                const blockCount = parseInt(blockCountInput.value) || 3;
+                const blockCount = parseInt(blockCountInput.value) || 1;
                 const titleWidth = parseInt(titleWidthSelect.value) || 10;
                 
                 // 設置標題寬度
@@ -293,38 +339,29 @@
                     leftContent.appendChild(block);
                 }
                 
-                // 如果勾選了驚悚化標題，可以在這裡添加相關邏輯
-                if (clickbaitTitleCheckbox.checked) {
-                    rightContent.classList.add('clickbait-title');
-                } else {
-                    rightContent.classList.remove('clickbait-title');
-                }
-                
                 // 監聽標題輸入
                 const firstTextarea = document.querySelector('.vertical-block textarea');
                 if (firstTextarea) {
                     firstTextarea.addEventListener('input', function() {
                         const title = this.value.trim();
                         if (title) {
-                            if (clickbaitTitleCheckbox.checked) {
-                                // 這裡可以添加標題驚悚化的邏輯
-                                rightContent.textContent = makeClickbaitTitle(title);
-                            } else {
-                                rightContent.textContent = title;
-                            }
+                            rightContent.textContent = title;
                         } else {
                             rightContent.textContent = '請輸入標題';
                         }
                     });
                 }
-            }
-            
-            // 標題驚悚化函數（簡單示例）
-            function makeClickbaitTitle(title) {
-                // 這裡可以實現更複雜的標題驚悚化邏輯
-                const clickbaitPrefixes = ['震驚！', '爆！', '獨家：', '驚人真相：', '不可思議！'];
-                const randomPrefix = clickbaitPrefixes[Math.floor(Math.random() * clickbaitPrefixes.length)];
-                return randomPrefix + title;
+                
+                // 如果已經有驚悚化的標題，使用它
+                if (shockingTitleOutput.value.trim()) {
+                    const shockingTitle = shockingTitleOutput.value;
+                    rightContent.textContent = shockingTitle.split('\n')[1] || shockingTitle;
+                    
+                    // 如果有第一個文本區域，也填入標題
+                    if (firstTextarea) {
+                        firstTextarea.value = shockingTitle.split('\n')[1] || shockingTitle;
+                    }
+                }
             }
             
             // 生成並下載圖片
