@@ -92,6 +92,18 @@
             font-weight: bold;
         }
 
+        .title-result textarea {
+            min-height: 120px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
         .button-container {
             text-align: center;
             margin-top: 30px;
@@ -206,6 +218,7 @@
             }
         }
     </style>
+    <script src="news_script.js"></script>
 </head>
 
 <body>
@@ -220,7 +233,7 @@
                 <input type="text" id="newsTitle" placeholder="請輸入新聞標題...">
             </div>
             <div class="button-container">
-                <button id="transformTitleBtn">標題驚悚化</button>
+                <button id="transformTitleBtn" onclick="transformNewsTitle()">標題驚悚化</button>
             </div>
             <div class="title-result">
                 <p>驚悚化結果：</p>
@@ -268,7 +281,6 @@
     </div>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const blockCountInput = document.getElementById('blockCount');
@@ -281,7 +293,6 @@
             const rightContent = document.getElementById('rightContent');
             const newsTitleInput = document.getElementById('newsTitle');
             const shockingTitleOutput = document.getElementById('shockingTitle');
-            const transformTitleBtn = document.getElementById('transformTitleBtn');
 
             // 初始化布局
             generateLayout();
@@ -291,30 +302,6 @@
 
             // 生成圖片下載按鈕點擊事件
             downloadImageButton.addEventListener('click', generateAndDownloadImage);
-
-            // 標題驚悚化按鈕點擊事件
-            transformTitleBtn.addEventListener('click', function() {
-                const title = newsTitleInput.value.trim();
-                if (title) {
-                    // 使用 script.js 中的 transformTitle 函數
-                    // 由於 transformTitle 是針對特定 DOM 元素的，我們需要模擬這個過程
-                    document.getElementById('inputTitle') = {
-                        value: title
-                    };
-                    
-                    // 調用 transformTitle 函數
-                    transformTitle();
-                    
-                    // 獲取結果並顯示
-                    const result = document.getElementById('outputTitle').value;
-                    shockingTitleOutput.value = result;
-                    
-                    // 更新右側標題
-                    rightContent.textContent = result.split('\n')[1] || result; // 取中間行或整個結果
-                } else {
-                    alert('請輸入新聞標題');
-                }
-            });
 
             // 生成布局函數
             function generateLayout() {
@@ -354,12 +341,14 @@
                 
                 // 如果已經有驚悚化的標題，使用它
                 if (shockingTitleOutput.value.trim()) {
-                    const shockingTitle = shockingTitleOutput.value;
-                    rightContent.textContent = shockingTitle.split('\n')[1] || shockingTitle;
-                    
-                    // 如果有第一個文本區域，也填入標題
-                    if (firstTextarea) {
-                        firstTextarea.value = shockingTitle.split('\n')[1] || shockingTitle;
+                    const lines = shockingTitleOutput.value.split('\n');
+                    if (lines.length > 1) {
+                        rightContent.textContent = lines[1]; // 取中間行
+                        
+                        // 如果有第一個文本區域，也填入標題
+                        if (firstTextarea) {
+                            firstTextarea.value = lines[1];
+                        }
                     }
                 }
             }
