@@ -71,7 +71,7 @@ function transformNewsTitle() {
     const middleText = inputTitle.trim();
     
     // 組合成一行
-    const transformedTitle = `${startKeyword}${middleText}${endKeyword}`;
+    const transformedTitle = `【${startKeyword} ${middleText} ${endKeyword}】`;
 
     // 輸出結果到 shockingTitle 元素 (橫書)
     outputElement.value = transformedTitle;
@@ -80,14 +80,32 @@ function transformNewsTitle() {
     outputElement.style.height = 'auto';
     outputElement.style.height = outputElement.scrollHeight + 'px';
     
-    // 更新右側標題 - 直接設置文本內容
+    // 更新右側標題 - 使文字極大化佔滿區域
     const rightContent = document.getElementById('rightContent');
     if (rightContent) {
-        // 將標題轉換為直書格式（不包含標點符號轉換，因為 rightContent 會自動處理）
+        // 將標題轉換為直書格式
         const processedTitle = halfToFull(transformedTitle);
         
-        // 直接設置文本內容，讓 rightContent 自己處理直書顯示
-        rightContent.textContent = processedTitle;
+        // 清空原有內容
+        rightContent.innerHTML = '';
+        
+        // 創建直書文字元素
+        const textElement = document.createElement('div');
+        textElement.textContent = processedTitle;
+        textElement.style.writingMode = 'vertical-rl';
+        textElement.style.textOrientation = 'upright';
+        textElement.style.width = '100%';
+        textElement.style.height = '100%';
+        textElement.style.display = 'flex';
+        textElement.style.alignItems = 'center';
+        textElement.style.justifyContent = 'center';
+        textElement.style.fontSize = '100%'; // 初始字體大小
+        
+        // 添加到容器
+        rightContent.appendChild(textElement);
+        
+        // 調整字體大小以極大化填充容器
+        maximizeFontSize(textElement, rightContent);
     }
     
     return transformedTitle;
@@ -206,4 +224,37 @@ function convertPunctuationToVertical(text) {
     };
 
     return text.split('').map(char => horizontalToVertical[char] || char).join('');
+}
+
+// 調整字體大小以極大化填充容器
+function maximizeFontSize(element, container) {
+    // 獲取容器尺寸
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    
+    // 設置初始字體大小（以像素為單位）
+    let fontSize = 20; // 起始字體大小
+    element.style.fontSize = fontSize + 'px';
+    
+    // 檢查元素是否超出容器
+    function isOverflowing() {
+        return (element.scrollWidth > containerWidth * 0.95 || 
+                element.scrollHeight > containerHeight * 0.95);
+    }
+    
+    // 增加字體大小直到填滿容器但不溢出
+    while (!isOverflowing() && fontSize < 200) { // 設置上限防止無限循環
+        fontSize += 2;
+        element.style.fontSize = fontSize + 'px';
+    }
+    
+    // 如果溢出，回退一步
+    if (isOverflowing()) {
+        fontSize -= 4; // 回退兩步以確保不溢出
+        element.style.fontSize = fontSize + 'px';
+    }
+    
+    // 設置行高和字間距以改善顯示效果
+    element.style.lineHeight = '1.2';
+    element.style.letterSpacing = '0.05em';
 } 
