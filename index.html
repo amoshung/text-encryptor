@@ -10,47 +10,47 @@
             font-family: Arial, sans-serif;
             margin: 0;
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        .sidebar {
-            width: 250px;
-            background-color: #f8f8f8;
-            border-right: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
+        .header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
         }
 
-        .sidebar h1 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 20px;
+        .site-title {
             font-size: 1.5rem;
-            text-align: center;
+            margin: 0;
+            margin-right: 40px;
+            color: #333;
+            white-space: nowrap;
         }
 
-        .sidebar ul {
+        .nav-links {
+            display: flex;
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
 
-        .sidebar li {
-            margin-bottom: 10px;
+        .nav-links li {
+            margin-right: 20px;
         }
 
-        .sidebar a {
+        .nav-links a {
             display: block;
-            padding: 10px;
+            padding: 8px 15px;
             color: #333;
             text-decoration: none;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
 
-        .sidebar a:hover, .sidebar a.active {
+        .nav-links a:hover, .nav-links a.active {
             background-color: #e0e0e0;
         }
 
@@ -67,14 +67,24 @@
         }
 
         @media (max-width: 768px) {
-            body {
+            .header {
                 flex-direction: column;
+                align-items: flex-start;
             }
 
-            .sidebar {
+            .site-title {
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+
+            .nav-links {
+                flex-direction: column;
                 width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #ddd;
+            }
+
+            .nav-links li {
+                margin-right: 0;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -84,12 +94,12 @@
             document.getElementById('content-frame').src = 'VerticalTrans.html';
             
             // 設置點擊事件
-            document.querySelectorAll('.sidebar a').forEach(link => {
+            document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
                     // 移除所有連結的 active 類別
-                    document.querySelectorAll('.sidebar a').forEach(l => {
+                    document.querySelectorAll('.nav-links a').forEach(l => {
                         l.classList.remove('active');
                     });
                     
@@ -102,15 +112,15 @@
             });
             
             // 預設第一個連結為 active
-            document.querySelector('.sidebar a').classList.add('active');
+            document.querySelector('.nav-links a').classList.add('active');
         });
     </script>
 </head>
 
 <body>
-    <div class="sidebar">
-        <h1>迴避偵測的各種方法</h1>
-        <ul>
+    <div class="header">
+        <h1 class="site-title">迴避偵測的各種方法</h1>
+        <ul class="nav-links">
             <li><a href="VerticalTrans.html">標題驚悚化&直書轉換</a></li>
             <li><a href="NewsMaker.html">新聞直書圖片製作</a></li>
             <!-- 未來可以在這裡添加更多工具的連結 -->
