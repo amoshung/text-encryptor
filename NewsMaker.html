@@ -35,6 +35,8 @@
             flex-direction: column;
             width: 100%;
             box-sizing: border-box;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .input-group {
@@ -46,51 +48,55 @@
 
         .input-item {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .input-item label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
+            font-size: 16px;
         }
 
         .input-item input, .input-item select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px;
+            display: block;
         }
 
         .checkbox-label {
             display: flex;
             align-items: center;
+            font-weight: bold;
+            font-size: 16px;
         }
 
         .checkbox-label input[type="checkbox"] {
             margin-right: 10px;
-            width: auto;
+            width: 20px;
+            height: 20px;
         }
 
         .button-container {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
             width: 100%;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 15px 25px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 16px;
+            font-size: 18px;
             width: 100%;
-            max-width: 300px;
         }
 
         button:hover {
@@ -101,6 +107,7 @@
             display: flex;
             flex: 1;
             padding: 20px;
+            justify-content: center;
         }
 
         .content-area {
@@ -111,6 +118,9 @@
             position: relative;
             overflow: hidden;
             min-height: 500px;
+            max-width: 800px;
+            aspect-ratio: 4/3;
+            margin: 0 auto;
         }
 
         .left-content {
@@ -164,6 +174,8 @@
 
         .download-button {
             background-color: #2196F3;
+            width: 100%;
+            max-width: 600px;
         }
 
         .download-button:hover {
@@ -194,11 +206,11 @@
         <div class="input-group">
             <div class="input-item">
                 <label for="blockCount">垂直布局幾個區塊</label>
-                <input type="number" id="blockCount" min="1" max="10" value="3">
+                <input type="number" id="blockCount" min="1" max="3" value="1">
             </div>
             <div class="input-item">
                 <label for="lineLength">直書每一行長度</label>
-                <input type="number" id="lineLength" min="10" max="50" value="20">
+                <input type="number" id="lineLength" min="12" max="16" value="12">
             </div>
             <div class="input-item">
                 <label for="titleWidth">標題佔畫面寬度</label>
