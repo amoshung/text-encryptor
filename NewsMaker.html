@@ -301,9 +301,39 @@
             newsTitleInput.addEventListener('input', function() {
                 const inputTitle = this.value.trim();
                 if (inputTitle) {
-                    // 將標題轉換為直書格式並加上【】
-                    const processedTitle = `【${inputTitle}】`;
-                    rightContent.textContent = processedTitle;
+                    // 清空原有內容
+                    rightContent.innerHTML = '';
+                    
+                    // 創建直書文字容器
+                    const textContainer = document.createElement('div');
+                    textContainer.style.writingMode = 'vertical-rl';
+                    textContainer.style.textOrientation = 'upright';
+                    textContainer.style.width = '100%';
+                    textContainer.style.height = '100%';
+                    textContainer.style.display = 'flex';
+                    textContainer.style.alignItems = 'center';
+                    textContainer.style.justifyContent = 'center';
+                    
+                    // 創建開頭括號
+                    const startElement = document.createElement('span');
+                    startElement.textContent = '【';
+                    
+                    // 創建中間文字（斜體）
+                    const middleElement = document.createElement('span');
+                    middleElement.textContent = halfToFull(inputTitle);
+                    middleElement.style.fontStyle = 'italic';
+                    
+                    // 創建結尾括號
+                    const endElement = document.createElement('span');
+                    endElement.textContent = '】';
+                    
+                    // 添加所有元素到容器
+                    textContainer.appendChild(startElement);
+                    textContainer.appendChild(middleElement);
+                    textContainer.appendChild(endElement);
+                    
+                    // 添加到右側內容區
+                    rightContent.appendChild(textContainer);
                 } else {
                     rightContent.textContent = '請輸入標題';
                 }
@@ -340,12 +370,44 @@
                 
                 // 如果已經有標題，使用它
                 if (newsTitleInput.value.trim()) {
-                    rightContent.textContent = `【${newsTitleInput.value.trim()}】`;
+                    // 清空原有內容
+                    rightContent.innerHTML = '';
+                    
+                    // 創建直書文字容器
+                    const textContainer = document.createElement('div');
+                    textContainer.style.writingMode = 'vertical-rl';
+                    textContainer.style.textOrientation = 'upright';
+                    textContainer.style.width = '100%';
+                    textContainer.style.height = '100%';
+                    textContainer.style.display = 'flex';
+                    textContainer.style.alignItems = 'center';
+                    textContainer.style.justifyContent = 'center';
+                    
+                    // 創建開頭括號
+                    const startElement = document.createElement('span');
+                    startElement.textContent = '【';
+                    
+                    // 創建中間文字（斜體）
+                    const middleElement = document.createElement('span');
+                    middleElement.textContent = halfToFull(newsTitleInput.value.trim());
+                    middleElement.style.fontStyle = 'italic';
+                    
+                    // 創建結尾括號
+                    const endElement = document.createElement('span');
+                    endElement.textContent = '】';
+                    
+                    // 添加所有元素到容器
+                    textContainer.appendChild(startElement);
+                    textContainer.appendChild(middleElement);
+                    textContainer.appendChild(endElement);
+                    
+                    // 添加到右側內容區
+                    rightContent.appendChild(textContainer);
                 }
                 
                 // 如果已經有驚悚化的標題，使用它
                 if (shockingTitleOutput.value.trim()) {
-                    rightContent.textContent = shockingTitleOutput.value.trim();
+                    // 這裡不需要修改，因為驚悚化函數已經處理了斜體效果
                     
                     // 如果有第一個文本區域，也填入標題
                     const firstTextarea = document.querySelector('.vertical-block textarea');

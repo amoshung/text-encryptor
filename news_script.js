@@ -70,7 +70,7 @@ function transformNewsTitle() {
     // 將輸入的文字放在中間
     const middleText = inputTitle.trim();
     
-    // 組合成一行
+    // 組合成一行 (用於文本框顯示)
     const transformedTitle = `【${startKeyword} ${middleText} ${endKeyword}】`;
 
     // 輸出結果到 shockingTitle 元素 (橫書)
@@ -80,32 +80,46 @@ function transformNewsTitle() {
     outputElement.style.height = 'auto';  // 先重置高度
     outputElement.style.height = (outputElement.scrollHeight) + 'px';  // 設置為內容高度
     
-    // 更新右側標題 - 使文字極大化佔滿區域
+    // 更新右側標題 - 使用 HTML 元素實現斜體效果
     const rightContent = document.getElementById('rightContent');
     if (rightContent) {
-        // 將標題轉換為直書格式
-        const processedTitle = halfToFull(transformedTitle);
-        
         // 清空原有內容
         rightContent.innerHTML = '';
         
-        // 創建直書文字元素
-        const textElement = document.createElement('div');
-        textElement.textContent = processedTitle;
-        textElement.style.writingMode = 'vertical-rl';
-        textElement.style.textOrientation = 'upright';
-        textElement.style.width = '100%';
-        textElement.style.height = '100%';
-        textElement.style.display = 'flex';
-        textElement.style.alignItems = 'center';
-        textElement.style.justifyContent = 'center';
-        textElement.style.fontSize = '100%'; // 初始字體大小
+        // 創建直書文字容器
+        const textContainer = document.createElement('div');
+        textContainer.style.writingMode = 'vertical-rl';
+        textContainer.style.textOrientation = 'upright';
+        textContainer.style.width = '100%';
+        textContainer.style.height = '100%';
+        textContainer.style.display = 'flex';
+        textContainer.style.alignItems = 'center';
+        textContainer.style.justifyContent = 'center';
+        textContainer.style.fontSize = '100%'; // 初始字體大小
         
-        // 添加到容器
-        rightContent.appendChild(textElement);
+        // 創建開頭括號和關鍵字
+        const startElement = document.createElement('span');
+        startElement.textContent = `【${halfToFull(startKeyword)} `;
+        
+        // 創建中間文字（斜體）
+        const middleElement = document.createElement('span');
+        middleElement.textContent = halfToFull(middleText);
+        middleElement.style.fontStyle = 'italic';
+        
+        // 創建結尾關鍵字和括號
+        const endElement = document.createElement('span');
+        endElement.textContent = ` ${halfToFull(endKeyword)}】`;
+        
+        // 添加所有元素到容器
+        textContainer.appendChild(startElement);
+        textContainer.appendChild(middleElement);
+        textContainer.appendChild(endElement);
+        
+        // 添加到右側內容區
+        rightContent.appendChild(textContainer);
         
         // 調整字體大小以極大化填充容器
-        maximizeFontSize(textElement, rightContent);
+        maximizeFontSize(textContainer, rightContent);
     }
     
     return transformedTitle;
@@ -268,9 +282,39 @@ document.addEventListener('DOMContentLoaded', function() {
     newsTitleInput.addEventListener('input', function() {
         const inputTitle = this.value.trim();
         if (inputTitle) {
-            // 將標題轉換為直書格式並加上【】
-            const processedTitle = `【${halfToFull(inputTitle)}】`;
-            rightContent.textContent = processedTitle;
+            // 清空原有內容
+            rightContent.innerHTML = '';
+            
+            // 創建直書文字容器
+            const textContainer = document.createElement('div');
+            textContainer.style.writingMode = 'vertical-rl';
+            textContainer.style.textOrientation = 'upright';
+            textContainer.style.width = '100%';
+            textContainer.style.height = '100%';
+            textContainer.style.display = 'flex';
+            textContainer.style.alignItems = 'center';
+            textContainer.style.justifyContent = 'center';
+            
+            // 創建開頭括號
+            const startElement = document.createElement('span');
+            startElement.textContent = '【';
+            
+            // 創建中間文字（斜體）
+            const middleElement = document.createElement('span');
+            middleElement.textContent = halfToFull(inputTitle);
+            middleElement.style.fontStyle = 'italic';
+            
+            // 創建結尾括號
+            const endElement = document.createElement('span');
+            endElement.textContent = '】';
+            
+            // 添加所有元素到容器
+            textContainer.appendChild(startElement);
+            textContainer.appendChild(middleElement);
+            textContainer.appendChild(endElement);
+            
+            // 添加到右側內容區
+            rightContent.appendChild(textContainer);
         } else {
             rightContent.textContent = '請輸入標題';
         }
