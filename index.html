@@ -4,217 +4,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>標題增強&中文直書加密</title>
+    <title>迴避偵測的各種方法</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
         }
 
-        .header {
-            text-align: center;
-            padding: 20px;
+        .sidebar {
+            width: 250px;
             background-color: #f8f8f8;
-            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header h1 {
+        .sidebar h1 {
             color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
             margin: 0;
         }
 
-        .content {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            gap: 20px;
-            width: 100%;
-            box-sizing: border-box;
+        .sidebar li {
+            margin-bottom: 10px;
         }
 
-        #title-left-panel,
-        #title-right-panel,
-        #left-panel,
-        #right-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-width: 50%;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 3em;
-            max-height: 300px;
-            /* 設置最大高度，避免過長 */
+        .sidebar a {
+            display: block;
             padding: 10px;
-            border: 1px solid #ccc;
+            color: #333;
+            text-decoration: none;
             border-radius: 4px;
-            resize: none;
-            /* 禁止調整大小 */
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e0e0e0;
         }
 
-        #warning {
-            color: red;
-            display: none;
-            margin: 10px 0;
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .vertical-options {
-            margin: 15px 0;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
+        iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
         }
 
-        .vertical-options label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 15px;
-            color: #333;
-        }
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
 
-        .vertical-options input[type="radio"] {
-            margin-right: 8px;
-            cursor: pointer;
-        }
-
-        .vertical-options input[type="number"] {
-            width: 60px;
-            padding: 4px 8px;
-            margin: 0 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .headline {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 20px;
-            color: #d9534f;
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 預設載入 VerticalTrans.html
+            document.getElementById('content-frame').src = 'VerticalTrans.html';
+            
+            // 設置點擊事件
+            document.querySelectorAll('.sidebar a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有連結的 active 類別
+                    document.querySelectorAll('.sidebar a').forEach(l => {
+                        l.classList.remove('active');
+                    });
+                    
+                    // 為當前點擊的連結添加 active 類別
+                    this.classList.add('active');
+                    
+                    // 載入對應的頁面
+                    document.getElementById('content-frame').src = this.getAttribute('href');
+                });
+            });
+            
+            // 預設第一個連結為 active
+            document.querySelector('.sidebar a').classList.add('active');
+        });
+    </script>
 </head>
 
-<script src="script.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const textareas = document.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-            textarea.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        });
-    });
-</script>
-
 <body>
-    <div class="header">
-        <h1>標題增強&中文直書加密</h1>
+    <div class="sidebar">
+        <h1>迴避偵測的各種方法</h1>
+        <ul>
+            <li><a href="VerticalTrans.html">標題驚悚化&直書轉換</a></li>
+            <li><a href="NewsMaker.html">新聞直書圖片製作</a></li>
+            <!-- 未來可以在這裡添加更多工具的連結 -->
+        </ul>
     </div>
-
-    <!-- 新增的雙欄結構 -->
-    <div class="content">
-        <div id="title-left-panel">
-            <h2>輸入原標題</h2>
-            <textarea id="inputTitle" placeholder="請在此輸入標題..."></textarea>
-            <div class="button-group">
-                <button onclick="transformTitle()">轉換標題</button>
-            </div>
-        </div>
-
-        <div id="title-right-panel">
-            <h2>轉換後標題</h2>
-            <textarea id="outputTitle" readonly></textarea>
-            <button onclick="copyTitleToClipboard()">複製結果</button>
-        </div>
-    </div>
-
-    <div class="content">
-        <div id="left-panel">
-            <h2>輸入原文</h2>
-            <textarea id="inputText" placeholder="請在此輸入中文文字..."></textarea>
-            <p id="warning">⚠️ 請輸入中文，否則無法轉換！</p>
-
-            <div class="vertical-options">
-                <label>直書轉換規則</label>
-                <label>
-                    <input type="radio" name="verticalType" id="byLinesOption" checked>
-                    共 <input type="number" id="totalLines" value="12" min="6"> 行
-                </label>
-                <label>
-                    <input type="radio" name="verticalType" id="byCharsOption">
-                    每行 <input type="number" id="charsPerLine" value="12" min="6"> 個字
-                </label>
-            </div>
-            <div class="vertical-options">
-                <label>
-                    釣魚文穿插機率:
-                    <select id="clickbaitProbability">
-                        <option value="0.4">40%</option>
-                        <option value="0.5">50%</option>
-                        <option value="0.6">60%</option>
-                        <option value="0.7">70%</option>
-                        <option value="0.8">80%</option>
-                        <option value="0.9">90%</option>
-                    </select>
-                </label>
-            </div>
-            <div class="vertical-options">
-                <label>
-                    轉換選項
-                </label>
-                <label>
-                    <input type="checkbox" id="clickbaitInsertOption">
-                    釣魚文穿插
-                </label>
-                <label>
-                    <input type="checkbox" id="verticalTextOption">
-                    直書轉換
-                </label>
-            </div>
-
-            <div class="button-group">
-                <button onclick="transformText()">轉換</button>
-            </div>
-        </div>
-
-        <div id="right-panel">
-            <h2>轉換結果</h2>
-            <textarea id="outputText" readonly></textarea>
-            <button onclick="copyToClipboard()">複製結果</button>
-        </div>
+    <div class="main-content">
+        <iframe id="content-frame" name="content-frame"></iframe>
     </div>
 </body>
 

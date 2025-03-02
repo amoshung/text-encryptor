@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新聞直書圖片製作</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+
+        .top-panel {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-item input, .input-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .bottom-panel {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            border: 1px solid #ddd;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+        }
+
+        .left-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-content {
+            background-color: #f0f0f0;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            padding: 20px 10px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vertical-block {
+            flex: 1;
+            border-bottom: 1px dashed #ccc;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        .vertical-block:last-child {
+            border-bottom: none;
+        }
+
+        .vertical-block textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .download-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .download-button {
+            background-color: #2196F3;
+        }
+
+        .download-button:hover {
+            background-color: #0b7dda;
+        }
+
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .bottom-panel {
+                flex-direction: column;
+            }
+            
+            .right-content {
+                writing-mode: horizontal-tb;
+                text-orientation: mixed;
+                width: 100% !important;
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>新聞直書圖片製作</h1>
+    </div>
+
+    <div class="top-panel">
+        <div class="input-group">
+            <div class="input-item">
+                <label for="blockCount">垂直布局幾個區塊</label>
+                <input type="number" id="blockCount" min="1" max="10" value="3">
+            </div>
+            <div class="input-item">
+                <label for="lineLength">直書每一行長度</label>
+                <input type="number" id="lineLength" min="10" max="50" value="20">
+            </div>
+            <div class="input-item">
+                <label for="titleWidth">標題佔畫面寬度</label>
+                <select id="titleWidth">
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                </select>
+            </div>
+            <div class="input-item">
+                <label for="clickbaitTitle">
+                    <input type="checkbox" id="clickbaitTitle">
+                    標題是否要驚悚化
+                </label>
+            </div>
+        </div>
+        <div class="button-container">
+            <button id="generateLayout">排版生成</button>
+        </div>
+    </div>
+
+    <div class="bottom-panel">
+        <div class="content-area" id="contentArea">
+            <div class="left-content" id="leftContent">
+                <!-- 垂直區塊將在這裡動態生成 -->
+            </div>
+            <div class="right-content" id="rightContent">
+                請輸入標題
+            </div>
+        </div>
+    </div>
+
+    <div class="download-container">
+        <button id="downloadImage" class="download-button">生成圖片下載</button>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const blockCountInput = document.getElementById('blockCount');
+            const lineLengthInput = document.getElementById('lineLength');
+            const titleWidthSelect = document.getElementById('titleWidth');
+            const clickbaitTitleCheckbox = document.getElementById('clickbaitTitle');
+            const generateLayoutButton = document.getElementById('generateLayout');
+            const downloadImageButton = document.getElementById('downloadImage');
+            const contentArea = document.getElementById('contentArea');
+            const leftContent = document.getElementById('leftContent');
+            const rightContent = document.getElementById('rightContent');
+
+            // 初始化布局
+            generateLayout();
+
+            // 排版生成按鈕點擊事件
+            generateLayoutButton.addEventListener('click', generateLayout);
+
+            // 生成圖片下載按鈕點擊事件
+            downloadImageButton.addEventListener('click', generateAndDownloadImage);
+
+            // 生成布局函數
+            function generateLayout() {
+                const blockCount = parseInt(blockCountInput.value) || 3;
+                const titleWidth = parseInt(titleWidthSelect.value) || 10;
+                
+                // 設置標題寬度
+                rightContent.style.width = `${titleWidth}%`;
+                
+                // 清空左側內容
+                leftContent.innerHTML = '';
+                
+                // 生成垂直區塊
+                for (let i = 0; i < blockCount; i++) {
+                    const block = document.createElement('div');
+                    block.className = 'vertical-block';
+                    
+                    const textarea = document.createElement('textarea');
+                    textarea.placeholder = `請在此輸入第 ${i + 1} 區塊的內容...`;
+                    
+                    block.appendChild(textarea);
+                    leftContent.appendChild(block);
+                }
+                
+                // 如果勾選了驚悚化標題，可以在這裡添加相關邏輯
+                if (clickbaitTitleCheckbox.checked) {
+                    rightContent.classList.add('clickbait-title');
+                } else {
+                    rightContent.classList.remove('clickbait-title');
+                }
+                
+                // 監聽標題輸入
+                const firstTextarea = document.querySelector('.vertical-block textarea');
+                if (firstTextarea) {
+                    firstTextarea.addEventListener('input', function() {
+                        const title = this.value.trim();
+                        if (title) {
+                            if (clickbaitTitleCheckbox.checked) {
+                                // 這裡可以添加標題驚悚化的邏輯
+                                rightContent.textContent = makeClickbaitTitle(title);
+                            } else {
+                                rightContent.textContent = title;
+                            }
+                        } else {
+                            rightContent.textContent = '請輸入標題';
+                        }
+                    });
+                }
+            }
+            
+            // 標題驚悚化函數（簡單示例）
+            function makeClickbaitTitle(title) {
+                // 這裡可以實現更複雜的標題驚悚化邏輯
+                const clickbaitPrefixes = ['震驚！', '爆！', '獨家：', '驚人真相：', '不可思議！'];
+                const randomPrefix = clickbaitPrefixes[Math.floor(Math.random() * clickbaitPrefixes.length)];
+                return randomPrefix + title;
+            }
+            
+            // 生成並下載圖片
+            function generateAndDownloadImage() {
+                html2canvas(contentArea).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = '新聞直書圖片.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html> 
