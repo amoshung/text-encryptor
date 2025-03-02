@@ -76,9 +76,9 @@ function transformNewsTitle() {
     // 輸出結果到 shockingTitle 元素 (橫書)
     outputElement.value = transformedTitle;
     
-    // 自動調整輸出文本框的高度
-    outputElement.style.height = 'auto';
-    outputElement.style.height = outputElement.scrollHeight + 'px';
+    // 自動調整輸出文本框的高度以適應內容
+    outputElement.style.height = 'auto';  // 先重置高度
+    outputElement.style.height = (outputElement.scrollHeight) + 'px';  // 設置為內容高度
     
     // 更新右側標題 - 使文字極大化佔滿區域
     const rightContent = document.getElementById('rightContent');
