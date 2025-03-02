@@ -80,13 +80,56 @@ function transformNewsTitle() {
     outputElement.style.height = 'auto';
     outputElement.style.height = outputElement.scrollHeight + 'px';
     
-    // 更新右側標題 - 只使用中間行
+    // 更新右側標題 - 使用完整的驚悚化標題
     const rightContent = document.getElementById('rightContent');
     if (rightContent) {
-        rightContent.textContent = middleText;
+        // 保存原始樣式
+        const originalWidth = rightContent.style.width;
+        const originalFontSize = window.getComputedStyle(rightContent).fontSize;
+        
+        // 設置新內容
+        rightContent.innerHTML = transformedTitle.replace(/\n/g, '<br>');
+        
+        // 確保寬度不變
+        rightContent.style.width = originalWidth;
+        
+        // 自動調整字體大小以適應容器
+        adjustFontSize(rightContent);
     }
     
     return transformedTitle;
+}
+
+// 自動調整字體大小以適應容器
+function adjustFontSize(element) {
+    // 獲取容器寬度
+    const containerWidth = element.offsetWidth;
+    
+    // 設置初始字體大小
+    let fontSize = 24; // 起始字體大小
+    element.style.fontSize = fontSize + 'px';
+    
+    // 檢查是否需要縮小字體
+    while (element.scrollWidth > containerWidth && fontSize > 12) {
+        fontSize -= 1;
+        element.style.fontSize = fontSize + 'px';
+    }
+    
+    // 檢查是否可以放大字體
+    let canIncrease = true;
+    while (canIncrease && fontSize < 36) {
+        fontSize += 1;
+        element.style.fontSize = fontSize + 'px';
+        
+        if (element.scrollWidth > containerWidth) {
+            fontSize -= 1;
+            element.style.fontSize = fontSize + 'px';
+            canIncrease = false;
+        }
+    }
+    
+    // 設置行高
+    element.style.lineHeight = '1.5';
 }
 
 // 複製驚悚化標題到剪貼簿
