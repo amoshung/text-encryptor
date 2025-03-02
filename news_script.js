@@ -80,41 +80,14 @@ function transformNewsTitle() {
     outputElement.style.height = 'auto';
     outputElement.style.height = outputElement.scrollHeight + 'px';
     
-    // 更新右側標題 (直書)
+    // 更新右側標題 - 直接設置文本內容
     const rightContent = document.getElementById('rightContent');
     if (rightContent) {
-        // 保存原始樣式
-        const originalWidth = rightContent.style.width;
+        // 將標題轉換為直書格式（不包含標點符號轉換，因為 rightContent 會自動處理）
+        const processedTitle = halfToFull(transformedTitle);
         
-        // 清空原有內容
-        rightContent.innerHTML = '';
-        
-        // 創建直書容器
-        const verticalContainer = document.createElement('div');
-        verticalContainer.style.display = 'flex';
-        verticalContainer.style.justifyContent = 'center';
-        verticalContainer.style.alignItems = 'center';
-        verticalContainer.style.height = '100%';
-        verticalContainer.style.width = '100%';
-        
-        // 創建直書元素
-        const verticalText = document.createElement('div');
-        verticalText.textContent = transformedTitle;
-        verticalText.style.writingMode = 'vertical-rl';  // 垂直從右到左
-        verticalText.style.textOrientation = 'upright';  // 字元直立
-        verticalText.style.height = '100%';  // 高度佔滿容器
-        verticalText.style.display = 'flex';
-        verticalText.style.alignItems = 'center';
-        verticalText.style.justifyContent = 'center';
-        
-        verticalContainer.appendChild(verticalText);
-        rightContent.appendChild(verticalContainer);
-        
-        // 確保寬度不變
-        rightContent.style.width = originalWidth;
-        
-        // 自動調整字體大小
-        adjustFontSizeForVertical(rightContent);
+        // 直接設置文本內容，讓 rightContent 自己處理直書顯示
+        rightContent.textContent = processedTitle;
     }
     
     return transformedTitle;
@@ -174,4 +147,63 @@ function copyShockingTitleToClipboard() {
         outputTitle.style.height = 'auto';
         outputTitle.style.height = outputTitle.scrollHeight + 'px';
     }, 1000);
+}
+
+// 將文字轉換為直書格式
+function convertToVertical(text) {
+    // 先進行全形轉換
+    text = halfToFull(text);
+    
+    // 將標點符號轉換為直書版本
+    text = convertPunctuationToVertical(text);
+    
+    return text;
+}
+
+// 半形轉全形函數
+function halfToFull(text) {
+    // 阿拉伯數字轉換為中文數字
+    const arabicToChinese = {
+        '0': '零', '1': '一', '2': '二', '3': '三', '4': '四',
+        '5': '五', '6': '六', '7': '七', '8': '八', '9': '九'
+    };
+    text = text.replace(/[0-9]/g, match => arabicToChinese[match]);
+
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+        let code = text.charCodeAt(i);
+        if (code === 32) { // 空格轉換
+            result += '　';
+        } else if (code >= 33 && code <= 126) { // ASCII 字元轉換
+            result += String.fromCharCode(code + 65248);
+        } else {
+            result += text.charAt(i);
+        }
+    }
+    return result;
+}
+
+// 標點符號轉換函數 - 將橫書標點轉為直書標點
+function convertPunctuationToVertical(text) {
+    const horizontalToVertical = {
+        '。': '︒', // 句號
+        '、': '︑', // 頓號
+        '（': '︵', // 左圓括號
+        '）': '︶', // 右圓括號
+        '「': '﹁', // 左單引號
+        '」': '﹂', // 右單引號
+        '『': '﹃', // 左雙引號
+        '』': '﹄', // 右雙引號
+        '《': '︽', // 左書名號
+        '》': '︾', // 右書名號
+        '〈': '︿', // 左尖括號
+        '〉': '﹀', // 右尖括號
+        '【': '︻', // 左方括號
+        '】': '︼', // 右方括號
+        '—': '︱', // 破折號
+        '…': '︙', // 省略號
+        '·': '・'  // 間隔號
+    };
+
+    return text.split('').map(char => horizontalToVertical[char] || char).join('');
 } 
