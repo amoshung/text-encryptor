@@ -273,12 +273,173 @@ function maximizeFontSize(element, container) {
     element.style.letterSpacing = '0.05em';
 }
 
+// 添加一個函數來解析驚悚化標題
+function parseShockingTitle(title) {
+    // 移除【】
+    title = title.replace(/【|】/g, '');
+    
+    // 嘗試找出原始標題（在兩個關鍵詞之間的部分）
+    const parts = title.split(' ');
+    
+    if (parts.length >= 3) {
+        // 假設格式為 "開頭關鍵詞 原始標題 結尾關鍵詞"
+        const start = parts[0];
+        const end = parts[parts.length - 1];
+        const middle = parts.slice(1, parts.length - 1).join(' ');
+        
+        return { start, middle, end };
+    }
+    
+    // 如果無法解析，返回整個標題作為中間部分
+    return { start: '', middle: title, end: '' };
+}
+
+// 生成並下載圖片
+function generateAndDownloadImage() {
+    const contentArea = document.getElementById('contentArea');
+    html2canvas(contentArea).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '新聞直書圖片.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+}
+
+// 生成布局函數
+function generateLayout() {
+    const blockCountInput = document.getElementById('blockCount');
+    const titleWidthSelect = document.getElementById('titleWidth');
+    const leftContent = document.getElementById('leftContent');
+    const rightContent = document.getElementById('rightContent');
+    const newsTitleInput = document.getElementById('newsTitle');
+    const shockingTitleOutput = document.getElementById('shockingTitle');
+    
+    const blockCount = parseInt(blockCountInput.value) || 1;
+    const titleWidth = parseInt(titleWidthSelect.value) || 10;
+    
+    // 設置標題寬度
+    rightContent.style.width = `${titleWidth}%`;
+    
+    // 清空左側內容
+    leftContent.innerHTML = '';
+    
+    // 生成垂直區塊
+    for (let i = 0; i < blockCount; i++) {
+        const block = document.createElement('div');
+        block.className = 'vertical-block';
+        
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = `請在此輸入第 ${i + 1} 區塊的內容...`;
+        
+        block.appendChild(textarea);
+        leftContent.appendChild(block);
+    }
+    
+    // 如果已經有標題，使用它
+    if (newsTitleInput.value.trim()) {
+        // 清空原有內容
+        rightContent.innerHTML = '';
+        
+        // 創建直書文字容器
+        const textContainer = document.createElement('div');
+        textContainer.style.writingMode = 'vertical-rl';
+        textContainer.style.textOrientation = 'upright';
+        textContainer.style.width = '100%';
+        textContainer.style.height = '100%';
+        textContainer.style.display = 'flex';
+        textContainer.style.alignItems = 'center';
+        textContainer.style.justifyContent = 'center';
+        
+        // 創建開頭括號
+        const startElement = document.createElement('span');
+        startElement.textContent = '【';
+        
+        // 創建中間文字（斜體）
+        const middleElement = document.createElement('span');
+        middleElement.textContent = halfToFull(newsTitleInput.value.trim());
+        middleElement.style.fontStyle = 'italic';
+        
+        // 創建結尾括號
+        const endElement = document.createElement('span');
+        endElement.textContent = '】';
+        
+        // 添加所有元素到容器
+        textContainer.appendChild(startElement);
+        textContainer.appendChild(middleElement);
+        textContainer.appendChild(endElement);
+        
+        // 添加到右側內容區
+        rightContent.appendChild(textContainer);
+        
+        // 調整字體大小以極大化填充容器
+        maximizeFontSize(textContainer, rightContent);
+    }
+    
+    // 如果已經有驚悚化的標題，使用它
+    if (shockingTitleOutput.value.trim()) {
+        // 這裡需要重新處理驚悚化標題的顯示
+        const titleParts = parseShockingTitle(shockingTitleOutput.value.trim());
+        
+        // 清空原有內容
+        rightContent.innerHTML = '';
+        
+        // 創建直書文字容器
+        const textContainer = document.createElement('div');
+        textContainer.style.writingMode = 'vertical-rl';
+        textContainer.style.textOrientation = 'upright';
+        textContainer.style.width = '100%';
+        textContainer.style.height = '100%';
+        textContainer.style.display = 'flex';
+        textContainer.style.alignItems = 'center';
+        textContainer.style.justifyContent = 'center';
+        
+        // 創建開頭括號和關鍵字
+        const startElement = document.createElement('span');
+        startElement.textContent = `【${halfToFull(titleParts.start)} `;
+        
+        // 創建中間文字（斜體）
+        const middleElement = document.createElement('span');
+        middleElement.textContent = halfToFull(titleParts.middle);
+        middleElement.style.fontStyle = 'italic';
+        
+        // 創建結尾關鍵字和括號
+        const endElement = document.createElement('span');
+        endElement.textContent = ` ${halfToFull(titleParts.end)}】`;
+        
+        // 添加所有元素到容器
+        textContainer.appendChild(startElement);
+        textContainer.appendChild(middleElement);
+        textContainer.appendChild(endElement);
+        
+        // 添加到右側內容區
+        rightContent.appendChild(textContainer);
+        
+        // 調整字體大小以極大化填充容器
+        maximizeFontSize(textContainer, rightContent);
+        
+        // 如果有第一個文本區域，也填入標題
+        const firstTextarea = document.querySelector('.vertical-block textarea');
+        if (firstTextarea) {
+            firstTextarea.value = shockingTitleOutput.value.trim();
+        }
+    }
+}
+
+// 頁面加載完成後初始化
 document.addEventListener('DOMContentLoaded', function() {
-    // 獲取新聞標題輸入框
+    // 獲取元素
+    const blockCountInput = document.getElementById('blockCount');
+    const lineLengthInput = document.getElementById('lineLength');
+    const titleWidthSelect = document.getElementById('titleWidth');
+    const generateLayoutButton = document.getElementById('generateLayout');
+    const downloadImageButton = document.getElementById('downloadImage');
     const newsTitleInput = document.getElementById('newsTitle');
     const rightContent = document.getElementById('rightContent');
     
-    // 監聽輸入事件
+    // 初始化布局
+    generateLayout();
+    
+    // 監聽新聞標題輸入
     newsTitleInput.addEventListener('input', function() {
         const inputTitle = this.value.trim();
         if (inputTitle) {
@@ -319,4 +480,10 @@ document.addEventListener('DOMContentLoaded', function() {
             rightContent.textContent = '請輸入標題';
         }
     });
+
+    // 排版生成按鈕點擊事件
+    generateLayoutButton.addEventListener('click', generateLayout);
+
+    // 生成圖片下載按鈕點擊事件
+    downloadImageButton.addEventListener('click', generateAndDownloadImage);
 }); 
