@@ -70,17 +70,17 @@ function transformNewsTitle() {
     // 將輸入的文字放在中間
     const middleText = inputTitle.trim();
     
-    // 組合成三行的結構
-    const transformedTitle = `${startKeyword}\n${middleText}\n${endKeyword}`;
+    // 組合成一行
+    const transformedTitle = `${startKeyword}${middleText}${endKeyword}`;
 
-    // 輸出結果到 shockingTitle 元素
+    // 輸出結果到 shockingTitle 元素 (橫書)
     outputElement.value = transformedTitle;
     
     // 自動調整輸出文本框的高度
     outputElement.style.height = 'auto';
     outputElement.style.height = outputElement.scrollHeight + 'px';
     
-    // 更新右側標題 - 使用完整的驚悚化標題，直書顯示
+    // 更新右側標題 (直書)
     const rightContent = document.getElementById('rightContent');
     if (rightContent) {
         // 保存原始樣式
@@ -89,37 +89,31 @@ function transformNewsTitle() {
         // 清空原有內容
         rightContent.innerHTML = '';
         
-        // 將標題分行處理
-        const titleLines = transformedTitle.split('\n');
-        
         // 創建直書容器
         const verticalContainer = document.createElement('div');
         verticalContainer.style.display = 'flex';
-        verticalContainer.style.flexDirection = 'column';
         verticalContainer.style.justifyContent = 'center';
         verticalContainer.style.alignItems = 'center';
         verticalContainer.style.height = '100%';
         verticalContainer.style.width = '100%';
         
-        // 為每一行創建元素
-        titleLines.forEach(line => {
-            const lineDiv = document.createElement('div');
-            lineDiv.textContent = line;
-            lineDiv.style.writingMode = 'vertical-rl';
-            lineDiv.style.textOrientation = 'upright';
-            lineDiv.style.marginBottom = '10px';
-            lineDiv.style.textAlign = 'center';
-            lineDiv.style.width = '100%';
-            verticalContainer.appendChild(lineDiv);
-        });
+        // 創建直書元素
+        const verticalText = document.createElement('div');
+        verticalText.textContent = transformedTitle;
+        verticalText.style.writingMode = 'vertical-rl';  // 垂直從右到左
+        verticalText.style.textOrientation = 'upright';  // 字元直立
+        verticalText.style.height = '100%';  // 高度佔滿容器
+        verticalText.style.display = 'flex';
+        verticalText.style.alignItems = 'center';
+        verticalText.style.justifyContent = 'center';
         
-        // 添加到右側內容區
+        verticalContainer.appendChild(verticalText);
         rightContent.appendChild(verticalContainer);
         
         // 確保寬度不變
         rightContent.style.width = originalWidth;
         
-        // 自動調整字體大小以適應容器
+        // 自動調整字體大小
         adjustFontSizeForVertical(rightContent);
     }
     
@@ -128,9 +122,9 @@ function transformNewsTitle() {
 
 // 自動調整字體大小以適應直書容器
 function adjustFontSizeForVertical(container) {
-    // 獲取所有行元素
-    const lineElements = container.querySelectorAll('div > div');
-    if (lineElements.length === 0) return;
+    // 獲取直書元素
+    const verticalText = container.querySelector('div > div');
+    if (!verticalText) return;
     
     // 獲取容器尺寸
     const containerHeight = container.offsetHeight;
@@ -138,52 +132,29 @@ function adjustFontSizeForVertical(container) {
     
     // 設置初始字體大小
     let fontSize = 24; // 起始字體大小
+    verticalText.style.fontSize = fontSize + 'px';
     
-    // 應用字體大小到所有行
-    function applyFontSize(size) {
-        lineElements.forEach(el => {
-            el.style.fontSize = size + 'px';
-        });
-    }
-    
-    // 初始應用
-    applyFontSize(fontSize);
-    
-    // 檢查總高度是否超出容器
-    function isTooTall() {
-        let totalHeight = 0;
-        lineElements.forEach(el => {
-            totalHeight += el.offsetHeight;
-        });
-        return totalHeight > containerHeight * 0.9; // 留出10%的邊距
-    }
-    
-    // 檢查最寬的行是否超出容器寬度
-    function isTooWide() {
-        let maxWidth = 0;
-        lineElements.forEach(el => {
-            if (el.offsetWidth > maxWidth) {
-                maxWidth = el.offsetWidth;
-            }
-        });
-        return maxWidth > containerWidth * 0.9; // 留出10%的邊距
+    // 檢查是否超出容器
+    function isTooBig() {
+        return (verticalText.offsetHeight > containerHeight * 0.95) || 
+               (verticalText.offsetWidth > containerWidth * 0.95);
     }
     
     // 縮小字體直到適合容器
-    while ((isTooTall() || isTooWide()) && fontSize > 12) {
+    while (isTooBig() && fontSize > 12) {
         fontSize -= 1;
-        applyFontSize(fontSize);
+        verticalText.style.fontSize = fontSize + 'px';
     }
     
     // 嘗試放大字體
     let canIncrease = true;
     while (canIncrease && fontSize < 36) {
         fontSize += 1;
-        applyFontSize(fontSize);
+        verticalText.style.fontSize = fontSize + 'px';
         
-        if (isTooTall() || isTooWide()) {
+        if (isTooBig()) {
             fontSize -= 1;
-            applyFontSize(fontSize);
+            verticalText.style.fontSize = fontSize + 'px';
             canIncrease = false;
         }
     }
