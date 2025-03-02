@@ -257,4 +257,22 @@ function maximizeFontSize(element, container) {
     // 設置行高和字間距以改善顯示效果
     element.style.lineHeight = '1.2';
     element.style.letterSpacing = '0.05em';
-} 
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 獲取新聞標題輸入框
+    const newsTitleInput = document.getElementById('newsTitle');
+    const rightContent = document.getElementById('rightContent');
+    
+    // 監聽輸入事件
+    newsTitleInput.addEventListener('input', function() {
+        const inputTitle = this.value.trim();
+        if (inputTitle) {
+            // 將標題轉換為直書格式並加上【】
+            const processedTitle = `【${halfToFull(inputTitle)}】`;
+            rightContent.textContent = processedTitle;
+        } else {
+            rightContent.textContent = '請輸入標題';
+        }
+    });
+}); 

@@ -296,6 +296,18 @@
 
             // 初始化布局
             generateLayout();
+            
+            // 監聽新聞標題輸入
+            newsTitleInput.addEventListener('input', function() {
+                const inputTitle = this.value.trim();
+                if (inputTitle) {
+                    // 將標題轉換為直書格式並加上【】
+                    const processedTitle = `【${inputTitle}】`;
+                    rightContent.textContent = processedTitle;
+                } else {
+                    rightContent.textContent = '請輸入標題';
+                }
+            });
 
             // 排版生成按鈕點擊事件
             generateLayoutButton.addEventListener('click', generateLayout);
@@ -326,29 +338,19 @@
                     leftContent.appendChild(block);
                 }
                 
-                // 監聽標題輸入
-                const firstTextarea = document.querySelector('.vertical-block textarea');
-                if (firstTextarea) {
-                    firstTextarea.addEventListener('input', function() {
-                        const title = this.value.trim();
-                        if (title) {
-                            rightContent.textContent = title;
-                        } else {
-                            rightContent.textContent = '請輸入標題';
-                        }
-                    });
+                // 如果已經有標題，使用它
+                if (newsTitleInput.value.trim()) {
+                    rightContent.textContent = `【${newsTitleInput.value.trim()}】`;
                 }
                 
                 // 如果已經有驚悚化的標題，使用它
                 if (shockingTitleOutput.value.trim()) {
-                    const lines = shockingTitleOutput.value.split('\n');
-                    if (lines.length > 1) {
-                        rightContent.textContent = lines[1]; // 取中間行
-                        
-                        // 如果有第一個文本區域，也填入標題
-                        if (firstTextarea) {
-                            firstTextarea.value = lines[1];
-                        }
+                    rightContent.textContent = shockingTitleOutput.value.trim();
+                    
+                    // 如果有第一個文本區域，也填入標題
+                    const firstTextarea = document.querySelector('.vertical-block textarea');
+                    if (firstTextarea) {
+                        firstTextarea.value = shockingTitleOutput.value.trim();
                     }
                 }
             }

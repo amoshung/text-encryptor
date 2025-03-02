@@ -77,13 +77,8 @@ function halfToFull(text) {
 // 標點符號轉換函數 - 將橫書標點轉為直書標點
 function convertPunctuationToVertical(text) {
     const horizontalToVertical = {
-        '，': '︐', // 逗號
         '。': '︒', // 句號
         '、': '︑', // 頓號
-        '：': '︓', // 冒號
-        '；': '︔', // 分號
-        '！': '︕', // 驚嘆號
-        '？': '︖', // 問號
         '（': '︵', // 左圓括號
         '）': '︶', // 右圓括號
         '「': '﹁', // 左單引號
