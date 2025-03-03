@@ -612,33 +612,34 @@ function verticalText(input) {
 
 function byChars(text) {
   const charsPerLine = parseInt(document.getElementById("charsPerLine").value);
-  
+
   // 將文字分段，並移除空段落
-  const paragraphs = text.split("\n").filter(p => p.trim().length > 0);
+  const paragraphs = text.split("\n").filter((p) => p.trim().length > 0);
   const allResults = [];
 
   for (let paragraph of paragraphs) {
     // 轉換為全形並處理標點符號
     paragraph = convertPunctuationToVertical(halfToFull(paragraph));
-    
+
     // 計算當前段落需要的行數
     const totalLines = Math.ceil(paragraph.length / charsPerLine);
-    
+
     // 補足空格
     while (paragraph.length < totalLines * charsPerLine) {
       paragraph += "　";
     }
-    
+
     // 建立矩陣並填充
     const matrix = [];
     for (let i = 0; i < totalLines; i++) {
       matrix[i] = [];
       for (let j = 0; j < charsPerLine; j++) {
         const charIndex = i * charsPerLine + j;
-        matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
+        matrix[i][j] =
+          charIndex < paragraph.length ? paragraph[charIndex] : "　";
       }
     }
-    
+
     // 生成直書結果（從右到左，從上到下）
     const result = [];
     for (let j = 0; j < charsPerLine; j++) {
@@ -648,36 +649,38 @@ function byChars(text) {
       }
       result.push(line.join(""));
     }
-    
+
     allResults.push(result.join("<br>"));
   }
-  
+
   // 用兩個換行符號連接各段落
   return allResults.join("<br><br>");
 }
 
 function byLines(text) {
   const totalLines = parseInt(document.getElementById("totalLines").value);
-  
+
   // 將文字分段，並移除空段落
-  const paragraphs = text.split("\n").filter(p => p.trim().length > 0);
+  const paragraphs = text.split("\n").filter((p) => p.trim().length > 0);
   const allResults = [];
 
   for (let paragraph of paragraphs) {
     // 轉換為全形並處理標點符號
     paragraph = convertPunctuationToVertical(halfToFull(paragraph));
-    
+
     // 計算每行應有的字數
     const charsPerLine = Math.ceil(paragraph.length / totalLines);
-    
+
     // 補足空格
     while (paragraph.length < charsPerLine * totalLines) {
       paragraph += "　";
     }
-    
+
     // 建立矩陣並填充
-    const matrix = Array(totalLines).fill().map(() => Array(charsPerLine).fill("　"));
-    
+    const matrix = Array(totalLines)
+      .fill()
+      .map(() => Array(charsPerLine).fill("　"));
+
     // 填充矩陣
     let count = 0;
     for (let i = 0; i < totalLines && count < paragraph.length; i++) {
@@ -685,7 +688,7 @@ function byLines(text) {
         matrix[i][j] = paragraph.charAt(count++);
       }
     }
-    
+
     // 生成直書結果（從右到左，從上到下）
     const result = [];
     for (let j = 0; j < charsPerLine; j++) {
@@ -695,10 +698,10 @@ function byLines(text) {
       }
       result.push(line.join(""));
     }
-    
+
     allResults.push(result.join("<br>"));
   }
-  
+
   // 用兩個換行符號連接各段落
   return allResults.join("<br><br>");
 }
@@ -825,78 +828,94 @@ function createTitleContainer(title, isShockingTitle = false) {
 
 // 添加計算每行字數的函數
 function calculateCharsPerLine(containerHeight, fontSize) {
-    // 假設每個字的高度是 fontSize * 1.5 (考慮行距)
-    const charHeight = fontSize * 1.5;
-    // 計算可以容納的字數
-    const charsPerLine = Math.floor(containerHeight / charHeight);
-    // 確保字數在合理範圍內（6-20字）
-    return Math.min(Math.max(charsPerLine, 6), 20);
+  // 假設每個字的高度是 fontSize * 1.5 (考慮行距)
+  const charHeight = fontSize * 1.5;
+  // 計算可以容納的字數
+  const charsPerLine = Math.floor(containerHeight / charHeight);
+  // 確保字數在合理範圍內（6-20字）
+  return Math.min(Math.max(charsPerLine, 6), 20);
 }
 
 // 修改 initializeLayout 函數
 function initializeLayout() {
-    const leftContent = document.getElementById('leftContent');
-    const charsize = parseInt(document.getElementById('charsize').value);
-    leftContent.innerHTML = '';
-    
-    // 創建單一文本區域容器
-    const textareaContainer = document.createElement('div');
-    textareaContainer.style.flex = '1';
-    textareaContainer.style.display = 'flex';
-    textareaContainer.style.flexDirection = 'row';
-    textareaContainer.style.gap = '10px';
-    
-    // 創建文本區域
-    const textarea = document.createElement('textarea');
-    textarea.className = 'grid-textarea';
-    textarea.placeholder = '請複製貼上要轉換的文字...';
-    textarea.style.width = '100%';
-    textarea.style.height = '100%';
-    textarea.style.border = 'none';
-    textarea.style.resize = 'none';
-    textarea.style.padding = '10px';
-    textarea.style.fontFamily = 'inherit';
-    textarea.style.fontSize = `${charsize}px`;
-    textarea.style.boxSizing = 'border-box';
-    
-    // 創建轉換按鈕
-    const convertButton = document.createElement('button');
-    convertButton.textContent = '轉換直書';
-    convertButton.style.width = '80px';
-    convertButton.style.height = '30px';
-    convertButton.style.alignSelf = 'flex-start';
-    convertButton.style.marginTop = '10px';
-    convertButton.style.fontSize = '14px';
-    convertButton.style.padding = '5px';
-    
-    // 添加轉換按鈕點擊事件
-    convertButton.addEventListener('click', function() {
-      const text = textarea.value.trim();
-      if (text) {
-        const verticalContainer = transformText(text);
-        verticalContainer.className = 'vertical-content';
-        verticalContainer.style.fontSize = `${charsize}px`;
-        verticalContainer.style.marginTop = '10px';
-        
-        // 清除現有的直書顯示
-        const existingVertical = textareaContainer.querySelector('.vertical-content');
-        if (existingVertical) {
-          existingVertical.remove();
-        }
-        
-        // 添加新的直書顯示
-        textareaContainer.appendChild(verticalContainer);
+  const leftContent = document.getElementById("leftContent");
+  const charsize = parseInt(document.getElementById("charsize").value);
+  leftContent.innerHTML = "";
+
+  // 創建單一文本區域容器
+  const textareaContainer = document.createElement("div");
+  textareaContainer.style.flex = "1";
+  textareaContainer.style.display = "flex";
+  textareaContainer.style.flexDirection = "row";
+  textareaContainer.style.gap = "10px";
+
+  // 創建文本區域
+  const textarea = document.createElement("textarea");
+  textarea.className = "grid-textarea";
+  textarea.placeholder = "請複製貼上要轉換的文字...";
+  textarea.style.width = "100%";
+  textarea.style.height = "100%";
+  textarea.style.border = "none";
+  textarea.style.resize = "none";
+  textarea.style.padding = "10px";
+  textarea.style.fontFamily = "inherit";
+  textarea.style.fontSize = `${charsize}px`;
+  textarea.style.boxSizing = "border-box";
+
+  // 創建轉換按鈕
+  const convertButton = document.createElement("button");
+  convertButton.textContent = "轉換直書";
+  convertButton.style.width = "80px";
+  convertButton.style.height = "30px";
+  convertButton.style.alignSelf = "flex-start";
+  convertButton.style.marginTop = "10px";
+  convertButton.style.fontSize = "14px";
+  convertButton.style.padding = "5px";
+
+  // 添加轉換按鈕點擊事件
+  convertButton.addEventListener("click", function () {
+    const text = textarea.value.trim();
+    if (text) {
+      const verticalContainer = transformText(text);
+      verticalContainer.className = "vertical-content";
+      verticalContainer.style.fontSize = `${charsize}px`;
+      verticalContainer.style.marginTop = "10px";
+
+      // 清除現有的直書顯示
+      const existingVertical =
+        textareaContainer.querySelector(".vertical-content");
+      if (existingVertical) {
+        existingVertical.remove();
       }
-    });
-    
-    textareaContainer.appendChild(textarea);
-    textareaContainer.appendChild(convertButton);
-    leftContent.appendChild(textareaContainer);
+
+      // 添加新的直書顯示
+      textareaContainer.appendChild(verticalContainer);
+    }
+  });
+
+  textareaContainer.appendChild(textarea);
+  textareaContainer.appendChild(convertButton);
+  leftContent.appendChild(textareaContainer);
+}
+
+// 修改 clearContent 函數
+function clearContent() {
+  const leftContent = document.getElementById("leftContent");
+  const textarea = leftContent.querySelector("textarea");
+  if (textarea) {
+    textarea.value = ""; // 清空文本內容
+  }
+  
+  // 移除已轉換的直書內容
+  const verticalContent = leftContent.querySelector(".vertical-content");
+  if (verticalContent) {
+    verticalContent.remove();
+  }
 }
 
 // 修改 clearContent 按鈕事件
-clearContentButton.addEventListener("click", function () {
-    initializeLayout();
+clearContentButton.addEventListener("click", function() {
+  clearContent();
 });
 
 // 修改 DOMContentLoaded 事件監聽器
@@ -989,55 +1008,5 @@ document.addEventListener("DOMContentLoaded", function () {
   const clearContentButton = document.getElementById("clearContent");
   clearContentButton.addEventListener("click", function () {
     initializeLayout();
-  });
-
-  // 監聽字體大小變更
-  const charsizeInput = document.getElementById("charsize");
-  charsizeInput.addEventListener("change", function() {
-    const charsize = parseInt(this.value);
-    const textareaContainers = document.querySelectorAll('.left-content > div > div');
-    
-    // 更新字體大小
-    const textareas = document.getElementsByClassName('grid-textarea');
-    Array.from(textareas).forEach(textarea => {
-        textarea.style.fontSize = `${charsize}px`;
-    });
-    
-    // 重新計算並更新每行字數
-    if (textareaContainers.length > 0) {
-        const containerHeight = textareaContainers[0].clientHeight;
-        const calculatedCharsPerLine = calculateCharsPerLine(containerHeight, charsize);
-        document.getElementById('charsPerLine').value = calculatedCharsPerLine;
-    }
-    
-    // 重新生成布局
-    generateLayout();
-  });
-
-  // 監聽每行字數變更
-  const charsPerLineInput = document.getElementById('charsPerLine');
-  charsPerLineInput.addEventListener('change', function() {
-    const charsize = parseInt(document.getElementById('charsize').value);
-    const charsPerLine = parseInt(this.value);
-    const textareaContainers = document.querySelectorAll('.left-content > div > div');
-    
-    if (textareaContainers.length > 0) {
-        const containerHeight = textareaContainers[0].clientHeight;
-        const calculatedCharsize = Math.floor(containerHeight / (charsPerLine * 1.5));
-        
-        // 如果計算出的字體大小在合理範圍內，則更新
-        if (calculatedCharsize >= 8 && calculatedCharsize <= 16) {
-            document.getElementById('charsize').value = calculatedCharsize;
-            
-            // 更新所有文本區域的字體大小
-            const textareas = document.getElementsByClassName('grid-textarea');
-            Array.from(textareas).forEach(textarea => {
-                textarea.style.fontSize = `${calculatedCharsize}px`;
-            });
-        }
-    }
-    
-    // 重新生成布局
-    generateLayout();
   });
 });
