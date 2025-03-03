@@ -769,7 +769,8 @@ function verticalText(input) {
   return byChars(input);
 }
 
-function byChars(text) {
+function byChars(input) {
+  var userText = input;
   // 固定每行12個字
   const charsPerLine = 12;
   
