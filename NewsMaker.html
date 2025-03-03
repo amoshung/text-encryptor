@@ -133,6 +133,7 @@
         justify-content: center;
         width: 100%;
         box-sizing: border-box;
+        font-family: "新細明體", "SimSun", serif;
       }
 
       .content-area {
@@ -144,6 +145,7 @@
         min-height: 500px;
         width: 100%;
         aspect-ratio: 4/3;
+        font-family: inherit;
       }
 
       .left-content {
@@ -151,6 +153,7 @@
         display: flex;
         flex-direction: column;
         border: 1px solid #ddd;
+        font-family: inherit;
       }
 
       .right-content {
@@ -164,6 +167,7 @@
         align-items: center;
         justify-content: center;
         border: 1px solid #ddd;
+        font-family: inherit;
       }
 
       .vertical-block {
@@ -171,6 +175,7 @@
         border-bottom: 1px dashed #ccc;
         padding: 10px;
         overflow: auto;
+        font-family: inherit;
       }
 
       .vertical-block:last-child {
@@ -185,6 +190,7 @@
         padding: 10px;
         box-sizing: border-box;
         font-size: 16px;
+        font-family: inherit;
       }
 
       .download-container {
@@ -317,7 +323,7 @@
           <input type="text" id="newsTitle" placeholder="請輸入新聞標題..." />
         </div>
         <div class="button-container">
-          <button id="transformTitleBtn" onclick="transformNewsTitle()">
+          <button id="transformTitleBtn">
             標題驚悚化
           </button>
         </div>

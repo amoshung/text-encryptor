@@ -246,7 +246,7 @@ function transformNewsTitle() {
     ],
   };
 
-  // 隨機選擇開頭的關鍵字
+  // 隨機選擇開頭和結尾關鍵字
   const startKeyword =
     shocking_title_keywords_restructured.opening_keywords[
       Math.floor(
@@ -254,8 +254,6 @@ function transformNewsTitle() {
           shocking_title_keywords_restructured.opening_keywords.length
       )
     ];
-
-  // 隨機選擇結尾的關鍵字
   const endKeyword =
     shocking_title_keywords_restructured.ending_keywords[
       Math.floor(
@@ -265,42 +263,32 @@ function transformNewsTitle() {
     ];
 
   // 將輸入的文字放在中間
-  const middleText = inputTitle.trim();
+  const titleText = inputTitle.trim();
 
   // 組合成一行 (用於文本框顯示)
-  const transformedTitle = `【${startKeyword} ${middleText} ${endKeyword}】`;
+  const transformedTitle = `【${startKeyword} ${titleText} ${endKeyword}】`;
 
-  // 輸出結果到 shockingTitle 元素 (橫書)
+  // 更新輸出框
   outputElement.value = transformedTitle;
+  outputElement.style.height = "auto";
+  outputElement.style.height = outputElement.scrollHeight + "px";
 
-  // 自動調整輸出文本框的高度以適應內容
-  outputElement.style.height = "auto"; // 先重置高度
-  outputElement.style.height = outputElement.scrollHeight + "px"; // 設置為內容高度
-
-  // 更新右側標題 - 使用 HTML 元素實現斜體效果
+  // 更新右側直書顯示
   rightContent.innerHTML = "";
-
-  // 創建直書文字容器
   const textContainer = document.createElement("div");
   textContainer.style.writingMode = "vertical-rl";
   textContainer.style.textOrientation = "upright";
-  textContainer.style.fontFamily =
-    '"Yu Mincho", "MS Mincho", "SimSun", serif'; // 使用較好支援直書的字型
   textContainer.style.width = "100%";
   textContainer.style.height = "100%";
   textContainer.style.display = "flex";
   textContainer.style.alignItems = "center";
   textContainer.style.justifyContent = "center";
-  textContainer.style.fontSize = "100%"; // 初始字體大小
+  textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';
 
   // 先進行半形轉全形，再轉換標點符號
-  const startText = convertPunctuationToVertical(
-    halfToFull(`【${startKeyword} `)
-  );
-  const middleText = convertPunctuationToVertical(halfToFull(middleText));
-  const endText = convertPunctuationToVertical(
-    halfToFull(` ${endKeyword}】`)
-  );
+  const startText = convertPunctuationToVertical(halfToFull(`【${startKeyword} `));
+  const middleText = convertPunctuationToVertical(halfToFull(titleText));
+  const endText = convertPunctuationToVertical(halfToFull(` ${endKeyword}】`));
 
   // 創建開頭括號和關鍵字
   const startElement = document.createElement("span");
@@ -308,12 +296,12 @@ function transformNewsTitle() {
 
   // 創建中間文字（斜體）
   const middleElement = document.createElement("span");
-  middleElement.textContent = middleText;
+  middleElement.innerHTML = middleText;
   middleElement.style.fontStyle = "italic";
 
   // 創建結尾關鍵字和括號
   const endElement = document.createElement("span");
-  endElement.textContent = endText;
+  endElement.innerHTML = endText;
 
   // 添加所有元素到容器
   textContainer.appendChild(startElement);
@@ -674,6 +662,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 生成圖片下載按鈕點擊事件
   downloadImageButton.addEventListener("click", generateAndDownloadImage);
+
+  // 添加驚悚化按鈕事件監聽器
+  const transformTitleBtn = document.getElementById("transformTitleBtn");
+  if (transformTitleBtn) {
+    transformTitleBtn.addEventListener("click", transformNewsTitle);
+  }
 });
 
 function createVerticalTextContainer(text) {
