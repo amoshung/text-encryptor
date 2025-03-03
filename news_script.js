@@ -765,19 +765,51 @@ function verticalText(input) {
 }
 
 function byChars(text) {
-  // 固定每行字數為12，不再從元素讀取
+  // 固定每行12個字
   const charsPerLine = 12;
   
-  // 將文字按指定字數分行
-  let result = [];
-  let i = 0;
-  while (i < text.length) {
-    result.push(text.substr(i, charsPerLine));
-    i += charsPerLine;
+  // 將文字分段，並移除空段落
+  const paragraphs = text.split("\n").filter(p => p.trim().length > 0);
+  const allResults = [];
+
+  for (let paragraph of paragraphs) {
+    // 轉換為全形並處理標點符號
+    paragraph = convertPunctuationToVertical(halfToFull(paragraph));
+    
+    // 計算當前段落需要的行數
+    const totalLines = Math.ceil(paragraph.length / charsPerLine);
+    
+    // 補足全形空格使每段落成為矩形
+    while (paragraph.length < totalLines * charsPerLine) {
+      paragraph += "　"; // 使用全形空格填充
+    }
+    
+    // 建立矩陣並填充字符
+    const matrix = [];
+    for (let i = 0; i < totalLines; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < charsPerLine; j++) {
+        const charIndex = i * charsPerLine + j;
+        matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
+      }
+    }
+    
+    // 生成直書結果（由右到左，由上到下）
+    const result = [];
+    for (let j = 0; j < charsPerLine; j++) {
+      const line = [];
+      for (let i = totalLines - 1; i >= 0; i--) {
+        line.push(matrix[i][j]);
+      }
+      result.push(line.join("")); // 直接連接字符，不添加空格
+    }
+    
+    // 將當前段落結果添加至總結果
+    allResults.push(result.join("<br>"));
   }
   
-  // 返回分行後的文字陣列
-  return result;
+  // 用兩個<br>標籤連接各段落
+  return allResults.join("<br><br>");
 }
 
 // 調整字體大小以極大化填充容器
