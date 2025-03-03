@@ -208,11 +208,12 @@ function byChars(input) {
       for (let j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join(''));
+      // 恢復使用 \u200B 來分隔字符
+      result.push(`<div class="vertical-line">${line.join("\u200B")}</div>`);
     }
 
-    // 將當前段落的結果加入總結果
-    allResults.push(result.join("\n"));
+    // 將當前段落的結果加入總結果，使用 div 包裹
+    allResults.push(`<div class="vertical-text">${result.join("")}</div>`);
   }
 
   // 用兩個換行符號連接各段落的結果
@@ -265,11 +266,12 @@ function byLines(input) {
       for (var j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join(''));
+      // 恢復使用 \u200B 來分隔字符
+      result.push(`<div class="vertical-line">${line.join("\u200B")}</div>`);
     }
 
-    // 將當前段落的結果加入總結果
-    allResults.push(result.join("\n"));
+    // 將當前段落的結果加入總結果，使用 div 包裹
+    allResults.push(`<div class="vertical-text">${result.join("")}</div>`);
   }
 
   // 用兩個換行符號連接各段落的結果

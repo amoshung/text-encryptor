@@ -164,6 +164,24 @@
             right: -0.25em;
         }
 
+        /* 直書文本容器 */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            white-space: nowrap;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        /* 直書行樣式 */
+        .vertical-line {
+            display: inline-block;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            margin: 0 5px;
+        }
+
+        /* 輸出容器樣式 */
         .output-text {
             width: 100%;
             min-height: 3em;
@@ -177,6 +195,10 @@
             white-space: pre-wrap;
             font-family: inherit;
             background-color: white;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            align-items: flex-start;
         }
     </style>
 </head>
