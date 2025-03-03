@@ -369,6 +369,17 @@
           </div>
         </div>
         <div class="input-item">
+          <label for="gridCount">左側垂直分格數</label>
+          <input 
+            type="number" 
+            id="gridCount" 
+            min="1" 
+            max="4" 
+            value="1" 
+            style="width: 80px;"
+          >
+        </div>
+        <div class="input-item">
           <label for="titleWidth">標題佔畫面寬度</label>
           <select id="titleWidth">
             <option value="10">10%</option>
@@ -378,7 +389,10 @@
         </div>
       </div>
       <div class="button-container">
-        <button id="generateLayout">新聞排版生成</button>
+        <div style="display: flex; gap: 10px;">
+          <button id="generateLayout" style="flex: 2;">新聞排版生成</button>
+          <button id="clearContent" style="flex: 1; background-color: #f44336;">文章清空</button>
+        </div>
       </div>
     </div>
 

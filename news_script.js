@@ -711,33 +711,86 @@ function createTitleContainer(title, isShockingTitle = false) {
   return textContainer;
 }
 
-// 生成布局函數
+function createGridLayout(gridCount) {
+    const leftContent = document.getElementById('leftContent');
+    leftContent.innerHTML = '';
+    
+    // 移除舊的樣式
+    leftContent.style.display = 'flex';
+    leftContent.style.flexDirection = 'column';
+    
+    for (let i = 0; i < gridCount; i++) {
+        const gridContainer = document.createElement('div');
+        gridContainer.style.flex = '1';
+        gridContainer.style.display = 'flex';
+        gridContainer.style.flexDirection = 'column';
+        gridContainer.style.marginBottom = i < gridCount - 1 ? '10px' : '0';
+        gridContainer.style.borderBottom = i < gridCount - 1 ? '1px dashed #ccc' : 'none';
+        
+        const textarea = document.createElement('textarea');
+        textarea.className = 'grid-textarea';
+        textarea.placeholder = `請輸入第 ${i + 1} 格的文字...`;
+        textarea.style.width = '100%';
+        textarea.style.height = '100%';
+        textarea.style.border = 'none';
+        textarea.style.resize = 'none';
+        textarea.style.padding = '10px';
+        textarea.style.fontFamily = 'inherit';
+        textarea.style.fontSize = '16px';
+        textarea.style.marginBottom = '10px';
+        
+        // 添加輸入事件監聽
+        textarea.addEventListener('input', function() {
+            if (this.value.trim()) {
+                generateLayout();
+            }
+        });
+        
+        gridContainer.appendChild(textarea);
+        leftContent.appendChild(gridContainer);
+    }
+}
+
+// 修改 generateLayout 函數
 function generateLayout() {
     const leftContent = document.getElementById('leftContent');
-    const leftContentInput = document.getElementById('leftContentInput');
     const rightContent = document.getElementById('rightContent');
     const shockingTitleOutput = document.getElementById('shockingTitle');
-
-    // 處理左側內容
-    if (leftContentInput.value.trim()) {
-        const byLinesOption = document.getElementById('byLinesOption');
-        const totalLines = document.getElementById('totalLines').value;
-        const charsPerLine = document.getElementById('charsPerLine').value;
-
-        const options = {
-            byLines: byLinesOption.checked,
-            totalLines: parseInt(totalLines),
-            charsPerLine: parseInt(charsPerLine)
-        };
-
-        const textContainer = transformText(leftContentInput.value, options);
-        leftContent.innerHTML = '';
-        leftContent.appendChild(textContainer);
-        
-        // 調整字體大小以適應容器
-        maximizeFontSize(textContainer, leftContent);
-    }
-
+    
+    // 獲取所有文本區域的內容
+    const textareas = leftContent.getElementsByClassName('grid-textarea');
+    const contents = Array.from(textareas).map(textarea => textarea.value.trim());
+    
+    // 清空左側內容區域的直書顯示
+    const contentContainers = leftContent.getElementsByClassName('vertical-content');
+    Array.from(contentContainers).forEach(container => container.remove());
+    
+    // 處理每個文本區域的內容
+    contents.forEach((content, index) => {
+        if (content) {
+            const byLinesOption = document.getElementById('byLinesOption');
+            const totalLines = document.getElementById('totalLines').value;
+            const charsPerLine = document.getElementById('charsPerLine').value;
+            
+            const options = {
+                byLines: byLinesOption.checked,
+                totalLines: parseInt(totalLines),
+                charsPerLine: parseInt(charsPerLine)
+            };
+            
+            const textContainer = transformText(content, options);
+            textContainer.className = 'vertical-content';
+            textContainer.style.height = '100%';
+            textContainer.style.marginTop = '10px';
+            
+            const gridContainer = textareas[index].parentElement;
+            gridContainer.appendChild(textContainer);
+            
+            // 調整字體大小以適應容器
+            maximizeFontSize(textContainer, gridContainer);
+        }
+    });
+    
     // 更新右側標題顯示
     if (shockingTitleOutput.value.trim()) {
         rightContent.innerHTML = '';
@@ -821,4 +874,44 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('byCharsOption').addEventListener('change', generateLayout);
   document.getElementById('totalLines').addEventListener('input', generateLayout);
   document.getElementById('charsPerLine').addEventListener('input', generateLayout);
+
+  // 監聽分格數量變化
+  const gridCountInput = document.getElementById('gridCount');
+  gridCountInput.addEventListener('change', function() {
+    createGridLayout(parseInt(this.value));
+    generateLayout();
+  });
+  
+  // 初始化分格布局
+  createGridLayout(parseInt(gridCountInput.value));
+
+  // 文章清空按鈕點擊事件
+  const clearContentButton = document.getElementById("clearContent");
+  clearContentButton.addEventListener("click", function() {
+    const leftContent = document.getElementById('leftContent');
+    
+    // 清空現有內容
+    leftContent.innerHTML = '';
+    
+    // 重新創建文本輸入區域
+    const textarea = document.createElement('textarea');
+    textarea.id = 'leftContentInput';
+    textarea.placeholder = '請輸入要轉換為直書的文字...';
+    textarea.style.width = '100%';
+    textarea.style.height = '100%';
+    textarea.style.border = 'none';
+    textarea.style.resize = 'none';
+    textarea.style.padding = '10px';
+    textarea.style.fontFamily = 'inherit';
+    textarea.style.fontSize = '16px';
+    
+    // 添加輸入事件監聽
+    textarea.addEventListener('input', function() {
+      if (this.value.trim()) {
+        generateLayout();
+      }
+    });
+    
+    leftContent.appendChild(textarea);
+  });
 });
