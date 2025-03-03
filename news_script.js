@@ -880,6 +880,9 @@ function createGridLayout(gridCount) {
         textarea.style.fontSize = `${charsize}px`;
         textarea.style.boxSizing = 'border-box';
         
+        // 將 textarea 添加到 textareaContainer
+        textareaContainer.appendChild(textarea);
+        
         gridContainer.appendChild(textareaContainer);
         
         // 計算合適的每行字數
@@ -932,7 +935,6 @@ function createGridLayout(gridCount) {
         convertButton.clickHandler = clickHandler; // 保存事件處理器的引用
         convertButton.addEventListener('click', clickHandler);
         
-        gridContainer.appendChild(textareaContainer);
         gridContainer.appendChild(convertButton);
         leftContent.appendChild(gridContainer);
     }
