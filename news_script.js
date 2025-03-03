@@ -511,6 +511,12 @@ function maximizeFontSize(element, container) {
     
     // 設置行高為1.2以改善可讀性
     element.style.lineHeight = "1.2";
+    
+    // 確保 strong 標籤內的文字保持粗體
+    const strongElements = element.getElementsByTagName('strong');
+    for (let strong of strongElements) {
+        strong.style.fontWeight = 'bold';
+    }
 }
 
 // 添加一個函數來解析驚悚化標題
@@ -570,31 +576,21 @@ function createTitleContainer(title, isShockingTitle = false) {
         endText = "】";
     }
     
-    // 創建開頭括號
-    const startElement = document.createElement('span');
-    startElement.innerHTML = convertPunctuationToVertical(halfToFull(startText));
-    startElement.style.fontWeight = 'normal';
-    startElement.style.fontSize = '0.9em';
-    startElement.style.display = 'inline-block';
+    // 創建單一文字元素
+    const textElement = document.createElement('div');
+    textElement.style.display = 'inline-block';
     
-    // 創建中間文字
-    const middleElement = document.createElement('span');
-    middleElement.innerHTML = convertPunctuationToVertical(halfToFull(middleText));
-    middleElement.style.fontSize = '1.1em';
-    middleElement.style.fontWeight = 'bold';
-    middleElement.style.display = 'inline-block';
+    // 組合文字內容，使用 strong 標籤使中間文字變粗
+    const combinedText = `
+        ${convertPunctuationToVertical(halfToFull(startText))}
+        <strong>${convertPunctuationToVertical(halfToFull(middleText))}</strong>
+        ${convertPunctuationToVertical(halfToFull(endText))}
+    `;
     
-    // 創建結尾括號
-    const endElement = document.createElement('span');
-    endElement.innerHTML = convertPunctuationToVertical(halfToFull(endText));
-    endElement.style.fontWeight = 'normal';
-    endElement.style.fontSize = '0.9em';
-    endElement.style.display = 'inline-block';
+    textElement.innerHTML = combinedText;
     
-    // 添加所有元素到容器
-    textContainer.appendChild(startElement);
-    textContainer.appendChild(middleElement);
-    textContainer.appendChild(endElement);
+    // 添加到容器
+    textContainer.appendChild(textElement);
     
     return textContainer;
 }
