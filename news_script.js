@@ -2,8 +2,7 @@
 function transformNewsTitle() {
   let inputTitle = document.getElementById("newsTitle").value;
   let outputElement = document.getElementById("shockingTitle");
-  let rightContent = document.getElementById("rightContent");
-
+  
   if (!inputTitle.trim()) {
     alert("請輸入新聞標題");
     return;
@@ -273,12 +272,8 @@ function transformNewsTitle() {
   outputElement.style.height = "auto";
   outputElement.style.height = outputElement.scrollHeight + "px";
 
-  // 更新右側直書顯示
-  rightContent.innerHTML = "";
-  const textContainer = createTitleContainer(transformedTitle, true);
-  rightContent.appendChild(textContainer);
-  maximizeFontSize(textContainer, rightContent);
-
+  // 不再直接更新 rightContent，而是通過 updateRightContent 函數統一處理
+  
   return transformedTitle;
 }
 
@@ -784,7 +779,7 @@ function calculateCharsPerLine(containerHeight, fontSize) {
   return Math.min(Math.max(charsPerLine, 6), 20);
 }
 
-// 修改 initializeLayout 函數
+// 修改 initializeLayout 函數，移除轉換按鈕
 function initializeLayout() {
   const leftContent = document.getElementById("leftContent");
   const charsize = parseInt(document.getElementById("charsize").value || 16);
@@ -794,11 +789,12 @@ function initializeLayout() {
   const textareaContainer = document.createElement("div");
   textareaContainer.style.flex = "1";
   textareaContainer.style.display = "flex";
-  textareaContainer.style.flexDirection = "row";
+  textareaContainer.style.flexDirection = "column"; // 改為縱向排列
   textareaContainer.style.gap = "10px";
 
   // 創建文本區域
   const textarea = document.createElement("textarea");
+  textarea.id = "contentTextarea"; // 添加ID以便後續獲取
   textarea.className = "grid-textarea";
   textarea.placeholder = "請複製貼上要轉換的文字...";
   textarea.style.width = "100%";
@@ -810,48 +806,54 @@ function initializeLayout() {
   textarea.style.fontSize = `${charsize}px`;
   textarea.style.boxSizing = "border-box";
 
-  // 創建轉換按鈕
-  const convertButton = document.createElement("button");
-  convertButton.textContent = "轉換直書";
-  convertButton.style.width = "80px";
-  convertButton.style.height = "30px";
-  convertButton.style.alignSelf = "flex-start";
-  convertButton.style.marginTop = "10px";
-  convertButton.style.fontSize = "14px";
-  convertButton.style.padding = "5px";
-
-  // 添加轉換按鈕點擊事件
-  convertButton.addEventListener("click", function () {
-    const text = textarea.value.trim();
-    if (text) {
-      const verticalContainer = transformText(text);
-      verticalContainer.className = "vertical-content";
-      verticalContainer.style.fontSize = `${charsize}px`;
-      verticalContainer.style.marginTop = "10px";
-
-      // 清除現有的直書顯示
-      const existingVertical =
-        textareaContainer.querySelector(".vertical-content");
-      if (existingVertical) {
-        existingVertical.remove();
-      }
-
-      // 添加新的直書顯示
-      textareaContainer.appendChild(verticalContainer);
-    }
-  });
-
+  // 不再創建轉換按鈕
   textareaContainer.appendChild(textarea);
-  textareaContainer.appendChild(convertButton);
   leftContent.appendChild(textareaContainer);
 }
 
-// 清空內容函數
+// 修改 convertToVerticalLayout 函數，使用 leftContentInput
+function convertToVerticalLayout() {
+  const textarea = document.getElementById("leftContentInput");
+  const leftContent = document.getElementById("leftContent");
+  
+  if (textarea && textarea.value.trim()) {
+    const text = textarea.value.trim();
+    const verticalContainer = transformText(text);
+    
+    // 清空現有內容
+    leftContent.innerHTML = "";
+    
+    // 添加新的直書內容
+    leftContent.appendChild(verticalContainer);
+  } else {
+    alert("請先輸入要轉換的文字");
+  }
+}
+
+// 在 DOMContentLoaded 事件中，移除動態添加按鈕的代碼，只保留事件監聽器
+document.addEventListener("DOMContentLoaded", function () {
+  // ... 現有代碼 ...
+
+  // 添加轉換直書按鈕事件監聽器
+  const convertToVerticalBtn = document.getElementById("convertToVerticalBtn");
+  if (convertToVerticalBtn) {
+    convertToVerticalBtn.addEventListener("click", convertToVerticalLayout);
+  }
+
+  // ... 現有代碼 ...
+});
+
+// 修改 clearContent 函數，確保能正確清空內容
 function clearContent() {
   const leftContent = document.getElementById("leftContent");
-  const textarea = leftContent.querySelector("textarea");
+  
+  // 檢查是否有文本區域
+  const textarea = document.getElementById("contentTextarea");
   if (textarea) {
     textarea.value = ""; // 清空文本內容
+  } else {
+    // 如果沒有文本區域，重新初始化
+    initializeLayout();
   }
   
   // 移除已轉換的直書內容
@@ -861,7 +863,40 @@ function clearContent() {
   }
 }
 
-// 生成布局函數 (需要實現)
+// 添加一個函數來更新右側標題內容
+function updateRightContent() {
+  const newsTitleInput = document.getElementById("newsTitle");
+  const rightContent = document.getElementById("rightContent");
+  const shockingTitle = document.getElementById("shockingTitle");
+  
+  // 優先使用驚悚化標題，如果沒有則使用普通標題
+  let titleText = "";
+  if (shockingTitle && shockingTitle.value.trim()) {
+    titleText = shockingTitle.value.trim();
+  } else if (newsTitleInput && newsTitleInput.value.trim()) {
+    titleText = newsTitleInput.value.trim();
+  }
+  
+  rightContent.innerHTML = "";
+  
+  if (titleText) {
+    // 判斷是否為驚悚化標題
+    const isShockingTitle = titleText.startsWith("【") && titleText.endsWith("】");
+    const textContainer = createTitleContainer(titleText, isShockingTitle);
+    rightContent.appendChild(textContainer);
+    maximizeFontSize(textContainer, rightContent);
+  } else {
+    rightContent.innerHTML = `
+      <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
+          display: flex; align-items: center; justify-content: center;
+          font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
+          font-weight: normal;">
+          請輸入標題
+      </div>`;
+  }
+}
+
+// 修改 generateLayout 函數
 function generateLayout() {
   // 獲取左側內容
   const leftContentInput = document.getElementById("leftContentInput");
@@ -880,6 +915,9 @@ function generateLayout() {
     // 如果沒有輸入，初始化布局
     initializeLayout();
   }
+  
+  // 更新右側標題內容
+  updateRightContent();
 }
 
 // 頁面加載完成後執行
@@ -900,6 +938,9 @@ document.addEventListener("DOMContentLoaded", function () {
       "--title-width",
       titleWidth + "%"
     );
+    
+    // 更新右側標題內容
+    updateRightContent();
   }
 
   // 初始化時設置寬度
@@ -918,22 +959,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 監聽新聞標題輸入
   newsTitleInput.addEventListener("input", function () {
-    const inputTitle = this.value.trim();
-    rightContent.innerHTML = "";
-
-    if (inputTitle) {
-      const textContainer = createTitleContainer(inputTitle);
-      rightContent.appendChild(textContainer);
-      maximizeFontSize(textContainer, rightContent);
-    } else {
-      rightContent.innerHTML = `
-        <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
-            font-weight: normal;">
-            請輸入標題
-        </div>`;
-    }
+    updateRightContent();
   });
 
   // 排版生成按鈕點擊事件
@@ -945,7 +971,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // 添加驚悚化按鈕事件監聽器
   const transformTitleBtn = document.getElementById("transformTitleBtn");
   if (transformTitleBtn) {
-    transformTitleBtn.addEventListener("click", transformNewsTitle);
+    transformTitleBtn.addEventListener("click", function() {
+      transformNewsTitle();
+      updateRightContent();
+    });
   }
 
   // 監聽左側文本輸入
