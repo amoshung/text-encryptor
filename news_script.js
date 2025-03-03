@@ -1398,6 +1398,15 @@ function convertToVerticalLayout() {
   // 設置頂部內邊距為兩個字的高度
   textArea.style.paddingTop = (charsize * 2) + 'px';
   
+  // 設置初始方向為從右到左
+  textArea.style.flexDirection = 'row-reverse';
+  
+  // 更新方向切換按鈕的文字
+  const directionToggleBtn = document.getElementById("directionToggleBtn");
+  if (directionToggleBtn) {
+    directionToggleBtn.textContent = "段落由右至左";
+  }
+  
   // 為每個段落創建直書元素
   paragraphs.forEach(paragraph => {
     if (!paragraph.trim()) return;
@@ -1660,4 +1669,35 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
+  // 添加段落方向切換按鈕事件監聽器
+  const directionToggleBtn = document.getElementById("directionToggleBtn");
+  if (directionToggleBtn) {
+    directionToggleBtn.addEventListener("click", toggleParagraphDirection);
+  }
 });
+
+// 添加段落排列方向控制函數
+function toggleParagraphDirection() {
+  // 獲取直書容器
+  const verticalContainer = document.getElementById("verticalContainer");
+  if (!verticalContainer) return;
+  
+  // 獲取直書文本區域
+  const textArea = verticalContainer.querySelector('.vertical-text-area');
+  if (!textArea) return;
+  
+  // 檢查當前方向
+  const currentDirection = textArea.style.flexDirection || getComputedStyle(textArea).flexDirection;
+  
+  // 切換方向
+  if (currentDirection === 'row-reverse' || currentDirection === '') {
+    // 當前是從右到左，切換為從左到右
+    textArea.style.flexDirection = 'row';
+    document.getElementById("directionToggleBtn").textContent = "段落由左至右";
+  } else {
+    // 當前是從左到右，切換為從右到左
+    textArea.style.flexDirection = 'row-reverse';
+    document.getElementById("directionToggleBtn").textContent = "段落由右至左";
+  }
+}
