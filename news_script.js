@@ -623,6 +623,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const newsTitleInput = document.getElementById("newsTitle");
   const rightContent = document.getElementById("rightContent");
 
+  // 設置標題寬度
+  function updateTitleWidth() {
+    const titleWidth = titleWidthSelect.value;
+    document.documentElement.style.setProperty('--title-width', titleWidth + '%');
+  }
+
+  // 初始化時設置寬度
+  updateTitleWidth();
+
+  // 監聽寬度選擇變化
+  titleWidthSelect.addEventListener('change', updateTitleWidth);
+
   // 初始化布局
   generateLayout();
 

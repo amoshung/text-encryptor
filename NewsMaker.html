@@ -214,25 +214,21 @@
 
       @media (max-width: 768px) {
         .content-area {
-          flex-direction: column;
+          flex-direction: row;
           aspect-ratio: auto;
-          min-height: auto;
+          min-height: 500px;
         }
         
         .left-content {
           flex: 1;
-          min-height: 300px;
           width: 100%;
         }
         
         .right-content {
           writing-mode: vertical-rl;
           text-orientation: upright;
-          width: 100% !important;
-          min-height: 150px;
           padding: 10px;
-          margin-top: 10px;
-          border-top: 1px solid #ddd;
+          border-left: 1px solid #ddd;
         }
       }
 
@@ -308,6 +304,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      /* 動態設置右側內容寬度 */
+      #contentArea {
+        position: relative;
+      }
+      
+      #rightContent {
+        width: var(--title-width, 15%);
+      }
+      
+      #leftContent {
+        width: calc(100% - var(--title-width, 15%));
       }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
