@@ -193,8 +193,7 @@ function byChars(input) {
       matrix[i] = [];
       for (let j = 0; j < charsPerLine; j++) {
         let charIndex = i * charsPerLine + j;
-        matrix[i][j] =
-          charIndex < paragraph.length ? paragraph[charIndex] : "　";
+        matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
       }
     }
 
@@ -205,7 +204,7 @@ function byChars(input) {
       for (let j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join("\u200B"));
+      result.push(line.join(" ")); // 使用半形空格代替零寬空格
     }
 
     // 將當前段落的結果加入總結果
@@ -262,7 +261,7 @@ function byLines(input) {
       for (var j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join("\u200B"));
+      result.push(line.join(" ")); // 使用半形空格代替零寬空格
     }
 
     // 將當前段落的結果加入總結果
