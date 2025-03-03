@@ -768,48 +768,53 @@ function byChars(text) {
   // 固定每行12個字
   const charsPerLine = 12;
   
+  // 先進行 UTF-8 和全形轉換
+  userText = halfToFull(userText);
+
+  // 將標點符號轉換為直書版本
+  userText = convertPunctuationToVertical(userText);
+
   // 將文字分段，並移除空段落
-  const paragraphs = text.split("\n").filter(p => p.trim().length > 0);
-  const allResults = [];
+  var paragraphs = userText.split("\n").filter((p) => p.trim().length > 0);
+
+  // 處理每個段落並收集結果
+  var allResults = [];
 
   for (let paragraph of paragraphs) {
-    // 轉換為全形並處理標點符號
-    paragraph = convertPunctuationToVertical(halfToFull(paragraph));
-    
     // 計算當前段落需要的行數
-    const totalLines = Math.ceil(paragraph.length / charsPerLine);
-    
-    // 補足全形空格使每段落成為矩形
+    var totalLines = Math.ceil(paragraph.length / charsPerLine);
+
+    // 補足空格
     while (paragraph.length < totalLines * charsPerLine) {
-      paragraph += "　"; // 使用全形空格填充
+      paragraph += "　";
     }
-    
-    // 建立矩陣並填充字符
-    const matrix = [];
+
+    // 建立矩陣並填充全形空格
+    var matrix = [];
     for (let i = 0; i < totalLines; i++) {
       matrix[i] = [];
       for (let j = 0; j < charsPerLine; j++) {
-        const charIndex = i * charsPerLine + j;
+        let charIndex = i * charsPerLine + j;
         matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
       }
     }
-    
-    // 生成直書結果（由右到左，由上到下）
-    const result = [];
-    for (let j = 0; j < charsPerLine; j++) {
-      const line = [];
-      for (let i = totalLines - 1; i >= 0; i--) {
-        line.push(matrix[i][j]);
+
+    // 生成當前段落的直書結果
+    var result = [];
+    for (let i = 0; i < charsPerLine; i++) {
+      let line = [];
+      for (let j = totalLines - 1; j >= 0; j--) {
+        line.push(matrix[j][i]);
       }
-      result.push(line.join("")); // 直接連接字符，不添加空格
+      result.push(line.join(" ")); // 使用半形空格代替零寬空格
     }
-    
-    // 將當前段落結果添加至總結果
-    allResults.push(result.join("<br>"));
+
+    // 將當前段落的結果加入總結果
+    allResults.push(result.join("\n"));
   }
-  
-  // 用兩個<br>標籤連接各段落
-  return allResults.join("<br><br>");
+
+  // 用兩個換行符號連接各段落的結果
+  return allResults.join("\n\n");
 }
 
 // 調整字體大小以極大化填充容器
