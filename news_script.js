@@ -275,52 +275,8 @@ function transformNewsTitle() {
 
   // 更新右側直書顯示
   rightContent.innerHTML = "";
-  const textContainer = document.createElement("div");
-  textContainer.style.writingMode = "vertical-rl";
-  textContainer.style.textOrientation = "upright";
-  textContainer.style.width = "100%";
-  textContainer.style.height = "100%";
-  textContainer.style.display = "flex";
-  textContainer.style.alignItems = "stretch";
-  textContainer.style.justifyContent = "center";
-  textContainer.style.whiteSpace = "nowrap";
-  textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
-
-  // 先進行半形轉全形，再轉換標點符號
-  const startText = convertPunctuationToVertical(halfToFull(`【${startKeyword} `));
-  const middleText = convertPunctuationToVertical(halfToFull(titleText));
-  const endText = convertPunctuationToVertical(halfToFull(` ${endKeyword}】`));
-
-  // 創建開頭括號和關鍵字
-  const startElement = document.createElement('span');
-  startElement.innerHTML = startText;
-  startElement.style.fontWeight = 'normal';
-  startElement.style.fontSize = '0.9em';
-  startElement.style.display = 'inline-block';
-  
-  // 創建中間文字（斜體）
-  const middleElement = document.createElement('span');
-  middleElement.innerHTML = middleText;
-  middleElement.style.fontSize = '1.1em';
-  middleElement.style.fontWeight = 'bold';
-  middleElement.style.display = 'inline-block';
-  
-  // 創建結尾關鍵字和括號
-  const endElement = document.createElement('span');
-  endElement.innerHTML = endText;
-  endElement.style.fontWeight = 'normal';
-  endElement.style.fontSize = '0.9em';
-  endElement.style.display = 'inline-block';
-
-  // 添加所有元素到容器
-  textContainer.appendChild(startElement);
-  textContainer.appendChild(middleElement);
-  textContainer.appendChild(endElement);
-
-  // 添加到右側內容區
+  const textContainer = createTitleContainer(transformedTitle, true);
   rightContent.appendChild(textContainer);
-
-  // 調整字體大小以極大化填充容器
   maximizeFontSize(textContainer, rightContent);
 
   return transformedTitle;
@@ -522,6 +478,9 @@ function convertPunctuationToVertical(text) {
 
 // 調整字體大小以極大化填充容器
 function maximizeFontSize(element, container) {
+    // 移除 nowrap 設置，允許換行
+    element.style.whiteSpace = 'normal';
+    
     // 獲取容器尺寸
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;
@@ -539,7 +498,7 @@ function maximizeFontSize(element, container) {
     }
     
     // 增加字體大小直到填滿容器但不溢出
-    while (!isOverflowing() && fontSize < 500) {
+    while (!isOverflowing() && fontSize < 200) {
         fontSize += 2;
         element.style.fontSize = fontSize + "px";
     }
@@ -550,9 +509,8 @@ function maximizeFontSize(element, container) {
         element.style.fontSize = fontSize + "px";
     }
     
-    // 設置行高為1以緊湊顯示
-    element.style.lineHeight = "1";
-    element.style.letterSpacing = "0";
+    // 設置行高為1.2以改善可讀性
+    element.style.lineHeight = "1.2";
 }
 
 // 添加一個函數來解析驚悚化標題
@@ -587,6 +545,60 @@ function generateAndDownloadImage() {
   });
 }
 
+// 創建標題容器的通用函數
+function createTitleContainer(title, isShockingTitle = false) {
+    const textContainer = document.createElement('div');
+    textContainer.style.writingMode = 'vertical-rl';
+    textContainer.style.textOrientation = 'upright';
+    textContainer.style.width = '100%';
+    textContainer.style.height = '100%';
+    textContainer.style.display = 'flex';
+    textContainer.style.alignItems = 'stretch';
+    textContainer.style.justifyContent = 'center';
+    textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
+    
+    let startText, middleText, endText;
+    
+    if (isShockingTitle) {
+        const titleParts = parseShockingTitle(title);
+        startText = `【${titleParts.start} `;
+        middleText = titleParts.middle;
+        endText = ` ${titleParts.end}】`;
+    } else {
+        startText = "【";
+        middleText = title;
+        endText = "】";
+    }
+    
+    // 創建開頭括號
+    const startElement = document.createElement('span');
+    startElement.innerHTML = convertPunctuationToVertical(halfToFull(startText));
+    startElement.style.fontWeight = 'normal';
+    startElement.style.fontSize = '0.9em';
+    startElement.style.display = 'inline-block';
+    
+    // 創建中間文字
+    const middleElement = document.createElement('span');
+    middleElement.innerHTML = convertPunctuationToVertical(halfToFull(middleText));
+    middleElement.style.fontSize = '1.1em';
+    middleElement.style.fontWeight = 'bold';
+    middleElement.style.display = 'inline-block';
+    
+    // 創建結尾括號
+    const endElement = document.createElement('span');
+    endElement.innerHTML = convertPunctuationToVertical(halfToFull(endText));
+    endElement.style.fontWeight = 'normal';
+    endElement.style.fontSize = '0.9em';
+    endElement.style.display = 'inline-block';
+    
+    // 添加所有元素到容器
+    textContainer.appendChild(startElement);
+    textContainer.appendChild(middleElement);
+    textContainer.appendChild(endElement);
+    
+    return textContainer;
+}
+
 // 生成布局函數
 function generateLayout() {
   const leftContent = document.getElementById('leftContent');
@@ -596,53 +608,10 @@ function generateLayout() {
   // 清空左側內容
   leftContent.innerHTML = '';
   
-  // 只在左側生成垂直區塊
-  // ... 原有的左側區塊生成邏輯 ...
-  
   // 更新右側標題顯示
   if (shockingTitleOutput.value.trim()) {
     rightContent.innerHTML = '';
-    const textContainer = document.createElement('div');
-    textContainer.style.writingMode = 'vertical-rl';
-    textContainer.style.textOrientation = 'upright';
-    textContainer.style.width = '100%';
-    textContainer.style.height = '100%';
-    textContainer.style.display = 'flex';
-    textContainer.style.alignItems = 'stretch';
-    textContainer.style.justifyContent = 'center';
-    textContainer.style.whiteSpace = 'nowrap';
-    textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
-    
-    const titleParts = parseShockingTitle(shockingTitleOutput.value);
-    
-    // 創建開頭部分
-    const startElement = document.createElement('span');
-    startElement.innerHTML = convertPunctuationToVertical(halfToFull(`【${titleParts.start} `));
-    startElement.style.fontWeight = 'normal';
-    startElement.style.fontSize = '0.9em';
-    startElement.style.display = 'inline-block';
-    
-    // 創建中間部分
-    const middleElement = document.createElement('span');
-    middleElement.innerHTML = convertPunctuationToVertical(halfToFull(titleParts.middle));
-    middleElement.style.fontSize = '1.1em';
-    middleElement.style.fontWeight = 'bold';
-    middleElement.style.fontStyle = 'normal';
-    middleElement.style.display = 'inline-block';
-    
-    // 創建結尾部分
-    const endElement = document.createElement('span');
-    endElement.innerHTML = convertPunctuationToVertical(halfToFull(` ${titleParts.end}】`));
-    endElement.style.fontWeight = 'normal';
-    endElement.style.fontSize = '0.9em';
-    endElement.style.display = 'inline-block';
-
-    // 添加所有元素到容器
-    textContainer.appendChild(startElement);
-    textContainer.appendChild(middleElement);
-    textContainer.appendChild(endElement);
-
-    // 添加到右側內容區
+    const textContainer = createTitleContainer(shockingTitleOutput.value, true);
     rightContent.appendChild(textContainer);
     maximizeFontSize(textContainer, rightContent);
   }
@@ -677,59 +646,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // 監聽新聞標題輸入
   newsTitleInput.addEventListener("input", function () {
     const inputTitle = this.value.trim();
+    rightContent.innerHTML = "";
+    
     if (inputTitle) {
-      // 清空原有內容
-      rightContent.innerHTML = "";
-
-      // 創建直書文字容器
-      const textContainer = document.createElement("div");
-      textContainer.style.writingMode = "vertical-rl";
-      textContainer.style.textOrientation = "upright";
-      textContainer.style.width = "100%";
-      textContainer.style.height = "100%";
-      textContainer.style.display = "flex";
-      textContainer.style.alignItems = "stretch";
-      textContainer.style.justifyContent = "center";
-      textContainer.style.whiteSpace = "nowrap";
-      textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
-
-      // 創建開頭括號
-      const startElement = document.createElement("span");
-      startElement.innerHTML = convertPunctuationToVertical(halfToFull("【"));
-      startElement.style.fontWeight = "normal";
-      startElement.style.fontSize = "0.9em";
-      startElement.style.display = "inline-block";
-
-      // 創建中間文字
-      const middleElement = document.createElement("span");
-      middleElement.innerHTML = convertPunctuationToVertical(halfToFull(inputTitle));
-      middleElement.style.fontSize = "1.1em";
-      middleElement.style.fontWeight = "bold";
-      middleElement.style.display = "inline-block";
-
-      // 創建結尾括號
-      const endElement = document.createElement("span");
-      endElement.innerHTML = convertPunctuationToVertical(halfToFull("】"));
-      endElement.style.fontWeight = "normal";
-      endElement.style.fontSize = "0.9em";
-      endElement.style.display = "inline-block";
-
-      // 添加所有元素到容器
-      textContainer.appendChild(startElement);
-      textContainer.appendChild(middleElement);
-      textContainer.appendChild(endElement);
-
-      // 添加到右側內容區
-      rightContent.appendChild(textContainer);
-      maximizeFontSize(textContainer, rightContent);
+        const textContainer = createTitleContainer(inputTitle);
+        rightContent.appendChild(textContainer);
+        maximizeFontSize(textContainer, rightContent);
     } else {
-      rightContent.innerHTML = `
-        <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
-          display: flex; align-items: center; justify-content: center;
-          font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
-          font-weight: normal;">
-          請輸入標題
-        </div>`;
+        rightContent.innerHTML = `
+            <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
+                display: flex; align-items: center; justify-content: center;
+                font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
+                font-weight: normal;">
+                請輸入標題
+            </div>`;
     }
   });
 

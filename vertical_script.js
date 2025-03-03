@@ -131,9 +131,37 @@ function convertPunctuationToVertical(text) {
     "‥": "︰", // U+FE30 直書刪節號
   };
 
+  // 需要特殊定位的標點符號
+  const specialPunctuation = {
+    "︒": "period", // 句號
+    "︑": "pause", // 頓號
+    "︐": "comma", // 逗號
+    "︓": "colon", // 冒號
+    "︔": "semicolon", // 分號
+    "︕": "exclaim", // 驚嘆號
+    "︖": "question", // 問號
+    "﹁": "quote-left", // 左單引號
+    "﹂": "quote-right", // 右單引號
+    "﹃": "quote-left", // 左雙引號
+    "﹄": "quote-right", // 右雙引號
+    "︻": "bracket-left", // 左黑方括號
+    "︼": "bracket-right", // 右黑方括號
+    "︽": "book-left", // 左書名號
+    "︾": "book-right", // 右書名號
+    "︿": "angle-left", // 左角括號
+    "﹀": "angle-right", // 右角括號
+  };
+
+  // 將文字轉換為帶有樣式類的 span 元素
   return text
     .split("")
-    .map((char) => horizontalToVertical[char] || char)
+    .map((char) => {
+      const vertical = horizontalToVertical[char] || char;
+      if (specialPunctuation[vertical]) {
+        return `<span class="vpunct ${specialPunctuation[vertical]}">${vertical}</span>`;
+      }
+      return vertical;
+    })
     .join("");
 }
 
@@ -180,7 +208,7 @@ function byChars(input) {
       for (let j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join("\u200B"));
+      result.push(line.join(''));
     }
 
     // 將當前段落的結果加入總結果
@@ -237,7 +265,7 @@ function byLines(input) {
       for (var j = totalLines - 1; j >= 0; j--) {
         line.push(matrix[j][i]);
       }
-      result.push(line.join("\u200B"));
+      result.push(line.join(''));
     }
 
     // 將當前段落的結果加入總結果
@@ -251,18 +279,20 @@ function byLines(input) {
 // 複製到剪貼板
 function copyToClipboard() {
   const outputText = document.getElementById("outputText");
-  outputText.select();
-  document.execCommand("copy");
-
-  // 顯示複製成功提示
-  const originalText = outputText.value;
-  outputText.value = "複製成功！";
-  setTimeout(() => {
-    outputText.value = originalText;
-    // 恢復原本的高度
-    outputText.style.height = "auto";
-    outputText.style.height = outputText.scrollHeight + "px";
-  }, 1000);
+  const textToCopy = outputText.innerText; // 使用 innerText 而不是 value
+  
+  // 使用新的 Clipboard API
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const originalHTML = outputText.innerHTML;
+    outputText.innerHTML = "複製成功！";
+    setTimeout(() => {
+      outputText.innerHTML = originalHTML;
+      outputText.style.height = "auto";
+      outputText.style.height = outputText.scrollHeight + "px";
+    }, 1000);
+  }).catch(err => {
+    console.error('複製失敗:', err);
+  });
 }
 
 // 解密功能
@@ -335,12 +365,13 @@ function transformText() {
     input = verticalText(input);
   }
 
-  document.getElementById("outputText").value = input;
-
+  // 修改輸出元素以支援 HTML
+  const outputText = document.getElementById("outputText");
+  outputText.innerHTML = input; // 使用 innerHTML 而不是 value
+  
   // 自動調整輸出文本框的高度
-  const outputTextarea = document.getElementById("outputText");
-  outputTextarea.style.height = "auto";
-  outputTextarea.style.height = outputTextarea.scrollHeight + "px";
+  outputText.style.height = "auto";
+  outputText.style.height = outputText.scrollHeight + "px";
 }
 
 function convertDateFormat(text) {

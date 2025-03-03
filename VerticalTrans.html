@@ -122,6 +122,62 @@
             font-size: 20px;
             color: #d9534f;
         }
+
+        /* 直書標點符號樣式 */
+        .vpunct {
+            display: inline-block;
+            position: relative;
+        }
+        
+        /* 句號和逗號的位置調整 */
+        .vpunct.period,
+        .vpunct.comma {
+            position: relative;
+            right: -0.5em;
+        }
+        
+        /* 左側引號和括號的位置調整 */
+        .vpunct.quote-left,
+        .vpunct.bracket-left,
+        .vpunct.book-left,
+        .vpunct.angle-left {
+            position: relative;
+            left: -0.5em;
+        }
+        
+        /* 右側引號和括號的位置調整 */
+        .vpunct.quote-right,
+        .vpunct.bracket-right,
+        .vpunct.book-right,
+        .vpunct.angle-right {
+            position: relative;
+            right: -0.5em;
+        }
+        
+        /* 其他標點符號的位置調整 */
+        .vpunct.pause,
+        .vpunct.colon,
+        .vpunct.semicolon,
+        .vpunct.exclaim,
+        .vpunct.question {
+            position: relative;
+            right: -0.25em;
+        }
+
+        .output-text {
+            width: 100%;
+            min-height: 3em;
+            max-height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: inherit;
+            background-color: white;
+        }
     </style>
 </head>
 
@@ -212,7 +268,7 @@
 
         <div id="right-panel">
             <h2>轉換結果</h2>
-            <textarea id="outputText" readonly></textarea>
+            <div id="outputText" class="output-text" readonly></div>
             <button onclick="copyToClipboard()">複製結果</button>
         </div>
     </div>
