@@ -669,15 +669,3 @@ document.addEventListener("DOMContentLoaded", function () {
     transformTitleBtn.addEventListener("click", transformNewsTitle);
   }
 });
-
-function createVerticalTextContainer(text) {
-  const container = document.createElement("div");
-  container.style.writingMode = "vertical-rl";
-  container.style.textOrientation = "upright";
-  container.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';
-  container.innerHTML = convertPunctuationToVertical(text);
-  return container;
-}
-
-// 使用這個函數來創建文字容器
-const textContainer = createVerticalTextContainer(text);
