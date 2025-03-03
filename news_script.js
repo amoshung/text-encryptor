@@ -1581,9 +1581,15 @@ document.addEventListener("DOMContentLoaded", function () {
     console.warn("無法找到轉換直書按鈕元素");
   }
 
-  // 確保左側文本框隱藏溢出內容
+  // 強化確保左側文本框隱藏溢出內容
   if (leftContentInput) {
     leftContentInput.style.overflow = "hidden";
+    leftContentInput.style.resize = "none"; // 同時禁用調整大小功能
+    
+    // 添加輸入事件監聽器，確保樣式一直被應用
+    leftContentInput.addEventListener("input", function() {
+      this.style.overflow = "hidden";
+    });
   }
 
   // 確保所有必要元素都存在
@@ -1676,6 +1682,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (directionToggleBtn) {
     directionToggleBtn.addEventListener("click", toggleParagraphDirection);
   }
+
+  // 添加全局樣式規則
+  const styleElement = document.createElement('style');
+  styleElement.textContent = `
 });
 
 // 修改段落排列方向控制函數
@@ -1706,3 +1716,156 @@ function toggleParagraphDirection() {
     document.getElementById("directionToggleBtn").textContent = "段落由右至左";
   }
 }
+
+// 修改下載圖片功能
+function setupDownloadButton() {
+  const downloadButton = document.getElementById("downloadImage");
+  if (!downloadButton) return;
+
+  downloadButton.addEventListener("click", function() {
+    // 顯示加載指示器
+    const loadingIndicator = document.createElement("div");
+    loadingIndicator.style.position = "fixed";
+    loadingIndicator.style.top = "0";
+    loadingIndicator.style.left = "0";
+    loadingIndicator.style.width = "100%";
+    loadingIndicator.style.height = "100%";
+    loadingIndicator.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    loadingIndicator.style.color = "white";
+    loadingIndicator.style.display = "flex";
+    loadingIndicator.style.justifyContent = "center";
+    loadingIndicator.style.alignItems = "center";
+    loadingIndicator.style.zIndex = "9999";
+    loadingIndicator.textContent = "正在生成圖片...";
+    document.body.appendChild(loadingIndicator);
+
+    // 準備要截圖的內容區域
+    const contentArea = document.getElementById("contentArea");
+    
+    // 1. 創建一個臨時的簡化版內容區域用於截圖
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "absolute";
+    tempContainer.style.left = "-9999px";
+    tempContainer.style.width = contentArea.offsetWidth + "px";
+    tempContainer.style.height = contentArea.offsetHeight + "px";
+    tempContainer.style.backgroundColor = "white";
+    tempContainer.style.display = "flex";
+    document.body.appendChild(tempContainer);
+    
+    // 2. 複製右側標題內容
+    const rightContent = document.createElement("div");
+    rightContent.style.width = document.getElementById("rightContent").offsetWidth + "px";
+    rightContent.style.height = "100%";
+    rightContent.style.writingMode = "vertical-rl";
+    rightContent.style.textOrientation = "upright";
+    rightContent.style.display = "flex";
+    rightContent.style.alignItems = "center";
+    rightContent.style.justifyContent = "center";
+    rightContent.style.fontFamily = "'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif";
+    rightContent.style.fontSize = document.getElementById("charsize").value + "px";
+    
+    // 獲取標題文字
+    const titleElement = document.querySelector("#shockingTitle");
+    const titleText = titleElement && titleElement.value ? titleElement.value : "請輸入標題";
+    rightContent.textContent = titleText;
+    
+    // 3. 複製左側直書內容
+    const leftContent = document.createElement("div");
+    leftContent.style.width = (contentArea.offsetWidth - rightContent.offsetWidth) + "px";
+    leftContent.style.height = "100%";
+    leftContent.style.display = "flex";
+    
+    // 檢查是否有直書容器
+    const verticalContainer = document.getElementById("verticalContainer");
+    if (verticalContainer && verticalContainer.style.display !== "none") {
+      // 複製直書內容
+      const verticalTextArea = document.createElement("div");
+      verticalTextArea.style.display = "flex";
+      verticalTextArea.style.width = "100%";
+      verticalTextArea.style.height = "100%";
+      verticalTextArea.style.paddingTop = "2em";
+      
+      // 取得當前的排列方向
+      const originalTextArea = verticalContainer.querySelector(".vertical-text-area");
+      if (originalTextArea) {
+        verticalTextArea.style.flexDirection = originalTextArea.style.flexDirection || "row-reverse";
+        verticalTextArea.style.justifyContent = originalTextArea.style.justifyContent || "flex-start";
+      } else {
+        verticalTextArea.style.flexDirection = "row-reverse";
+        verticalTextArea.style.justifyContent = "flex-start";
+      }
+      
+      // 複製所有段落
+      const paragraphs = verticalContainer.querySelectorAll(".vertical-paragraph");
+      paragraphs.forEach(p => {
+        const newP = document.createElement("div");
+        newP.style.writingMode = "vertical-rl";
+        newP.style.textOrientation = "mixed";
+        newP.style.height = "calc(100% - 2em)";
+        newP.style.marginLeft = "15px";
+        newP.style.padding = "10px";
+        newP.style.boxSizing = "border-box";
+        newP.style.fontSize = p.style.fontSize || document.getElementById("charsize").value + "px";
+        newP.textContent = p.textContent;
+        verticalTextArea.appendChild(newP);
+      });
+      
+      leftContent.appendChild(verticalTextArea);
+    } else {
+      // 如果沒有直書內容，使用文本框內容
+      const textarea = document.getElementById("leftContentInput");
+      if (textarea && textarea.value) {
+        const textContent = document.createElement("div");
+        textContent.style.writingMode = "vertical-rl";
+        textContent.style.textOrientation = "mixed";
+        textContent.style.height = "100%";
+        textContent.style.width = "100%";
+        textContent.style.padding = "10px";
+        textContent.style.boxSizing = "border-box";
+        textContent.style.fontSize = document.getElementById("charsize").value + "px";
+        textContent.style.whiteSpace = "pre-wrap";
+        textContent.textContent = textarea.value;
+        leftContent.appendChild(textContent);
+      }
+    }
+    
+    // 4. 組合內容
+    tempContainer.appendChild(leftContent);
+    tempContainer.appendChild(rightContent);
+    
+    // 5. 使用 html2canvas 截圖
+    setTimeout(() => {
+      html2canvas(tempContainer, {
+        scale: 2, // 更高解析度
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff"
+      }).then(canvas => {
+        // 移除臨時容器和加載指示器
+        document.body.removeChild(tempContainer);
+        document.body.removeChild(loadingIndicator);
+        
+        // 將 canvas 轉為圖片並下載
+        const link = document.createElement("a");
+        link.download = "新聞直書圖片_" + new Date().toISOString().slice(0, 19).replace(/[-:T]/g, "") + ".png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }).catch(error => {
+        console.error("生成圖片時發生錯誤:", error);
+        alert("生成圖片時發生錯誤，請稍後再試");
+        document.body.removeChild(tempContainer);
+        document.body.removeChild(loadingIndicator);
+      });
+    }, 100); // 短暫延遲以確保內容已準備好
+  });
+}
+
+// 頁面加載完成後執行
+document.addEventListener("DOMContentLoaded", function () {
+  // ... 現有代碼 ...
+  
+  // 設置下載按鈕
+  setupDownloadButton();
+  
+  // ... 其餘代碼 ...
+});
