@@ -229,12 +229,12 @@
           aspect-ratio: auto;
           min-height: 500px;
         }
-        
+
         .left-content {
           flex: 1;
           width: 100%;
         }
-        
+
         .right-content {
           writing-mode: vertical-rl;
           text-orientation: upright;
@@ -319,11 +319,11 @@
       #contentArea {
         position: relative;
       }
-      
+
       #rightContent {
         width: var(--title-width, 15%);
       }
-      
+
       #leftContent {
         width: calc(100% - var(--title-width, 15%));
       }
@@ -373,9 +373,7 @@
           <input type="text" id="newsTitle" placeholder="請輸入新聞標題..." />
         </div>
         <div class="button-container">
-          <button id="transformTitleBtn">
-            標題驚悚化
-          </button>
+          <button id="transformTitleBtn">標題驚悚化</button>
         </div>
         <div class="title-result">
           <p>驚悚化結果：</p>
@@ -387,31 +385,25 @@
         <div class="input-item">
           <label>直書轉換規則</label>
           <div class="radio-group">
-            <div class="radio-option">
-              <input type="radio" name="verticalType" id="byLinesOption">
-              <label for="byLinesOption">共</label>
-              <input type="number" id="totalLines" value="8" min="4">
-              <label for="totalLines">行</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" name="verticalType" id="byCharsOption" checked>
-              <label for="byCharsOption">每行</label>
-              <input type="number" id="charsPerLine" value="12" min="6">
-              <label for="charsPerLine">個字</label>
-            </div>
+            <label>
+              <input type="radio" name="verticalType" id="byLinesOption" />
+              共 <input type="number" id="totalLines" value="8" min="4" /> 行
+            </label>
+            <label>
+              <input type="radio" name="verticalType" id="byCharsOption" checked/>
+              每行
+              <input type="number" id="charsPerLine" value="12" min="6" /> 個字
+            </label>
           </div>
         </div>
         <div class="input-item">
           <label for="gridCount">左側垂直分格數</label>
-          <input 
-            type="number" 
-            id="gridCount" 
-            min="1" 
-            max="4" 
-            value="1" 
-            style="width: 80px;"
-          >
+          <input type="number" id="gridCount" min="1" max="4" value="1" />
         </div>
+        <div class="input-item">
+            <label for="gridCount">新聞內容字體大小</label>
+            <input type="number" id="gridCount" min="8" max="14" value="12" />
+          </div>
         <div class="input-item">
           <label for="titleWidth">標題佔畫面寬度</label>
           <select id="titleWidth">
@@ -422,9 +414,11 @@
         </div>
       </div>
       <div class="button-container">
-        <div style="display: flex; gap: 10px;">
-          <button id="generateLayout" style="flex: 2;">新聞排版生成</button>
-          <button id="clearContent" style="flex: 1; background-color: #f44336;">文章清空</button>
+        <div style="display: flex; gap: 10px">
+          <button id="generateLayout" style="flex: 2">新聞排版生成</button>
+          <button id="clearContent" style="flex: 1; background-color: #f44336">
+            文章清空
+          </button>
         </div>
       </div>
     </div>
@@ -432,14 +426,28 @@
     <div class="bottom-panel">
       <div class="content-area" id="contentArea">
         <div class="left-content" id="leftContent">
-          <textarea id="leftContentInput" placeholder="請輸入要轉換為直書的文字..."></textarea>
+          <textarea
+            id="leftContentInput"
+            placeholder="請輸入要轉換為直書的文字..."
+          ></textarea>
         </div>
         <div class="right-content" id="rightContent">
-            <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-                font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
-                font-weight: normal;">
-                請輸入標題
-            </div>
+          <div
+            style="
+              writing-mode: vertical-rl;
+              text-orientation: upright;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light',
+                sans-serif;
+              font-weight: normal;
+            "
+          >
+            請輸入標題
+          </div>
         </div>
       </div>
     </div>
