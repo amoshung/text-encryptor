@@ -327,35 +327,6 @@
       #leftContent {
         width: calc(100% - var(--title-width, 15%));
       }
-
-      .radio-group {
-        display: flex;
-        gap: 20px;
-        margin-top: 10px;
-      }
-
-      .radio-option {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .radio-option input[type="number"] {
-        width: 60px;
-        padding: 4px 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-
-      .radio-option input[type="radio"] {
-        margin: 0;
-      }
-
-      .radio-option label {
-        margin: 0;
-        font-weight: normal;
-        display: inline;
-      }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="news_script.js"></script>
@@ -402,25 +373,6 @@
           </div>
         </div>
         <div class="input-item">
-          <label for="gridCount">左側垂直分格數</label>
-          <select id="gridCount">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-        </div>
-        <div class="input-item">
-          <label for="charsize">新聞內容字體大小</label>
-          <select id="charsize">
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="14">14</option>
-            <option value="16">16</option>
-          </select>
-        </div>
-        <div class="input-item">
           <label for="titleWidth">標題佔畫面寬度</label>
           <select id="titleWidth">
             <option value="10">10%</option>
@@ -430,12 +382,7 @@
         </div>
       </div>
       <div class="button-container">
-        <div style="display: flex; gap: 10px">
-          <button id="generateLayout" style="flex: 2">新聞排版生成</button>
-          <button id="clearContent" style="flex: 1; background-color: #f44336">
-            文章清空
-          </button>
-        </div>
+        <button id="generateLayout">新聞排版生成</button>
       </div>
     </div>
 
@@ -444,7 +391,7 @@
         <div class="left-content" id="leftContent">
           <textarea
             id="leftContentInput"
-            placeholder="請貼上要轉換為直書的文字..."
+            placeholder="請輸入要轉換為直書的文字..."
           ></textarea>
         </div>
         <div class="right-content" id="rightContent">
