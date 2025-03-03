@@ -991,46 +991,121 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數，正確處理左側內容
+// 修改 convertToVerticalLayout 函數 - 簡化為純文字處理
 function convertToVerticalLayout() {
-  // 獲取左側內容區域
-  const leftContent = document.getElementById("leftContent");
-  
-  // 獲取文本輸入框，可能是直接的 leftContentInput 或者是動態創建的 contentTextarea
+  // 獲取文本輸入框
   let textarea = document.getElementById("leftContentInput");
   if (!textarea || !textarea.value.trim()) {
-    // 如果找不到 leftContentInput 或者它是空的，嘗試找 contentTextarea
     textarea = document.getElementById("contentTextarea");
   }
   
   if (textarea && textarea.value.trim()) {
-    const text = textarea.value.trim();
-    const verticalContainer = transformText(text);
+    const originalText = textarea.value.trim();
     
-    // // 清空現有內容
-    // leftContent.innerHTML = "";
+    // 使用修改後的純文字處理方式進行轉換
+    const verticalText = convertTextToVertical(originalText);
     
-    // // 添加新的直書內容
-    // leftContent.appendChild(verticalContainer);
+    // 更新輸入框內容
+    textarea.value = verticalText;
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
   } else {
     alert("請先輸入要轉換的文字");
   }
 }
 
-// 修改 clearContent 函數，確保能正確清空內容
-function clearContent() {
-  const leftContent = document.getElementById("leftContent");
-  const leftContentInput = document.getElementById("leftContentInput");
+// 新增純文字直書轉換函數
+function convertTextToVertical(text) {
+  // 移除所有半形空白
+  text = text.replace(/ /g, "");
   
-  if (leftContentInput) {
-    leftContentInput.value = ""; // 清空文本內容
+  // 轉換日期格式
+  text = convertDateFormat(text);
+  
+  // 移除 emoji
+  text = text.replace(
+    /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu,
+    ""
+  );
+  
+  // 處理短段落
+  let paragraphs = text.split("\n");
+  let mergedParagraphs = [];
+  let currentParagraph = "";
+  let currentLength = 0;
+  
+  for (let paragraph of paragraphs) {
+    paragraph = paragraph.trim();
+    if (paragraph.length === 0) continue;
+    
+    currentLength = currentParagraph.length + paragraph.length;
+    if (currentLength < 120) {
+      currentParagraph += paragraph;
+    } else {
+      if (currentParagraph) {
+        mergedParagraphs.push(currentParagraph);
+      }
+      currentParagraph = paragraph;
+    }
   }
   
-  // 重新初始化左側內容
-  initializeLayout();
+  if (currentParagraph) {
+    mergedParagraphs.push(currentParagraph);
+  }
   
-  // 更新右側標題內容
-  updateRightContent();
+  text = mergedParagraphs.join("\n");
+  
+  // 將文字轉換為全形字符
+  text = halfToFull(text);
+  
+  // 處理每個段落的直書轉換 (不添加HTML標籤)
+  const processedParagraphs = text.split("\n").filter(p => p.trim().length > 0);
+  const results = [];
+  
+  for (let paragraph of processedParagraphs) {
+    // 使用純文字方式轉換段落
+    results.push(convertParagraphToVertical(paragraph));
+  }
+  
+  // 返回結果 (段落間用兩個換行分隔)
+  return results.join("\n\n");
+}
+
+// 新增段落直書轉換函數 (純文字版本)
+function convertParagraphToVertical(paragraph) {
+  // 固定每行12個字
+  const charsPerLine = 12;
+  
+  // 計算行數
+  const totalLines = Math.ceil(paragraph.length / charsPerLine);
+  
+  // 補足全形空格
+  while (paragraph.length < totalLines * charsPerLine) {
+    paragraph += "　";
+  }
+  
+  // 建立矩陣並填充字符
+  const matrix = [];
+  for (let i = 0; i < totalLines; i++) {
+    matrix[i] = [];
+    for (let j = 0; j < charsPerLine; j++) {
+      const charIndex = i * charsPerLine + j;
+      matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
+    }
+  }
+  
+  // 生成直書結果 (由右到左，由上到下)
+  const result = [];
+  for (let j = 0; j < charsPerLine; j++) {
+    const line = [];
+    for (let i = totalLines - 1; i >= 0; i--) {
+      line.push(matrix[i][j]);
+    }
+    result.push(line.join(""));
+  }
+  
+  // 返回這個段落的直書文字
+  return result.join("\n");
 }
 
 // 修改 updateRightContent 函數，確保正確調整字體大小
