@@ -765,50 +765,19 @@ function verticalText(input) {
 }
 
 function byChars(text) {
-  const charsPerLine = parseInt(document.getElementById("charsPerLine").value || 20);
-
-  // 將文字分段，並移除空段落
-  const paragraphs = text.split("\n").filter((p) => p.trim().length > 0);
-  const allResults = [];
-
-  for (let paragraph of paragraphs) {
-    // 轉換為全形並處理標點符號
-    paragraph = convertPunctuationToVertical(halfToFull(paragraph));
-
-    // 計算當前段落需要的行數
-    const totalLines = Math.ceil(paragraph.length / charsPerLine);
-
-    // 補足空格
-    while (paragraph.length < totalLines * charsPerLine) {
-      paragraph += "　";
-    }
-
-    // 建立矩陣並填充
-    const matrix = [];
-    for (let i = 0; i < totalLines; i++) {
-      matrix[i] = [];
-      for (let j = 0; j < charsPerLine; j++) {
-        const charIndex = i * charsPerLine + j;
-        matrix[i][j] =
-          charIndex < paragraph.length ? paragraph[charIndex] : "　";
-      }
-    }
-
-    // 生成直書結果（從右到左，從上到下）
-    const result = [];
-    for (let j = 0; j < charsPerLine; j++) {
-      const line = [];
-      for (let i = totalLines - 1; i >= 0; i--) {
-        line.push(matrix[i][j]);
-      }
-      result.push(line.join(""));
-    }
-
-    allResults.push(result.join("<br>"));
+  // 固定每行字數為12，不再從元素讀取
+  const charsPerLine = 12;
+  
+  // 將文字按指定字數分行
+  let result = [];
+  let i = 0;
+  while (i < text.length) {
+    result.push(text.substr(i, charsPerLine));
+    i += charsPerLine;
   }
-
-  // 用兩個換行符號連接各段落
-  return allResults.join("<br><br>");
+  
+  // 返回分行後的文字陣列
+  return result;
 }
 
 // 調整字體大小以極大化填充容器
@@ -931,16 +900,6 @@ function createTitleContainer(title, isShockingTitle = false) {
   return textContainer;
 }
 
-// 添加計算每行字數的函數
-function calculateCharsPerLine(containerHeight, fontSize) {
-  // 假設每個字的高度是 fontSize * 1.5 (考慮行距)
-  const charHeight = fontSize * 1.5;
-  // 計算可以容納的字數
-  const charsPerLine = Math.floor(containerHeight / charHeight);
-  // 確保字數在合理範圍內（6-20字）
-  return Math.min(Math.max(charsPerLine, 6), 20);
-}
-
 // 修改 initializeLayout 函數，確保不會覆蓋 leftContentInput
 function initializeLayout() {
   const leftContent = document.getElementById("leftContent");
@@ -1015,16 +974,31 @@ function convertToVerticalLayout() {
   }
 }
 
-// 在 DOMContentLoaded 事件中，移除動態添加按鈕的代碼，只保留事件監聽器
+// 修改 DOMContentLoaded 事件處理函數
 document.addEventListener("DOMContentLoaded", function () {
   // ... 現有代碼 ...
-
-  // 添加轉換直書按鈕事件監聽器
-  const convertToVerticalBtn = document.getElementById("convertToVerticalBtn");
-  if (convertToVerticalBtn) {
-    convertToVerticalBtn.addEventListener("click", convertToVerticalLayout);
-  }
-
+  
+  // 移除設置預設每行字數的代碼
+  // if (charsPerLineInput) {
+  //   charsPerLineInput.value = "20";
+  // }
+  
+  // ... 現有代碼 ...
+  
+  // 移除監聽每行字數變化的代碼
+  // if (charsPerLineInput) {
+  //   charsPerLineInput.addEventListener("input", generateLayout);
+  // }
+  
+  // ... 現有代碼 ...
+  
+  // 修改必要元素檢查列表，移除 charsPerLine
+  const necessaryElements = [
+    // "charsPerLine", // 已移除
+    "convertToVerticalBtn",
+    // 其他必要元素...
+  ];
+  
   // ... 現有代碼 ...
 });
 
@@ -1134,11 +1108,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // 監聽寬度選擇變化
   titleWidthSelect.addEventListener("change", updateTitleWidth);
 
-  // 設置預設的每行字數
-  if (charsPerLineInput) {
-    charsPerLineInput.value = "20";
-  }
-
   // 初始化布局
   initializeLayout();
 
@@ -1172,13 +1141,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 監聽每行字數變化
-  if (charsPerLineInput) {
-    charsPerLineInput.addEventListener("input", generateLayout);
-  }
-
   // 清空按鈕點擊事件
   if (clearContentButton) {
     clearContentButton.addEventListener("click", clearContent);
+  }
+
+  // 確保所有必要元素都存在
+  const necessaryElements = [
+    "convertToVerticalBtn",
+    // 其他必要元素...
+  ];
+
+  let missingElements = [];
+  necessaryElements.forEach(id => {
+    if (!document.getElementById(id)) {
+      missingElements.push(id);
+    }
+  });
+
+  if (missingElements.length > 0) {
+    console.warn("以下元素不存在，可能會導致功能異常:", missingElements.join(", "));
   }
 });
