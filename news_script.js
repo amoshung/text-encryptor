@@ -887,14 +887,47 @@ function parseShockingTitle(title) {
   return { start: "", middle: title, end: "" };
 }
 
-// 生成並下載圖片
+// 修改圖片生成函數，確保捕獲所有內容
 function generateAndDownloadImage() {
+  // 獲取內容區域
   const contentArea = document.getElementById("contentArea");
-  html2canvas(contentArea).then((canvas) => {
+  
+  // 獲取直書容器
+  const verticalContainer = document.getElementById("verticalContainer");
+  const textarea = document.getElementById("leftContentInput");
+  
+  // 記錄原始滾動位置
+  const originalScrollTop = verticalContainer ? verticalContainer.scrollTop : 0;
+  
+  // 暫時禁用滾動，確保捕獲完整內容
+  if (verticalContainer && verticalContainer.style.display === 'block') {
+    verticalContainer.style.overflowY = 'visible';
+    verticalContainer.style.height = 'auto';
+    verticalContainer.scrollTop = 0;
+  }
+  
+  // 使用 html2canvas 生成圖片
+  html2canvas(contentArea, {
+    allowTaint: true,
+    useCORS: true,
+    scrollY: 0,
+    scrollX: 0,
+    // 確保捕獲完整高度
+    height: contentArea.scrollHeight,
+    windowHeight: contentArea.scrollHeight
+  }).then(function (canvas) {
+    // 創建下載鏈接
     const link = document.createElement("a");
     link.download = "新聞直書圖片.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
+    
+    // 恢復原始滾動設置
+    if (verticalContainer && verticalContainer.style.display === 'block') {
+      verticalContainer.style.overflowY = 'auto';
+      verticalContainer.style.height = `${document.getElementById("leftContent").clientHeight}px`;
+      verticalContainer.scrollTop = originalScrollTop;
+    }
   });
 }
 
@@ -992,10 +1025,13 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數以確保元素存在
+// 修改 convertToVerticalLayout 函數，解決字體大小和內容溢出問題
 function convertToVerticalLayout() {
   // 獲取輸入框
   const textarea = document.getElementById("leftContentInput");
+  
+  // 獲取字體大小設置
+  const charsize = parseInt(document.getElementById("charsize").value || 16);
   
   // 獲取直書容器
   let verticalContainer = document.getElementById("verticalContainer");
@@ -1048,6 +1084,7 @@ function convertToVerticalLayout() {
     const p = document.createElement('div');
     p.className = 'vertical-paragraph';
     p.textContent = paragraph.replace(/\n/g, ''); // 移除段落內的換行
+    p.style.fontSize = `${charsize}px`; // 應用字體大小設置
     textArea.appendChild(p);
   });
   
@@ -1057,6 +1094,36 @@ function convertToVerticalLayout() {
   // 隱藏文本框，顯示直書容器
   textarea.style.display = 'none';
   verticalContainer.style.display = 'block';
+  
+  // 設置容器樣式，確保內容可見
+  adjustContainerHeight(verticalContainer);
+}
+
+// 新增調整容器和段落高度的函數
+function adjustContainerHeight(container) {
+  // 獲取左側內容區域的高度
+  const leftContent = document.getElementById("leftContent");
+  if (!leftContent) return;
+  
+  const leftContentHeight = leftContent.clientHeight;
+  
+  // 設置容器高度為左側內容區域的高度
+  container.style.height = `${leftContentHeight}px`;
+  
+  // 設置段落高度為textarea高度的90%
+  const paragraphs = container.querySelectorAll('.vertical-paragraph');
+  const paragraphHeight = Math.floor(leftContentHeight * 0.9);
+  
+  paragraphs.forEach(p => {
+    p.style.height = `${paragraphHeight}px`;
+  });
+  
+  // 如果內容超出容器高度，設置滾動
+  if (container.scrollHeight > leftContentHeight) {
+    container.style.overflowY = 'auto';
+  } else {
+    container.style.overflowY = 'hidden';
+  }
 }
 
 // 修改清空內容函數
@@ -1200,14 +1267,15 @@ document.addEventListener("DOMContentLoaded", function () {
     console.warn("以下元素不存在，可能會導致功能異常:", missingElements.join(", "));
   }
 
-  // 添加必要的樣式
+  // 更新樣式設置，處理段落排序和高度問題
   const style = document.createElement('style');
   style.textContent = `
     .vertical-container {
       display: none;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
     }
     
@@ -1215,17 +1283,19 @@ document.addEventListener("DOMContentLoaded", function () {
       display: flex;
       flex-direction: row-reverse; /* 從右到左排列段落 */
       justify-content: flex-start;
+      align-items: flex-start;
       width: 100%;
       height: 100%;
-      overflow: hidden;
     }
     
     .vertical-paragraph {
       writing-mode: vertical-rl;
-      text-orientation: upright;
+      text-orientation: mixed; /* 使用mixed而不是upright，更自然 */
       height: 100%;
       margin-left: 15px;
       padding: 10px;
+      box-sizing: border-box;
+      overflow-y: hidden; /* 防止內容溢出 */
     }
   `;
   document.head.appendChild(style);
@@ -1245,4 +1315,18 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // 設置初始樣式
   verticalContainer.style.display = 'none';
+
+  // 監聽字體大小變化
+  const charsizeInput = document.getElementById("charsize");
+  if (charsizeInput) {
+    charsizeInput.addEventListener("change", function() {
+      // 更新直書內容的字體大小
+      const verticalParagraphs = document.querySelectorAll('.vertical-paragraph');
+      const newSize = parseInt(this.value) || 16;
+      
+      verticalParagraphs.forEach(p => {
+        p.style.fontSize = `${newSize}px`;
+      });
+    });
+  }
 });
