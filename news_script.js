@@ -1400,6 +1400,7 @@ function convertToVerticalLayout() {
   
   // 設置初始方向為從右到左
   textArea.style.flexDirection = 'row-reverse';
+  textArea.style.justifyContent = 'flex-start'; // 確保段落靠右顯示
   
   // 更新方向切換按鈕的文字
   const directionToggleBtn = document.getElementById("directionToggleBtn");
@@ -1620,22 +1621,22 @@ document.addEventListener("DOMContentLoaded", function () {
     
     .vertical-text-area {
       display: flex;
-      flex-direction: row-reverse; /* 從右到左排列段落 */
-      justify-content: flex-start;
+      flex-direction: row-reverse;
+      justify-content: flex-start; /* 從右到左排列時使用 */
       align-items: flex-start;
       width: 100%;
       height: 100%;
-      padding-top: 2em; /* 添加頂部內邊距，約兩個字的高度 */
+      padding-top: 2em;
     }
     
     .vertical-paragraph {
       writing-mode: vertical-rl;
-      text-orientation: mixed; /* 使用mixed而不是upright，更自然 */
-      height: calc(100% - 2em); /* 減去頂部內邊距 */
+      text-orientation: mixed;
+      height: calc(100% - 2em);
       margin-left: 15px;
       padding: 10px;
       box-sizing: border-box;
-      overflow-y: hidden; /* 防止內容溢出 */
+      overflow-y: hidden;
     }
   `;
   document.head.appendChild(style);
@@ -1677,7 +1678,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// 添加段落排列方向控制函數
+// 修改段落排列方向控制函數
 function toggleParagraphDirection() {
   // 獲取直書容器
   const verticalContainer = document.getElementById("verticalContainer");
@@ -1694,10 +1695,14 @@ function toggleParagraphDirection() {
   if (currentDirection === 'row-reverse' || currentDirection === '') {
     // 當前是從右到左，切換為從左到右
     textArea.style.flexDirection = 'row';
+    // 當使用 row 方向時，需要使用 flex-end 使段落靠右
+    textArea.style.justifyContent = 'flex-end';
     document.getElementById("directionToggleBtn").textContent = "段落由左至右";
   } else {
     // 當前是從左到右，切換為從右到左
     textArea.style.flexDirection = 'row-reverse';
+    // 當使用 row-reverse 方向時，需要使用 flex-start 使段落靠右
+    textArea.style.justifyContent = 'flex-start';
     document.getElementById("directionToggleBtn").textContent = "段落由右至左";
   }
 }
