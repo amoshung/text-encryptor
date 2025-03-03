@@ -608,8 +608,9 @@ function generateLayout() {
     textContainer.style.width = '100%';
     textContainer.style.height = '100%';
     textContainer.style.display = 'flex';
-    textContainer.style.alignItems = 'center';
+    textContainer.style.alignItems = 'stretch';
     textContainer.style.justifyContent = 'center';
+    textContainer.style.whiteSpace = 'nowrap';
     textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
     
     const titleParts = parseShockingTitle(shockingTitleOutput.value);
@@ -619,6 +620,7 @@ function generateLayout() {
     startElement.innerHTML = convertPunctuationToVertical(halfToFull(`【${titleParts.start} `));
     startElement.style.fontWeight = 'normal';
     startElement.style.fontSize = '0.9em';
+    startElement.style.display = 'inline-block';
     
     // 創建中間部分
     const middleElement = document.createElement('span');
@@ -626,12 +628,14 @@ function generateLayout() {
     middleElement.style.fontSize = '1.1em';
     middleElement.style.fontWeight = 'bold';
     middleElement.style.fontStyle = 'normal';
+    middleElement.style.display = 'inline-block';
     
     // 創建結尾部分
     const endElement = document.createElement('span');
     endElement.innerHTML = convertPunctuationToVertical(halfToFull(` ${titleParts.end}】`));
     endElement.style.fontWeight = 'normal';
     endElement.style.fontSize = '0.9em';
+    endElement.style.display = 'inline-block';
 
     // 添加所有元素到容器
     textContainer.appendChild(startElement);
@@ -681,26 +685,34 @@ document.addEventListener("DOMContentLoaded", function () {
       const textContainer = document.createElement("div");
       textContainer.style.writingMode = "vertical-rl";
       textContainer.style.textOrientation = "upright";
-      textContainer.style.fontFamily =
-        '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif'; // 使用較好支援直書的字型
       textContainer.style.width = "100%";
       textContainer.style.height = "100%";
       textContainer.style.display = "flex";
-      textContainer.style.alignItems = "center";
+      textContainer.style.alignItems = "stretch";
       textContainer.style.justifyContent = "center";
+      textContainer.style.whiteSpace = "nowrap";
+      textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
 
       // 創建開頭括號
       const startElement = document.createElement("span");
-      startElement.textContent = "【";
+      startElement.innerHTML = convertPunctuationToVertical(halfToFull("【"));
+      startElement.style.fontWeight = "normal";
+      startElement.style.fontSize = "0.9em";
+      startElement.style.display = "inline-block";
 
-      // 創建中間文字（斜體）
+      // 創建中間文字
       const middleElement = document.createElement("span");
-      middleElement.textContent = halfToFull(inputTitle);
-      middleElement.style.fontStyle = "italic";
+      middleElement.innerHTML = convertPunctuationToVertical(halfToFull(inputTitle));
+      middleElement.style.fontSize = "1.1em";
+      middleElement.style.fontWeight = "bold";
+      middleElement.style.display = "inline-block";
 
       // 創建結尾括號
       const endElement = document.createElement("span");
-      endElement.textContent = "】";
+      endElement.innerHTML = convertPunctuationToVertical(halfToFull("】"));
+      endElement.style.fontWeight = "normal";
+      endElement.style.fontSize = "0.9em";
+      endElement.style.display = "inline-block";
 
       // 添加所有元素到容器
       textContainer.appendChild(startElement);
@@ -709,8 +721,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // 添加到右側內容區
       rightContent.appendChild(textContainer);
+      maximizeFontSize(textContainer, rightContent);
     } else {
-      rightContent.textContent = "請輸入標題";
+      rightContent.innerHTML = `
+        <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
+          display: flex; align-items: center; justify-content: center;
+          font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
+          font-weight: normal;">
+          請輸入標題
+        </div>`;
     }
   });
 
