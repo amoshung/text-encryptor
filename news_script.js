@@ -779,22 +779,39 @@ function calculateCharsPerLine(containerHeight, fontSize) {
   return Math.min(Math.max(charsPerLine, 6), 20);
 }
 
-// 修改 initializeLayout 函數，移除轉換按鈕
+// 修改 initializeLayout 函數，確保不會覆蓋 leftContentInput
 function initializeLayout() {
   const leftContent = document.getElementById("leftContent");
   const charsize = parseInt(document.getElementById("charsize").value || 16);
+  
+  // 檢查是否已經有 leftContentInput
+  const existingInput = document.getElementById("leftContentInput");
+  if (existingInput) {
+    // 如果已經存在，只需要清空其他內容
+    const parent = existingInput.parentElement;
+    if (parent) {
+      // 保留 leftContentInput，清空其他內容
+      const value = existingInput.value;
+      parent.innerHTML = "";
+      parent.appendChild(existingInput);
+      existingInput.value = value;
+    }
+    return;
+  }
+  
+  // 如果不存在 leftContentInput，創建新的文本區域
   leftContent.innerHTML = "";
-
+  
   // 創建單一文本區域容器
   const textareaContainer = document.createElement("div");
   textareaContainer.style.flex = "1";
   textareaContainer.style.display = "flex";
-  textareaContainer.style.flexDirection = "column"; // 改為縱向排列
+  textareaContainer.style.flexDirection = "column";
   textareaContainer.style.gap = "10px";
-
+  
   // 創建文本區域
   const textarea = document.createElement("textarea");
-  textarea.id = "contentTextarea"; // 添加ID以便後續獲取
+  textarea.id = "contentTextarea";
   textarea.className = "grid-textarea";
   textarea.placeholder = "請複製貼上要轉換的文字...";
   textarea.style.width = "100%";
@@ -805,16 +822,22 @@ function initializeLayout() {
   textarea.style.fontFamily = "inherit";
   textarea.style.fontSize = `${charsize}px`;
   textarea.style.boxSizing = "border-box";
-
-  // 不再創建轉換按鈕
+  
   textareaContainer.appendChild(textarea);
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數，使用 leftContentInput
+// 修改 convertToVerticalLayout 函數，正確處理左側內容
 function convertToVerticalLayout() {
-  const textarea = document.getElementById("leftContentInput");
+  // 獲取左側內容區域
   const leftContent = document.getElementById("leftContent");
+  
+  // 獲取文本輸入框，可能是直接的 leftContentInput 或者是動態創建的 contentTextarea
+  let textarea = document.getElementById("leftContentInput");
+  if (!textarea || !textarea.value.trim()) {
+    // 如果找不到 leftContentInput 或者它是空的，嘗試找 contentTextarea
+    textarea = document.getElementById("contentTextarea");
+  }
   
   if (textarea && textarea.value.trim()) {
     const text = textarea.value.trim();
