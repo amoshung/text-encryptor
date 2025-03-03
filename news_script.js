@@ -992,11 +992,30 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 簡化的直書轉換函數
+// 修改 convertToVerticalLayout 函數以確保元素存在
 function convertToVerticalLayout() {
-  // 獲取輸入框和直書容器
+  // 獲取輸入框
   const textarea = document.getElementById("leftContentInput");
-  const verticalContainer = document.getElementById("verticalContainer");
+  
+  // 獲取直書容器
+  let verticalContainer = document.getElementById("verticalContainer");
+  
+  // 如果找不到直書容器，就創建一個
+  if (!verticalContainer) {
+    verticalContainer = document.createElement("div");
+    verticalContainer.id = "verticalContainer";
+    verticalContainer.className = "vertical-container";
+    
+    // 添加到左側內容區域中
+    const leftContent = document.getElementById("leftContent");
+    if (leftContent) {
+      leftContent.appendChild(verticalContainer);
+    } else {
+      console.error("找不到左側內容區域");
+      alert("轉換失敗：頁面元素不完整");
+      return;
+    }
+  }
   
   if (!textarea || !textarea.value.trim()) {
     alert("請先輸入要轉換的文字");
@@ -1040,7 +1059,7 @@ function convertToVerticalLayout() {
   verticalContainer.style.display = 'block';
 }
 
-// 添加清空內容函數
+// 修改清空內容函數
 function clearContent() {
   const textarea = document.getElementById("leftContentInput");
   const verticalContainer = document.getElementById("verticalContainer");
@@ -1092,7 +1111,6 @@ function updateRightContent() {
       </div>`;
   }
 }
-
 
 // 頁面加載完成後執行
 document.addEventListener("DOMContentLoaded", function () {
@@ -1211,4 +1229,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   `;
   document.head.appendChild(style);
+
+  // 確保 verticalContainer 存在
+  let verticalContainer = document.getElementById("verticalContainer");
+  if (!verticalContainer) {
+    verticalContainer = document.createElement("div");
+    verticalContainer.id = "verticalContainer";
+    verticalContainer.className = "vertical-container";
+    
+    const leftContent = document.getElementById("leftContent");
+    if (leftContent) {
+      leftContent.appendChild(verticalContainer);
+    }
+  }
+  
+  // 設置初始樣式
+  verticalContainer.style.display = 'none';
 });
