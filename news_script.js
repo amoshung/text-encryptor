@@ -837,8 +837,18 @@ function calculateCharsPerLine(containerHeight, fontSize) {
 function createGridLayout(gridCount) {
     const leftContent = document.getElementById('leftContent');
     const charsize = parseInt(document.getElementById('charsize').value);
-    leftContent.innerHTML = '';
     
+    // 清除所有現有的內容和事件監聽器
+    while (leftContent.firstChild) {
+        // 移除所有按鈕的事件監聽器
+        const buttons = leftContent.firstChild.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.removeEventListener('click', button.clickHandler);
+        });
+        leftContent.removeChild(leftContent.firstChild);
+    }
+    
+    leftContent.innerHTML = '';
     leftContent.style.display = 'flex';
     leftContent.style.flexDirection = 'column';
     leftContent.style.height = '100%';
@@ -891,14 +901,11 @@ function createGridLayout(gridCount) {
         convertButton.style.padding = '5px';
         
         // 添加轉換按鈕點擊事件
-        convertButton.addEventListener('click', function() {
+        const clickHandler = function() {
             const text = textarea.value.trim();
             if (text) {
-                // 保存原始文本
                 const originalText = text;
-                
-                // 使用 transformText 處理文本
-                const verticalContainer = transformText(text);
+                const verticalContainer = transformText(originalText);
                 verticalContainer.className = 'vertical-content';
                 verticalContainer.style.fontSize = `${charsize}px`;
                 verticalContainer.style.marginTop = '10px';
@@ -921,7 +928,9 @@ function createGridLayout(gridCount) {
                 // 添加新的直書顯示
                 textareaContainer.appendChild(verticalContainer);
             }
-        });
+        };
+        convertButton.clickHandler = clickHandler; // 保存事件處理器的引用
+        convertButton.addEventListener('click', clickHandler);
         
         gridContainer.appendChild(textareaContainer);
         gridContainer.appendChild(convertButton);
