@@ -602,16 +602,13 @@ function transformText(text, options = {}) {
   return container;
 }
 
-// 從 vertical_script.js 導入的函數
+// 直書轉換函數
 function verticalText(input) {
-  const result = document.getElementById("byCharsOption").checked
-    ? byChars(input)
-    : byLines(input);
-  return result;
+  return byChars(input);
 }
 
 function byChars(text) {
-  const charsPerLine = parseInt(document.getElementById("charsPerLine").value);
+  const charsPerLine = parseInt(document.getElementById("charsPerLine").value || 20);
 
   // 將文字分段，並移除空段落
   const paragraphs = text.split("\n").filter((p) => p.trim().length > 0);
@@ -637,55 +634,6 @@ function byChars(text) {
         const charIndex = i * charsPerLine + j;
         matrix[i][j] =
           charIndex < paragraph.length ? paragraph[charIndex] : "　";
-      }
-    }
-
-    // 生成直書結果（從右到左，從上到下）
-    const result = [];
-    for (let j = 0; j < charsPerLine; j++) {
-      const line = [];
-      for (let i = totalLines - 1; i >= 0; i--) {
-        line.push(matrix[i][j]);
-      }
-      result.push(line.join(""));
-    }
-
-    allResults.push(result.join("<br>"));
-  }
-
-  // 用兩個換行符號連接各段落
-  return allResults.join("<br><br>");
-}
-
-function byLines(text) {
-  const totalLines = parseInt(document.getElementById("totalLines").value);
-
-  // 將文字分段，並移除空段落
-  const paragraphs = text.split("\n").filter((p) => p.trim().length > 0);
-  const allResults = [];
-
-  for (let paragraph of paragraphs) {
-    // 轉換為全形並處理標點符號
-    paragraph = convertPunctuationToVertical(halfToFull(paragraph));
-
-    // 計算每行應有的字數
-    const charsPerLine = Math.ceil(paragraph.length / totalLines);
-
-    // 補足空格
-    while (paragraph.length < charsPerLine * totalLines) {
-      paragraph += "　";
-    }
-
-    // 建立矩陣並填充
-    const matrix = Array(totalLines)
-      .fill()
-      .map(() => Array(charsPerLine).fill("　"));
-
-    // 填充矩陣
-    let count = 0;
-    for (let i = 0; i < totalLines && count < paragraph.length; i++) {
-      for (let j = 0; j < charsPerLine && count < paragraph.length; j++) {
-        matrix[i][j] = paragraph.charAt(count++);
       }
     }
 
@@ -839,7 +787,7 @@ function calculateCharsPerLine(containerHeight, fontSize) {
 // 修改 initializeLayout 函數
 function initializeLayout() {
   const leftContent = document.getElementById("leftContent");
-  const charsize = parseInt(document.getElementById("charsize").value);
+  const charsize = parseInt(document.getElementById("charsize").value || 16);
   leftContent.innerHTML = "";
 
   // 創建單一文本區域容器
@@ -898,7 +846,7 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 clearContent 函數
+// 清空內容函數
 function clearContent() {
   const leftContent = document.getElementById("leftContent");
   const textarea = leftContent.querySelector("textarea");
@@ -913,21 +861,37 @@ function clearContent() {
   }
 }
 
-// 修改 clearContent 按鈕事件
-clearContentButton.addEventListener("click", function() {
-  clearContent();
-});
+// 生成布局函數 (需要實現)
+function generateLayout() {
+  // 獲取左側內容
+  const leftContentInput = document.getElementById("leftContentInput");
+  const leftContent = document.getElementById("leftContent");
+  
+  if (leftContentInput && leftContentInput.value.trim()) {
+    const text = leftContentInput.value.trim();
+    const verticalContainer = transformText(text);
+    
+    // 清空現有內容
+    leftContent.innerHTML = "";
+    
+    // 添加新的直書內容
+    leftContent.appendChild(verticalContainer);
+  } else {
+    // 如果沒有輸入，初始化布局
+    initializeLayout();
+  }
+}
 
-// 修改 DOMContentLoaded 事件監聽器
+// 頁面加載完成後執行
 document.addEventListener("DOMContentLoaded", function () {
   // 獲取元素
-  const blockCountInput = document.getElementById("blockCount");
-  const lineLengthInput = document.getElementById("lineLength");
   const titleWidthSelect = document.getElementById("titleWidth");
   const generateLayoutButton = document.getElementById("generateLayout");
   const downloadImageButton = document.getElementById("downloadImage");
   const newsTitleInput = document.getElementById("newsTitle");
   const rightContent = document.getElementById("rightContent");
+  const clearContentButton = document.getElementById("clearContent");
+  const charsPerLineInput = document.getElementById("charsPerLine");
 
   // 設置標題寬度
   function updateTitleWidth() {
@@ -944,8 +908,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // 監聽寬度選擇變化
   titleWidthSelect.addEventListener("change", updateTitleWidth);
 
+  // 設置預設的每行字數
+  if (charsPerLineInput) {
+    charsPerLineInput.value = "20";
+  }
+
   // 初始化布局
-  generateLayout();
+  initializeLayout();
 
   // 監聽新聞標題輸入
   newsTitleInput.addEventListener("input", function () {
@@ -958,12 +927,12 @@ document.addEventListener("DOMContentLoaded", function () {
       maximizeFontSize(textContainer, rightContent);
     } else {
       rightContent.innerHTML = `
-            <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
-                display: flex; align-items: center; justify-content: center;
-                font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
-                font-weight: normal;">
-                請輸入標題
-            </div>`;
+        <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
+            font-weight: normal;">
+            請輸入標題
+        </div>`;
     }
   });
 
@@ -981,32 +950,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 監聽左側文本輸入
   const leftContentInput = document.getElementById("leftContentInput");
-  leftContentInput.addEventListener("input", function () {
-    if (this.value.trim()) {
-      generateLayout();
-    }
-  });
+  if (leftContentInput) {
+    leftContentInput.addEventListener("input", function () {
+      if (this.value.trim()) {
+        generateLayout();
+      }
+    });
+  }
 
-  // 監聽直書規則選項變化
-  document
-    .getElementById("byLinesOption")
-    .addEventListener("change", generateLayout);
-  document
-    .getElementById("byCharsOption")
-    .addEventListener("change", generateLayout);
-  document
-    .getElementById("totalLines")
-    .addEventListener("input", generateLayout);
-  document
-    .getElementById("charsPerLine")
-    .addEventListener("input", generateLayout);
+  // 監聽每行字數變化
+  if (charsPerLineInput) {
+    charsPerLineInput.addEventListener("input", generateLayout);
+  }
 
-  // 初始化單一文本區域布局
-  initializeLayout();
-
-  // 文章清空按鈕點擊事件
-  const clearContentButton = document.getElementById("clearContent");
-  clearContentButton.addEventListener("click", function () {
-    initializeLayout();
-  });
+  // 清空按鈕點擊事件
+  if (clearContentButton) {
+    clearContentButton.addEventListener("click", clearContent);
+  }
 });

@@ -126,6 +126,14 @@
         background-color: #45a049;
       }
 
+      #clearContent:hover {
+        background-color: #da190b;
+      }
+
+      .button-container button + button {
+        margin-top: 10px;
+      }
+
       .bottom-panel {
         display: flex;
         flex: 1;
@@ -354,23 +362,8 @@
 
       <div class="input-group">
         <div class="input-item">
-          <label>直書轉換規則</label>
-          <div class="radio-group">
-            <label>
-              <input type="radio" name="verticalType" id="byLinesOption" />
-              共 <input type="number" id="totalLines" value="8" min="4" /> 行
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="verticalType"
-                id="byCharsOption"
-                checked
-              />
-              每行
-              <input type="number" id="charsPerLine" value="12" min="6" /> 個字
-            </label>
-          </div>
+          <label for="charsize">字體大小</label>
+          <input type="number" id="charsize" value="16" min="12" max="36" />
         </div>
         <div class="input-item">
           <label for="titleWidth">標題佔畫面寬度</label>
@@ -383,6 +376,7 @@
       </div>
       <div class="button-container">
         <button id="generateLayout">新聞排版生成</button>
+        <button id="clearContent" style="margin-top: 10px; background-color: #f44336;">清空內容</button>
       </div>
     </div>
 
