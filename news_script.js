@@ -830,6 +830,7 @@ function createGridLayout(gridCount) {
     
     leftContent.style.display = 'flex';
     leftContent.style.flexDirection = 'column';
+    leftContent.style.height = '100%';
     
     for (let i = 0; i < gridCount; i++) {
         const gridContainer = document.createElement('div');
@@ -843,6 +844,8 @@ function createGridLayout(gridCount) {
         const textareaContainer = document.createElement('div');
         textareaContainer.style.flex = '1';
         textareaContainer.style.position = 'relative';
+        textareaContainer.style.height = `${100 / gridCount}%`;
+        textareaContainer.style.minHeight = '0';
         
         const textarea = document.createElement('textarea');
         textarea.className = 'grid-textarea';
@@ -854,10 +857,7 @@ function createGridLayout(gridCount) {
         textarea.style.padding = '10px';
         textarea.style.fontFamily = 'inherit';
         textarea.style.fontSize = `${charsize}px`;
-        textarea.style.backgroundColor = 'transparent';
-        textarea.style.position = 'absolute';
-        textarea.style.top = '0';
-        textarea.style.left = '0';
+        textarea.style.boxSizing = 'border-box';
         
         textareaContainer.appendChild(textarea);
         
