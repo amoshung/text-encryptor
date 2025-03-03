@@ -992,168 +992,68 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數 - 截斷超出內容
+// 簡化的直書轉換函數
 function convertToVerticalLayout() {
-  // 獲取文本輸入框
-  let textarea = document.getElementById("leftContentInput");
+  // 獲取輸入框和直書容器
+  const textarea = document.getElementById("leftContentInput");
+  const verticalContainer = document.getElementById("verticalContainer");
+  
   if (!textarea || !textarea.value.trim()) {
-    textarea = document.getElementById("contentTextarea");
-  }
-  
-  if (textarea && textarea.value.trim()) {
-    const originalText = textarea.value.trim();
-    
-    // 使用修改後的純文字處理方式進行轉換
-    const verticalText = convertTextToVertical(originalText);
-    
-    // 更新輸入框內容
-    textarea.value = verticalText;
-    
-    // 設置文本框樣式，固定高度並隱藏滾動條
-    textarea.style.height = "100%";
-    textarea.style.overflow = "hidden"; // 隱藏滾動條
-    
-    // 截斷超出的文本內容
-    limitTextareaContent(textarea);
-  } else {
     alert("請先輸入要轉換的文字");
+    return;
   }
+  
+  // 分析文本並分段
+  const text = textarea.value.trim();
+  let paragraphs = text.split(/\n\s*\n/); // 按空行分段
+  
+  // 如果沒有空行，嘗試按單個換行符分段
+  if (paragraphs.length === 1) {
+    paragraphs = text.split(/\n/).filter(p => p.trim());
+  }
+  
+  // 反轉段落順序（C、B、A）
+  paragraphs = paragraphs.reverse();
+  
+  // 清空容器
+  verticalContainer.innerHTML = '';
+  
+  // 創建直書區域
+  const textArea = document.createElement('div');
+  textArea.className = 'vertical-text-area';
+  
+  // 為每個段落創建直書元素
+  paragraphs.forEach(paragraph => {
+    if (!paragraph.trim()) return;
+    
+    const p = document.createElement('div');
+    p.className = 'vertical-paragraph';
+    p.textContent = paragraph.replace(/\n/g, ''); // 移除段落內的換行
+    textArea.appendChild(p);
+  });
+  
+  // 添加到容器
+  verticalContainer.appendChild(textArea);
+  
+  // 隱藏文本框，顯示直書容器
+  textarea.style.display = 'none';
+  verticalContainer.style.display = 'block';
 }
 
-// 添加截斷文本內容的函數
-function limitTextareaContent(textarea) {
-  // 獲取可見高度
-  const visibleHeight = textarea.clientHeight;
+// 添加清空內容函數
+function clearContent() {
+  const textarea = document.getElementById("leftContentInput");
+  const verticalContainer = document.getElementById("verticalContainer");
   
-  // 創建一個臨時的隱藏文本區域來測量內容高度
-  const temp = document.createElement('textarea');
-  temp.style.position = 'absolute';
-  temp.style.left = '-9999px';
-  temp.style.width = textarea.clientWidth + 'px';
-  temp.style.fontSize = window.getComputedStyle(textarea).fontSize;
-  temp.style.lineHeight = window.getComputedStyle(textarea).lineHeight;
-  temp.style.fontFamily = window.getComputedStyle(textarea).fontFamily;
-  temp.value = textarea.value;
-  
-  document.body.appendChild(temp);
-  
-  // 如果內容高度超過可見高度，循環刪除行直到適合
-  if (temp.scrollHeight > visibleHeight) {
-    const lines = textarea.value.split('\n');
-    let truncatedContent = '';
-    
-    // 從頭開始添加行，直到達到最大可見高度
-    for (let i = 0; i < lines.length; i++) {
-      temp.value = truncatedContent + lines[i] + '\n';
-      
-      // 如果添加這一行後超出高度，停止添加
-      if (temp.scrollHeight > visibleHeight) {
-        break;
-      }
-      
-      truncatedContent += lines[i] + '\n';
-    }
-    
-    // 更新文本框內容為截斷後的內容
-    textarea.value = truncatedContent.trim();
+  if (textarea) {
+    textarea.value = '';
+    textarea.style.display = 'block';
   }
   
-  // 移除臨時元素
-  document.body.removeChild(temp);
-}
-
-// 修改 convertTextToVertical 函數，反轉段落順序
-function convertTextToVertical(text) {
-  // 移除所有半形空白
-  text = text.replace(/ /g, "");
-  
-  // 轉換日期格式
-  text = convertDateFormat(text);
-  
-  // 移除 emoji
-  text = text.replace(
-    /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu,
-    ""
-  );
-  
-  // 處理短段落
-  let paragraphs = text.split("\n");
-  let mergedParagraphs = [];
-  let currentParagraph = "";
-  let currentLength = 0;
-  
-  for (let paragraph of paragraphs) {
-    paragraph = paragraph.trim();
-    if (paragraph.length === 0) continue;
-    
-    currentLength = currentParagraph.length + paragraph.length;
-    if (currentLength < 120) {
-      currentParagraph += paragraph;
-    } else {
-      if (currentParagraph) {
-        mergedParagraphs.push(currentParagraph);
-      }
-      currentParagraph = paragraph;
-    }
+  if (verticalContainer) {
+    verticalContainer.innerHTML = '';
+    verticalContainer.style.display = 'none';
   }
-  
-  if (currentParagraph) {
-    mergedParagraphs.push(currentParagraph);
-  }
-  
-  // 將文字轉換為全形字符
-  const fullwidthParagraphs = mergedParagraphs.map(p => halfToFull(p));
-  
-  // 反轉段落順序 (從後向前)
-  const reversedParagraphs = fullwidthParagraphs.reverse();
-  
-  // 處理每個段落的直書轉換
-  const results = [];
-  
-  for (let paragraph of reversedParagraphs) {
-    // 使用純文字方式轉換段落
-    results.push(convertParagraphToVertical(paragraph));
-  }
-  
-  // 返回結果 (段落間用兩個換行分隔)
-  return results.join("\n\n");
-}
-
-// 修改段落直書轉換函數，確保文字向右對齊
-function convertParagraphToVertical(paragraph) {
-  // 固定每行12個字
-  const charsPerLine = 12;
-  
-  // 計算行數
-  const totalLines = Math.ceil(paragraph.length / charsPerLine);
-  
-  // 補足全形空格使每行右對齊
-  while (paragraph.length < totalLines * charsPerLine) {
-    paragraph = "　" + paragraph;  // 在段落前面加空格，確保右對齊
-  }
-  
-  // 建立矩陣並填充字符
-  const matrix = [];
-  for (let i = 0; i < totalLines; i++) {
-    matrix[i] = [];
-    for (let j = 0; j < charsPerLine; j++) {
-      const charIndex = i * charsPerLine + j;
-      matrix[i][j] = charIndex < paragraph.length ? paragraph[charIndex] : "　";
-    }
-  }
-  
-  // 生成直書結果 (由右到左，由上到下)
-  const result = [];
-  for (let j = 0; j < charsPerLine; j++) {
-    const line = [];
-    for (let i = totalLines - 1; i >= 0; i--) {
-      line.push(matrix[i][j]);
-    }
-    result.push(line.join(""));
-  }
-  
-  // 返回這個段落的直書文字
-  return result.join("\n");
 }
 
 // 修改 updateRightContent 函數，確保正確調整字體大小
@@ -1281,4 +1181,34 @@ document.addEventListener("DOMContentLoaded", function () {
   if (missingElements.length > 0) {
     console.warn("以下元素不存在，可能會導致功能異常:", missingElements.join(", "));
   }
+
+  // 添加必要的樣式
+  const style = document.createElement('style');
+  style.textContent = `
+    .vertical-container {
+      display: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;
+    }
+    
+    .vertical-text-area {
+      display: flex;
+      flex-direction: row-reverse; /* 從右到左排列段落 */
+      justify-content: flex-start;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .vertical-paragraph {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      height: 100%;
+      margin-left: 15px;
+      padding: 10px;
+    }
+  `;
+  document.head.appendChild(style);
 });
