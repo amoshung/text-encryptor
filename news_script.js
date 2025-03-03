@@ -744,6 +744,11 @@ function transformText(text, options = {}) {
   // 呼叫 verticalText 進行直書轉換
   const verticalResult = verticalText(text);
 
+  document.getElementById("leftContentInput").value = verticalResult;
+  const outputTextarea = document.getElementById("leftContentInput");
+  outputTextarea.style.height = "auto";
+  outputTextarea.style.height = outputTextarea.scrollHeight + "px";
+
   // 創建容器並設置樣式
   const container = document.createElement("div");
   container.style.writingMode = "vertical-rl";
@@ -1001,11 +1006,11 @@ function convertToVerticalLayout() {
     const text = textarea.value.trim();
     const verticalContainer = transformText(text);
     
-    // 清空現有內容
-    leftContent.innerHTML = "";
+    // // 清空現有內容
+    // leftContent.innerHTML = "";
     
-    // 添加新的直書內容
-    leftContent.appendChild(verticalContainer);
+    // // 添加新的直書內容
+    // leftContent.appendChild(verticalContainer);
   } else {
     alert("請先輸入要轉換的文字");
   }
