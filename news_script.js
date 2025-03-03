@@ -1086,9 +1086,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const generateLayoutButton = document.getElementById("generateLayout");
   const downloadImageButton = document.getElementById("downloadImage");
   const newsTitleInput = document.getElementById("newsTitle");
-  const rightContent = document.getElementById("rightContent");
   const clearContentButton = document.getElementById("clearContent");
-  const charsPerLineInput = document.getElementById("charsPerLine");
 
   // 設置標題寬度
   function updateTitleWidth() {
