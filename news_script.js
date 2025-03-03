@@ -835,14 +835,14 @@ function createGridLayout(gridCount) {
         const gridContainer = document.createElement('div');
         gridContainer.style.flex = '1';
         gridContainer.style.display = 'flex';
-        gridContainer.style.flexDirection = 'row'; // 改為水平排列
+        gridContainer.style.flexDirection = 'row';
         gridContainer.style.marginBottom = i < gridCount - 1 ? '10px' : '0';
         gridContainer.style.borderBottom = i < gridCount - 1 ? '1px dashed #ccc' : 'none';
-        gridContainer.style.gap = '10px'; // 添加間距
+        gridContainer.style.gap = '10px';
         
-        // 創建文本區域容器
         const textareaContainer = document.createElement('div');
         textareaContainer.style.flex = '1';
+        textareaContainer.style.position = 'relative';
         
         const textarea = document.createElement('textarea');
         textarea.className = 'grid-textarea';
@@ -854,10 +854,10 @@ function createGridLayout(gridCount) {
         textarea.style.padding = '10px';
         textarea.style.fontFamily = 'inherit';
         textarea.style.fontSize = `${charsize}px`;
-        
-        // 移除原有的輸入事件監聽
-        // textarea.addEventListener('input', handleTextareaInput);
-        // textarea.addEventListener('paste', handleTextareaInput);
+        textarea.style.backgroundColor = 'transparent';
+        textarea.style.position = 'absolute';
+        textarea.style.top = '0';
+        textarea.style.left = '0';
         
         textareaContainer.appendChild(textarea);
         
@@ -875,6 +875,9 @@ function createGridLayout(gridCount) {
         convertButton.addEventListener('click', function() {
             const text = textarea.value.trim();
             if (text) {
+                // 保存原始文本
+                const originalText = text;
+                
                 // 使用 transformText 處理文本
                 const verticalContainer = transformText(text);
                 verticalContainer.className = 'vertical-content';
@@ -886,6 +889,15 @@ function createGridLayout(gridCount) {
                 if (existingVertical) {
                     existingVertical.remove();
                 }
+                
+                // 清空原始文本區域
+                textarea.value = '';
+                
+                // 將轉換後的文本以直書方式填入文本區域
+                const verticalText = verticalContainer.innerText || verticalContainer.textContent;
+                textarea.style.writingMode = 'vertical-rl';
+                textarea.style.textOrientation = 'upright';
+                textarea.value = verticalText;
                 
                 // 添加新的直書顯示
                 textareaContainer.appendChild(verticalContainer);
@@ -1033,31 +1045,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // 文章清空按鈕點擊事件
   const clearContentButton = document.getElementById("clearContent");
   clearContentButton.addEventListener("click", function () {
-    const leftContent = document.getElementById("leftContent");
-
-    // 清空現有內容
-    leftContent.innerHTML = "";
-
-    // 重新創建文本輸入區域
-    const textarea = document.createElement("textarea");
-    textarea.id = "leftContentInput";
-    textarea.placeholder = "請輸入要轉換為直書的文字...";
-    textarea.style.width = "100%";
-    textarea.style.height = "100%";
-    textarea.style.border = "none";
-    textarea.style.resize = "none";
-    textarea.style.padding = "10px";
-    textarea.style.fontFamily = "inherit";
-    textarea.style.fontSize = "16px";
-
-    // 添加輸入事件監聽
-    textarea.addEventListener("input", function () {
-      if (this.value.trim()) {
-        generateLayout();
-      }
-    });
-
-    leftContent.appendChild(textarea);
+    // 獲取當前的分格數和字體大小
+    const gridCount = parseInt(document.getElementById("gridCount").value);
+    
+    // 重新創建布局，但保持設置
+    createGridLayout(gridCount);
   });
 
   // 監聽字體大小變更
