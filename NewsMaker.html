@@ -327,6 +327,35 @@
       #leftContent {
         width: calc(100% - var(--title-width, 15%));
       }
+
+      .radio-group {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .radio-option input[type="number"] {
+        width: 60px;
+        padding: 4px 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .radio-option input[type="radio"] {
+        margin: 0;
+      }
+
+      .radio-option label {
+        margin: 0;
+        font-weight: normal;
+        display: inline;
+      }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="news_script.js"></script>
@@ -358,14 +387,18 @@
         <div class="input-item">
           <label>直書轉換規則</label>
           <div class="radio-group">
-            <label>
+            <div class="radio-option">
               <input type="radio" name="verticalType" id="byLinesOption">
-              共 <input type="number" id="totalLines" value="8" min="4"> 行
-            </label>
-            <label>
+              <label for="byLinesOption">共</label>
+              <input type="number" id="totalLines" value="8" min="4">
+              <label for="totalLines">行</label>
+            </div>
+            <div class="radio-option">
               <input type="radio" name="verticalType" id="byCharsOption" checked>
-              每行 <input type="number" id="charsPerLine" value="12" min="6"> 個字
-            </label>
+              <label for="byCharsOption">每行</label>
+              <input type="number" id="charsPerLine" value="12" min="6">
+              <label for="charsPerLine">個字</label>
+            </div>
           </div>
         </div>
         <div class="input-item">
