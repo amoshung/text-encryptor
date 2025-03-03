@@ -283,7 +283,7 @@ function transformNewsTitle() {
   textContainer.style.display = "flex";
   textContainer.style.alignItems = "center";
   textContainer.style.justifyContent = "center";
-  textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';
+  textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
 
   // 先進行半形轉全形，再轉換標點符號
   const startText = convertPunctuationToVertical(halfToFull(`【${startKeyword} `));
@@ -291,17 +291,22 @@ function transformNewsTitle() {
   const endText = convertPunctuationToVertical(halfToFull(` ${endKeyword}】`));
 
   // 創建開頭括號和關鍵字
-  const startElement = document.createElement("span");
+  const startElement = document.createElement('span');
   startElement.innerHTML = startText;
-
+  startElement.style.fontWeight = 'normal';
+  startElement.style.fontSize = '0.9em';
+  
   // 創建中間文字（斜體）
-  const middleElement = document.createElement("span");
+  const middleElement = document.createElement('span');
   middleElement.innerHTML = middleText;
-  middleElement.style.fontStyle = "italic";
-
+  middleElement.style.fontSize = '1.1em';
+  middleElement.style.fontWeight = 'bold';
+  
   // 創建結尾關鍵字和括號
-  const endElement = document.createElement("span");
+  const endElement = document.createElement('span');
   endElement.innerHTML = endText;
+  endElement.style.fontWeight = 'normal';
+  endElement.style.fontSize = '0.9em';
 
   // 添加所有元素到容器
   textContainer.appendChild(startElement);
@@ -602,11 +607,35 @@ function generateLayout() {
     textContainer.style.display = 'flex';
     textContainer.style.alignItems = 'center';
     textContainer.style.justifyContent = 'center';
-    textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';
+    textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
     
-    const transformedText = convertPunctuationToVertical(halfToFull(shockingTitleOutput.value));
-    textContainer.innerHTML = transformedText;
+    const titleParts = parseShockingTitle(shockingTitleOutput.value);
     
+    // 創建開頭部分
+    const startElement = document.createElement('span');
+    startElement.innerHTML = convertPunctuationToVertical(halfToFull(`【${titleParts.start} `));
+    startElement.style.fontWeight = 'normal';
+    startElement.style.fontSize = '0.9em';
+    
+    // 創建中間部分
+    const middleElement = document.createElement('span');
+    middleElement.innerHTML = convertPunctuationToVertical(halfToFull(titleParts.middle));
+    middleElement.style.fontSize = '1.1em';
+    middleElement.style.fontWeight = 'bold';
+    middleElement.style.fontStyle = 'normal';
+    
+    // 創建結尾部分
+    const endElement = document.createElement('span');
+    endElement.innerHTML = convertPunctuationToVertical(halfToFull(` ${titleParts.end}】`));
+    endElement.style.fontWeight = 'normal';
+    endElement.style.fontSize = '0.9em';
+
+    // 添加所有元素到容器
+    textContainer.appendChild(startElement);
+    textContainer.appendChild(middleElement);
+    textContainer.appendChild(endElement);
+
+    // 添加到右側內容區
     rightContent.appendChild(textContainer);
     maximizeFontSize(textContainer, rightContent);
   }
@@ -650,7 +679,7 @@ document.addEventListener("DOMContentLoaded", function () {
       textContainer.style.writingMode = "vertical-rl";
       textContainer.style.textOrientation = "upright";
       textContainer.style.fontFamily =
-        '"Yu Mincho", "MS Mincho", "SimSun", serif'; // 使用較好支援直書的字型
+        '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif'; // 使用較好支援直書的字型
       textContainer.style.width = "100%";
       textContainer.style.height = "100%";
       textContainer.style.display = "flex";
