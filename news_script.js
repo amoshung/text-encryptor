@@ -90,6 +90,7 @@ function transformNewsTitle() {
         const textContainer = document.createElement('div');
         textContainer.style.writingMode = 'vertical-rl';
         textContainer.style.textOrientation = 'upright';
+        textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';  // 使用較好支援直書的字型
         textContainer.style.width = '100%';
         textContainer.style.height = '100%';
         textContainer.style.display = 'flex';
@@ -97,18 +98,23 @@ function transformNewsTitle() {
         textContainer.style.justifyContent = 'center';
         textContainer.style.fontSize = '100%'; // 初始字體大小
         
+        // 先進行半形轉全形，再轉換標點符號
+        const startText = convertPunctuationToVertical(halfToFull(`【${startKeyword} `));
+        const middleText = convertPunctuationToVertical(halfToFull(middleText));
+        const endText = convertPunctuationToVertical(halfToFull(` ${endKeyword}】`));
+        
         // 創建開頭括號和關鍵字
         const startElement = document.createElement('span');
-        startElement.textContent = `【${halfToFull(startKeyword)} `;
+        startElement.innerHTML = startText;
         
         // 創建中間文字（斜體）
         const middleElement = document.createElement('span');
-        middleElement.textContent = halfToFull(middleText);
+        middleElement.textContent = middleText;
         middleElement.style.fontStyle = 'italic';
         
         // 創建結尾關鍵字和括號
         const endElement = document.createElement('span');
-        endElement.textContent = ` ${halfToFull(endKeyword)}】`;
+        endElement.textContent = endText;
         
         // 添加所有元素到容器
         textContainer.appendChild(startElement);
@@ -218,23 +224,60 @@ function halfToFull(text) {
 // 標點符號轉換函數 - 將橫書標點轉為直書標點
 function convertPunctuationToVertical(text) {
     const horizontalToVertical = {
-        '。': '︒', // 句號
-        '、': '︑', // 頓號
+        // 基本標點
+        '。': '。',  // U+3002 而不是 U+FE12
+        '、': '、',  // U+3001 而不是 U+FE11
+        '，': '，',  // U+FF0C 而不是 U+FE10
+        '．': '・', // 間隔號
+        '：': '︓', // 冒號
+        '；': '︔', // 分號
+       '！': '！',  // U+FF01 而不是 U+FE15
+        '？': '？',  // U+FF1F 而不是 U+FE16
+        '‧': '·', // 間隔號
+        
+        // 括號類
         '（': '︵', // 左圓括號
         '）': '︶', // 右圓括號
+        '｛': '︷', // 左大括號
+        '｝': '︸', // 右大括號
+        '［': '︹', // 左方括號
+        '］': '︺', // 右方括號
+        '【': '︻', // 左黑方括號
+        '】': '︼', // 右黑方括號
+        '《': '︽', // 左書名號
+        '》': '︾', // 右書名號
+        '〈': '︿', // 左單書名號
+        '〉': '﹀', // 右單書名號
         '「': '﹁', // 左單引號
         '」': '﹂', // 右單引號
         '『': '﹃', // 左雙引號
         '』': '﹄', // 右雙引號
-        '《': '︽', // 左書名號
-        '》': '︾', // 右書名號
-        '〈': '︿', // 左尖括號
-        '〉': '﹀', // 右尖括號
-        '【': '︻', // 左方括號
-        '】': '︼', // 右方括號
+        '〔': '﹝', // 左括號
+        '〕': '﹞', // 右括號
+        
+        // 其他符號
         '—': '︱', // 破折號
-        '…': '︙', // 省略號
-        '·': '・'  // 間隔號
+        '︱': '︱', // 直線
+        '╴': '︴', // 波浪線
+        '⋮': '︙', // 垂直省略號
+        '…': '︙', // 橫式省略號轉垂直
+        '＿': '︳', // 底線
+        '～': '〜', // 波浪號
+        '‥': '︰', // 刪節號
+        
+        // 常用半形轉全形
+        ',': '︐', // 半形逗號
+        '.': '︒', // 半形句號
+        ':': '︓', // 半形冒號
+        ';': '︔', // 半形分號
+        '!': '︕', // 半形驚嘆號
+        '?': '︖', // 半形問號
+        '[': '︹', // 半形左方括號
+        ']': '︺', // 半形右方括號
+        '{': '︷', // 半形左大括號
+        '}': '︸', // 半形右大括號
+        '(': '︵', // 半形左圓括號
+        ')': '︶'  // 半形右圓括號
     };
 
     return text.split('').map(char => horizontalToVertical[char] || char).join('');
@@ -344,6 +387,7 @@ function generateLayout() {
         const textContainer = document.createElement('div');
         textContainer.style.writingMode = 'vertical-rl';
         textContainer.style.textOrientation = 'upright';
+        textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';  // 使用較好支援直書的字型
         textContainer.style.width = '100%';
         textContainer.style.height = '100%';
         textContainer.style.display = 'flex';
@@ -377,7 +421,6 @@ function generateLayout() {
     
     // 如果已經有驚悚化的標題，使用它
     if (shockingTitleOutput.value.trim()) {
-        // 這裡需要重新處理驚悚化標題的顯示
         const titleParts = parseShockingTitle(shockingTitleOutput.value.trim());
         
         // 清空原有內容
@@ -387,24 +430,30 @@ function generateLayout() {
         const textContainer = document.createElement('div');
         textContainer.style.writingMode = 'vertical-rl';
         textContainer.style.textOrientation = 'upright';
+        textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';  // 使用較好支援直書的字型
         textContainer.style.width = '100%';
         textContainer.style.height = '100%';
         textContainer.style.display = 'flex';
         textContainer.style.alignItems = 'center';
         textContainer.style.justifyContent = 'center';
         
+        // 先進行半形轉全形，再轉換標點符號
+        const startText = convertPunctuationToVertical(halfToFull(`【${titleParts.start} `));
+        const middleText = convertPunctuationToVertical(halfToFull(titleParts.middle));
+        const endText = convertPunctuationToVertical(halfToFull(` ${titleParts.end}】`));
+        
         // 創建開頭括號和關鍵字
         const startElement = document.createElement('span');
-        startElement.textContent = `【${halfToFull(titleParts.start)} `;
+        startElement.textContent = startText;
         
         // 創建中間文字（斜體）
         const middleElement = document.createElement('span');
-        middleElement.textContent = halfToFull(titleParts.middle);
+        middleElement.textContent = middleText;
         middleElement.style.fontStyle = 'italic';
         
         // 創建結尾關鍵字和括號
         const endElement = document.createElement('span');
-        endElement.textContent = ` ${halfToFull(titleParts.end)}】`;
+        endElement.textContent = endText;
         
         // 添加所有元素到容器
         textContainer.appendChild(startElement);
@@ -450,6 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const textContainer = document.createElement('div');
             textContainer.style.writingMode = 'vertical-rl';
             textContainer.style.textOrientation = 'upright';
+            textContainer.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';  // 使用較好支援直書的字型
             textContainer.style.width = '100%';
             textContainer.style.height = '100%';
             textContainer.style.display = 'flex';
@@ -486,4 +536,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 生成圖片下載按鈕點擊事件
     downloadImageButton.addEventListener('click', generateAndDownloadImage);
-}); 
+});
+
+function createVerticalTextContainer(text) {
+    const container = document.createElement('div');
+    container.style.writingMode = 'vertical-rl';
+    container.style.textOrientation = 'upright';
+    container.style.fontFamily = '"Yu Mincho", "MS Mincho", "SimSun", serif';
+    container.innerHTML = convertPunctuationToVertical(text);
+    return container;
+}
+
+// 使用這個函數來創建文字容器
+const textContainer = createVerticalTextContainer(text); 
