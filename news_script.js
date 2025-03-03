@@ -1686,6 +1686,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // 添加全局樣式規則
   const styleElement = document.createElement('style');
   styleElement.textContent = `
+    /* 這裡放置您的CSS樣式 */
+  `;
+  document.head.appendChild(styleElement);
 });
 
 // 修改段落排列方向控制函數
