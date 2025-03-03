@@ -1395,6 +1395,9 @@ function convertToVerticalLayout() {
   const textArea = document.createElement('div');
   textArea.className = 'vertical-text-area';
   
+  // 設置頂部內邊距為兩個字的高度
+  textArea.style.paddingTop = (charsize * 2) + 'px';
+  
   // 為每個段落創建直書元素
   paragraphs.forEach(paragraph => {
     if (!paragraph.trim()) return;
@@ -1613,12 +1616,13 @@ document.addEventListener("DOMContentLoaded", function () {
       align-items: flex-start;
       width: 100%;
       height: 100%;
+      padding-top: 2em; /* 添加頂部內邊距，約兩個字的高度 */
     }
     
     .vertical-paragraph {
       writing-mode: vertical-rl;
       text-orientation: mixed; /* 使用mixed而不是upright，更自然 */
-      height: 100%;
+      height: calc(100% - 2em); /* 減去頂部內邊距 */
       margin-left: 15px;
       padding: 10px;
       box-sizing: border-box;
