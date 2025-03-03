@@ -986,12 +986,13 @@ function initializeLayout() {
   textarea.style.fontFamily = "inherit";
   textarea.style.fontSize = `${charsize}px`;
   textarea.style.boxSizing = "border-box";
+  textarea.style.overflow = "hidden"; // 隱藏滾動條，不顯示超出內容
   
   textareaContainer.appendChild(textarea);
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數 - 簡化為純文字處理
+// 修改 convertToVerticalLayout 函數 - 截斷超出內容
 function convertToVerticalLayout() {
   // 獲取文本輸入框
   let textarea = document.getElementById("leftContentInput");
@@ -1007,11 +1008,58 @@ function convertToVerticalLayout() {
     
     // 更新輸入框內容
     textarea.value = verticalText;
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
+    
+    // 設置文本框樣式，固定高度並隱藏滾動條
+    textarea.style.height = "100%";
+    textarea.style.overflow = "hidden"; // 隱藏滾動條
+    
+    // 截斷超出的文本內容
+    limitTextareaContent(textarea);
   } else {
     alert("請先輸入要轉換的文字");
   }
+}
+
+// 添加截斷文本內容的函數
+function limitTextareaContent(textarea) {
+  // 獲取可見高度
+  const visibleHeight = textarea.clientHeight;
+  
+  // 創建一個臨時的隱藏文本區域來測量內容高度
+  const temp = document.createElement('textarea');
+  temp.style.position = 'absolute';
+  temp.style.left = '-9999px';
+  temp.style.width = textarea.clientWidth + 'px';
+  temp.style.fontSize = window.getComputedStyle(textarea).fontSize;
+  temp.style.lineHeight = window.getComputedStyle(textarea).lineHeight;
+  temp.style.fontFamily = window.getComputedStyle(textarea).fontFamily;
+  temp.value = textarea.value;
+  
+  document.body.appendChild(temp);
+  
+  // 如果內容高度超過可見高度，循環刪除行直到適合
+  if (temp.scrollHeight > visibleHeight) {
+    const lines = textarea.value.split('\n');
+    let truncatedContent = '';
+    
+    // 從頭開始添加行，直到達到最大可見高度
+    for (let i = 0; i < lines.length; i++) {
+      temp.value = truncatedContent + lines[i] + '\n';
+      
+      // 如果添加這一行後超出高度，停止添加
+      if (temp.scrollHeight > visibleHeight) {
+        break;
+      }
+      
+      truncatedContent += lines[i] + '\n';
+    }
+    
+    // 更新文本框內容為截斷後的內容
+    textarea.value = truncatedContent.trim();
+  }
+  
+  // 移除臨時元素
+  document.body.removeChild(temp);
 }
 
 // 新增純文字直書轉換函數
@@ -1206,6 +1254,11 @@ document.addEventListener("DOMContentLoaded", function () {
     convertToVerticalBtn.addEventListener("click", convertToVerticalLayout);
   } else {
     console.warn("無法找到轉換直書按鈕元素");
+  }
+
+  // 確保左側文本框隱藏溢出內容
+  if (leftContentInput) {
+    leftContentInput.style.overflow = "hidden";
   }
 
   // 確保所有必要元素都存在
