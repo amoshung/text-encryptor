@@ -390,20 +390,36 @@
               共 <input type="number" id="totalLines" value="8" min="4" /> 行
             </label>
             <label>
-              <input type="radio" name="verticalType" id="byCharsOption" checked/>
+              <input
+                type="radio"
+                name="verticalType"
+                id="byCharsOption"
+                checked
+              />
               每行
               <input type="number" id="charsPerLine" value="12" min="6" /> 個字
             </label>
           </div>
         </div>
         <div class="input-item">
-          <label for="gridCount">左側垂直分格數 <input type="number" id="gridCount" min="1" max="4" value="1" /></label>
-          
+          <label for="gridCount">左側垂直分格數</label>
+          <select id="gridCount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
         </div>
         <div class="input-item">
-            <label for="charsize">新聞內容字體大小 <input type="number" id="charsize" min="8" max="14" value="12" /></label>
-           
-          </div>
+          <label for="charsize">新聞內容字體大小</label>
+          <select id="charsize">
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+          </select>
+        </div>
         <div class="input-item">
           <label for="titleWidth">標題佔畫面寬度</label>
           <select id="titleWidth">
@@ -428,7 +444,7 @@
         <div class="left-content" id="leftContent">
           <textarea
             id="leftContentInput"
-            placeholder="請輸入要轉換為直書的文字..."
+            placeholder="請貼上要轉換為直書的文字..."
           ></textarea>
         </div>
         <div class="right-content" id="rightContent">

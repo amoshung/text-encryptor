@@ -824,41 +824,78 @@ function createTitleContainer(title, isShockingTitle = false) {
 }
 
 function createGridLayout(gridCount) {
-  const leftContent = document.getElementById("leftContent");
-  const charsize = document.getElementById("charsize").value;
-  leftContent.innerHTML = "";
-
-  // 移除舊的樣式
-  leftContent.style.display = "flex";
-  leftContent.style.flexDirection = "column";
-
-  for (let i = 0; i < gridCount; i++) {
-    const gridContainer = document.createElement("div");
-    gridContainer.style.flex = "1";
-    gridContainer.style.display = "flex";
-    gridContainer.style.flexDirection = "column";
-    gridContainer.style.marginBottom = i < gridCount - 1 ? "10px" : "0";
-    gridContainer.style.borderBottom =
-      i < gridCount - 1 ? "1px dashed #ccc" : "none";
-
-    const textarea = document.createElement("textarea");
-    textarea.className = "grid-textarea";
-    textarea.placeholder = `請輸入第 ${i + 1} 格的文字...`;
-    textarea.style.width = "100%";
-    textarea.style.height = "100%";
-    textarea.style.border = "none";
-    textarea.style.resize = "none";
-    textarea.style.padding = "10px";
-    textarea.style.fontFamily = "inherit";
-    textarea.style.fontSize = `${charsize}px`;
-
-    // 添加輸入事件監聽（包括貼上事件）
-    textarea.addEventListener("input", handleTextareaInput);
-    textarea.addEventListener("paste", handleTextareaInput);
-
-    gridContainer.appendChild(textarea);
-    leftContent.appendChild(gridContainer);
-  }
+    const leftContent = document.getElementById('leftContent');
+    const charsize = document.getElementById('charsize').value;
+    leftContent.innerHTML = '';
+    
+    leftContent.style.display = 'flex';
+    leftContent.style.flexDirection = 'column';
+    
+    for (let i = 0; i < gridCount; i++) {
+        const gridContainer = document.createElement('div');
+        gridContainer.style.flex = '1';
+        gridContainer.style.display = 'flex';
+        gridContainer.style.flexDirection = 'row'; // 改為水平排列
+        gridContainer.style.marginBottom = i < gridCount - 1 ? '10px' : '0';
+        gridContainer.style.borderBottom = i < gridCount - 1 ? '1px dashed #ccc' : 'none';
+        gridContainer.style.gap = '10px'; // 添加間距
+        
+        // 創建文本區域容器
+        const textareaContainer = document.createElement('div');
+        textareaContainer.style.flex = '1';
+        
+        const textarea = document.createElement('textarea');
+        textarea.className = 'grid-textarea';
+        textarea.placeholder = `請複製貼上第 ${i + 1} 格的文字...`;
+        textarea.style.width = '100%';
+        textarea.style.height = '100%';
+        textarea.style.border = 'none';
+        textarea.style.resize = 'none';
+        textarea.style.padding = '10px';
+        textarea.style.fontFamily = 'inherit';
+        textarea.style.fontSize = `${charsize}px`;
+        
+        // 移除原有的輸入事件監聽
+        // textarea.addEventListener('input', handleTextareaInput);
+        // textarea.addEventListener('paste', handleTextareaInput);
+        
+        textareaContainer.appendChild(textarea);
+        
+        // 創建轉換按鈕
+        const convertButton = document.createElement('button');
+        convertButton.textContent = '轉換直書';
+        convertButton.style.width = '80px';
+        convertButton.style.height = '30px';
+        convertButton.style.alignSelf = 'flex-start';
+        convertButton.style.marginTop = '10px';
+        convertButton.style.fontSize = '14px';
+        convertButton.style.padding = '5px';
+        
+        // 添加轉換按鈕點擊事件
+        convertButton.addEventListener('click', function() {
+            const text = textarea.value.trim();
+            if (text) {
+                // 使用 transformText 處理文本
+                const verticalContainer = transformText(text);
+                verticalContainer.className = 'vertical-content';
+                verticalContainer.style.fontSize = `${charsize}px`;
+                verticalContainer.style.marginTop = '10px';
+                
+                // 清除現有的直書顯示
+                const existingVertical = gridContainer.querySelector('.vertical-content');
+                if (existingVertical) {
+                    existingVertical.remove();
+                }
+                
+                // 添加新的直書顯示
+                textareaContainer.appendChild(verticalContainer);
+            }
+        });
+        
+        gridContainer.appendChild(textareaContainer);
+        gridContainer.appendChild(convertButton);
+        leftContent.appendChild(gridContainer);
+    }
 }
 
 // 處理文本輸入和貼上的函數
@@ -886,40 +923,18 @@ function handleTextareaInput(event) {
 }
 
 // 修改 generateLayout 函數
-function generateLayout(charsize) {
-  const leftContent = document.getElementById("leftContent");
-  const rightContent = document.getElementById("rightContent");
-  const shockingTitleOutput = document.getElementById("shockingTitle");
+function generateLayout() {
+    const leftContent = document.getElementById('leftContent');
+    const rightContent = document.getElementById('rightContent');
+    const shockingTitleOutput = document.getElementById('shockingTitle');
 
-  // 獲取所有文本區域的內容
-  const textareas = leftContent.getElementsByClassName("grid-textarea");
-  const contents = Array.from(textareas).map((textarea) => textarea.value.trim());
-
-  // 清空左側內容區域的直書顯示
-  const contentContainers = leftContent.getElementsByClassName("vertical-content");
-  Array.from(contentContainers).forEach((container) => container.remove());
-
-  // 處理每個文本區域的內容
-  contents.forEach((content, index) => {
-    if (content) {
-      // 使用 transformText 處理文本
-      const verticalContainer = transformText(content);
-      verticalContainer.className = "vertical-content";
-      verticalContainer.style.fontSize = `${charsize}px`;
-      verticalContainer.style.marginTop = "10px";
-      
-      const gridContainer = textareas[index].parentElement;
-      gridContainer.appendChild(verticalContainer);
+    // 更新右側標題顯示
+    if (shockingTitleOutput.value.trim()) {
+        rightContent.innerHTML = '';
+        const textContainer = createTitleContainer(shockingTitleOutput.value, true);
+        rightContent.appendChild(textContainer);
+        maximizeFontSize(textContainer, rightContent);
     }
-  });
-
-  // 更新右側標題顯示
-  if (shockingTitleOutput.value.trim()) {
-    rightContent.innerHTML = "";
-    const textContainer = createTitleContainer(shockingTitleOutput.value, true);
-    rightContent.appendChild(textContainer);
-    maximizeFontSize(textContainer, rightContent);
-  }
 }
 
 // 頁面加載完成後初始化
