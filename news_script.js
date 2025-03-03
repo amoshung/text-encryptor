@@ -281,8 +281,9 @@ function transformNewsTitle() {
   textContainer.style.width = "100%";
   textContainer.style.height = "100%";
   textContainer.style.display = "flex";
-  textContainer.style.alignItems = "center";
+  textContainer.style.alignItems = "stretch";
   textContainer.style.justifyContent = "center";
+  textContainer.style.whiteSpace = "nowrap";
   textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
 
   // 先進行半形轉全形，再轉換標點符號
@@ -295,18 +296,21 @@ function transformNewsTitle() {
   startElement.innerHTML = startText;
   startElement.style.fontWeight = 'normal';
   startElement.style.fontSize = '0.9em';
+  startElement.style.display = 'inline-block';
   
   // 創建中間文字（斜體）
   const middleElement = document.createElement('span');
   middleElement.innerHTML = middleText;
   middleElement.style.fontSize = '1.1em';
   middleElement.style.fontWeight = 'bold';
+  middleElement.style.display = 'inline-block';
   
   // 創建結尾關鍵字和括號
   const endElement = document.createElement('span');
   endElement.innerHTML = endText;
   endElement.style.fontWeight = 'normal';
   endElement.style.fontSize = '0.9em';
+  endElement.style.display = 'inline-block';
 
   // 添加所有元素到容器
   textContainer.appendChild(startElement);
@@ -518,38 +522,37 @@ function convertPunctuationToVertical(text) {
 
 // 調整字體大小以極大化填充容器
 function maximizeFontSize(element, container) {
-  // 獲取容器尺寸
-  const containerWidth = container.clientWidth;
-  const containerHeight = container.clientHeight;
-
-  // 設置初始字體大小（以像素為單位）
-  let fontSize = 20; // 起始字體大小
-  element.style.fontSize = fontSize + "px";
-
-  // 檢查元素是否超出容器
-  function isOverflowing() {
-    return (
-      element.scrollWidth > containerWidth * 0.95 ||
-      element.scrollHeight > containerHeight * 0.95
-    );
-  }
-
-  // 增加字體大小直到填滿容器但不溢出
-  while (!isOverflowing() && fontSize < 200) {
-    // 設置上限防止無限循環
-    fontSize += 2;
+    // 獲取容器尺寸
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    
+    // 設置初始字體大小
+    let fontSize = 24;
     element.style.fontSize = fontSize + "px";
-  }
-
-  // 如果溢出，回退一步
-  if (isOverflowing()) {
-    fontSize -= 4; // 回退兩步以確保不溢出
-    element.style.fontSize = fontSize + "px";
-  }
-
-  // 設置行高和字間距以改善顯示效果
-  element.style.lineHeight = "1.2";
-  element.style.letterSpacing = "0.05em";
+    
+    // 檢查元素是否超出容器
+    function isOverflowing() {
+        return (
+            element.scrollWidth > containerWidth ||
+            element.scrollHeight > containerHeight
+        );
+    }
+    
+    // 增加字體大小直到填滿容器但不溢出
+    while (!isOverflowing() && fontSize < 500) {
+        fontSize += 2;
+        element.style.fontSize = fontSize + "px";
+    }
+    
+    // 如果溢出，回退一步
+    if (isOverflowing()) {
+        fontSize -= 2;
+        element.style.fontSize = fontSize + "px";
+    }
+    
+    // 設置行高為1以緊湊顯示
+    element.style.lineHeight = "1";
+    element.style.letterSpacing = "0";
 }
 
 // 添加一個函數來解析驚悚化標題
