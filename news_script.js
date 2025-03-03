@@ -355,9 +355,17 @@ function convertToVertical(text) {
 function halfToFull(text) {
   // 阿拉伯數字轉換為中文數字
   const arabicToChinese = {
-    0: "零", 1: "一", 2: "二", 3: "三", 4: "四",
-    5: "五", 6: "六", 7: "七", 8: "八", 9: "九",
-    10: "十"
+    0: "零",
+    1: "一",
+    2: "二",
+    3: "三",
+    4: "四",
+    5: "五",
+    6: "六",
+    7: "七",
+    8: "八",
+    9: "九",
+    10: "十",
   };
 
   // 先處理兩位數以上的數字
@@ -370,14 +378,24 @@ function halfToFull(text) {
     } else if (num < 100) {
       const tens = Math.floor(num / 10);
       const ones = num % 10;
-      return arabicToChinese[tens] + "十" + (ones === 0 ? "" : arabicToChinese[ones]);
+      return (
+        arabicToChinese[tens] + "十" + (ones === 0 ? "" : arabicToChinese[ones])
+      );
     } else if (num < 1000) {
       const hundreds = Math.floor(num / 100);
       const tens = Math.floor((num % 100) / 10);
       const ones = num % 10;
-      return arabicToChinese[hundreds] + "百" + 
-             (tens === 0 ? (ones === 0 ? "" : "零" + arabicToChinese[ones]) : 
-             (arabicToChinese[tens] + "十" + (ones === 0 ? "" : arabicToChinese[ones])));
+      return (
+        arabicToChinese[hundreds] +
+        "百" +
+        (tens === 0
+          ? ones === 0
+            ? ""
+            : "零" + arabicToChinese[ones]
+          : arabicToChinese[tens] +
+            "十" +
+            (ones === 0 ? "" : arabicToChinese[ones]))
+      );
     }
     return match; // 超過三位數則保持原樣
   });
@@ -478,45 +496,45 @@ function convertPunctuationToVertical(text) {
 
 // 調整字體大小以極大化填充容器
 function maximizeFontSize(element, container) {
-    // 移除 nowrap 設置，允許換行
-    element.style.whiteSpace = 'normal';
-    
-    // 獲取容器尺寸
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    
-    // 設置初始字體大小
-    let fontSize = 24;
+  // 移除 nowrap 設置，允許換行
+  element.style.whiteSpace = "normal";
+
+  // 獲取容器尺寸
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+
+  // 設置初始字體大小
+  let fontSize = 24;
+  element.style.fontSize = fontSize + "px";
+
+  // 檢查元素是否超出容器
+  function isOverflowing() {
+    return (
+      element.scrollWidth > containerWidth ||
+      element.scrollHeight > containerHeight
+    );
+  }
+
+  // 增加字體大小直到填滿容器但不溢出
+  while (!isOverflowing() && fontSize < 200) {
+    fontSize += 2;
     element.style.fontSize = fontSize + "px";
-    
-    // 檢查元素是否超出容器
-    function isOverflowing() {
-        return (
-            element.scrollWidth > containerWidth ||
-            element.scrollHeight > containerHeight
-        );
-    }
-    
-    // 增加字體大小直到填滿容器但不溢出
-    while (!isOverflowing() && fontSize < 200) {
-        fontSize += 2;
-        element.style.fontSize = fontSize + "px";
-    }
-    
-    // 如果溢出，回退一步
-    if (isOverflowing()) {
-        fontSize -= 2;
-        element.style.fontSize = fontSize + "px";
-    }
-    
-    // 設置行高為1.2以改善可讀性
-    element.style.lineHeight = "1.2";
-    
-    // 確保 strong 標籤內的文字保持粗體
-    const strongElements = element.getElementsByTagName('strong');
-    for (let strong of strongElements) {
-        strong.style.fontWeight = 'bold';
-    }
+  }
+
+  // 如果溢出，回退一步
+  if (isOverflowing()) {
+    fontSize -= 2;
+    element.style.fontSize = fontSize + "px";
+  }
+
+  // 設置行高為1.2以改善可讀性
+  element.style.lineHeight = "1.2";
+
+  // 確保 strong 標籤內的文字保持粗體
+  const strongElements = element.getElementsByTagName("strong");
+  for (let strong of strongElements) {
+    strong.style.fontWeight = "bold";
+  }
 }
 
 // 添加一個函數來解析驚悚化標題
@@ -553,60 +571,61 @@ function generateAndDownloadImage() {
 
 // 創建標題容器的通用函數
 function createTitleContainer(title, isShockingTitle = false) {
-    const textContainer = document.createElement('div');
-    textContainer.style.writingMode = 'vertical-rl';
-    textContainer.style.textOrientation = 'upright';
-    textContainer.style.width = '100%';
-    textContainer.style.height = '100%';
-    textContainer.style.display = 'flex';
-    textContainer.style.alignItems = 'stretch';
-    textContainer.style.justifyContent = 'center';
-    textContainer.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
-    
-    let startText, middleText, endText;
-    
-    if (isShockingTitle) {
-        const titleParts = parseShockingTitle(title);
-        startText = `【${titleParts.start} `;
-        middleText = titleParts.middle;
-        endText = ` ${titleParts.end}】`;
-    } else {
-        startText = "【";
-        middleText = title;
-        endText = "】";
-    }
-    
-    // 創建單一文字元素
-    const textElement = document.createElement('div');
-    textElement.style.display = 'inline-block';
-    
-    // 組合文字內容，使用 strong 標籤使中間文字變粗
-    const combinedText = `
+  const textContainer = document.createElement("div");
+  textContainer.style.writingMode = "vertical-rl";
+  textContainer.style.textOrientation = "upright";
+  textContainer.style.width = "100%";
+  textContainer.style.height = "100%";
+  textContainer.style.display = "flex";
+  textContainer.style.alignItems = "stretch";
+  textContainer.style.justifyContent = "center";
+  textContainer.style.fontFamily =
+    '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
+
+  let startText, middleText, endText;
+
+  if (isShockingTitle) {
+    const titleParts = parseShockingTitle(title);
+    startText = `【${titleParts.start} `;
+    middleText = titleParts.middle;
+    endText = ` ${titleParts.end}】`;
+  } else {
+    startText = "【";
+    middleText = title;
+    endText = "】";
+  }
+
+  // 創建單一文字元素
+  const textElement = document.createElement("div");
+  textElement.style.display = "inline-block";
+
+  // 組合文字內容，使用 strong 標籤使中間文字變粗
+  const combinedText = `
         ${convertPunctuationToVertical(halfToFull(startText))}
         <strong>${convertPunctuationToVertical(halfToFull(middleText))}</strong>
         ${convertPunctuationToVertical(halfToFull(endText))}
     `;
-    
-    textElement.innerHTML = combinedText;
-    
-    // 添加到容器
-    textContainer.appendChild(textElement);
-    
-    return textContainer;
+
+  textElement.innerHTML = combinedText;
+
+  // 添加到容器
+  textContainer.appendChild(textElement);
+
+  return textContainer;
 }
 
 // 生成布局函數
 function generateLayout() {
-  const leftContent = document.getElementById('leftContent');
-  const rightContent = document.getElementById('rightContent');
-  const shockingTitleOutput = document.getElementById('shockingTitle');
-  
+  const leftContent = document.getElementById("leftContent");
+  const rightContent = document.getElementById("rightContent");
+  const shockingTitleOutput = document.getElementById("shockingTitle");
+
   // 清空左側內容
-  leftContent.innerHTML = '';
-  
+  leftContent.innerHTML = "";
+
   // 更新右側標題顯示
   if (shockingTitleOutput.value.trim()) {
-    rightContent.innerHTML = '';
+    rightContent.innerHTML = "";
     const textContainer = createTitleContainer(shockingTitleOutput.value, true);
     rightContent.appendChild(textContainer);
     maximizeFontSize(textContainer, rightContent);
@@ -627,14 +646,17 @@ document.addEventListener("DOMContentLoaded", function () {
   // 設置標題寬度
   function updateTitleWidth() {
     const titleWidth = titleWidthSelect.value;
-    document.documentElement.style.setProperty('--title-width', titleWidth + '%');
+    document.documentElement.style.setProperty(
+      "--title-width",
+      titleWidth + "%"
+    );
   }
 
   // 初始化時設置寬度
   updateTitleWidth();
 
   // 監聽寬度選擇變化
-  titleWidthSelect.addEventListener('change', updateTitleWidth);
+  titleWidthSelect.addEventListener("change", updateTitleWidth);
 
   // 初始化布局
   generateLayout();
@@ -643,13 +665,13 @@ document.addEventListener("DOMContentLoaded", function () {
   newsTitleInput.addEventListener("input", function () {
     const inputTitle = this.value.trim();
     rightContent.innerHTML = "";
-    
+
     if (inputTitle) {
-        const textContainer = createTitleContainer(inputTitle);
-        rightContent.appendChild(textContainer);
-        maximizeFontSize(textContainer, rightContent);
+      const textContainer = createTitleContainer(inputTitle);
+      rightContent.appendChild(textContainer);
+      maximizeFontSize(textContainer, rightContent);
     } else {
-        rightContent.innerHTML = `
+      rightContent.innerHTML = `
             <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
                 display: flex; align-items: center; justify-content: center;
                 font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light', sans-serif;

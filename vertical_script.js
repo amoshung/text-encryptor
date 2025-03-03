@@ -49,12 +49,6 @@ function toUTF8(text) {
 
 // 半形轉全形函數（更新版）
 function halfToFull(text) {
-  // 先進行 UTF-8 轉換
-  text = toUTF8(text);
-
-  // 移除所有超連結
-  text = text.replace(/<a[^>]*>(.*?)<\/a>/gi, "$1");
-
   // 阿拉伯數字轉換為中文數字
   const arabicToChinese = {
     0: "零",
@@ -67,17 +61,48 @@ function halfToFull(text) {
     7: "七",
     8: "八",
     9: "九",
+    10: "十",
   };
-  text = text.replace(/[0-9]/g, (match) => arabicToChinese[match]);
 
+  // 先處理兩位數以上的數字
+  text = text.replace(/[0-9]+/g, (match) => {
+    const num = parseInt(match);
+    if (num <= 10) {
+      return arabicToChinese[num];
+    } else if (num < 20) {
+      return "十" + (num % 10 === 0 ? "" : arabicToChinese[num % 10]);
+    } else if (num < 100) {
+      const tens = Math.floor(num / 10);
+      const ones = num % 10;
+      return (
+        arabicToChinese[tens] + "十" + (ones === 0 ? "" : arabicToChinese[ones])
+      );
+    } else if (num < 1000) {
+      const hundreds = Math.floor(num / 100);
+      const tens = Math.floor((num % 100) / 10);
+      const ones = num % 10;
+      return (
+        arabicToChinese[hundreds] +
+        "百" +
+        (tens === 0
+          ? ones === 0
+            ? ""
+            : "零" + arabicToChinese[ones]
+          : arabicToChinese[tens] +
+            "十" +
+            (ones === 0 ? "" : arabicToChinese[ones]))
+      );
+    }
+    return match; // 超過三位數則保持原樣
+  });
+
+  // 處理其他字符的全形轉換
   let result = "";
   for (let i = 0; i < text.length; i++) {
     let code = text.charCodeAt(i);
     if (code === 32) {
-      // 空格轉換
       result += "　";
     } else if (code >= 33 && code <= 126) {
-      // ASCII 字元轉換
       result += String.fromCharCode(code + 65248);
     } else {
       result += text.charAt(i);
