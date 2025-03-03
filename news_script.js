@@ -342,6 +342,9 @@ function copyShockingTitleToClipboard() {
 
 // 將文字轉換為直書格式
 function convertToVertical(text) {
+  // 先進行日期格式轉換
+  text = convertDateFormat(text);
+
   // 先進行全形轉換
   text = halfToFull(text);
 
@@ -349,6 +352,54 @@ function convertToVertical(text) {
   text = convertPunctuationToVertical(text);
 
   return text;
+}
+
+function convertDateFormat(text) {
+  const numberToChineseMap = {
+    0: "零",
+    1: "一",
+    2: "二",
+    3: "三",
+    4: "四",
+    5: "五",
+    6: "六",
+    7: "七",
+    8: "八",
+    9: "九",
+    10: "十",
+    11: "十一",
+    12: "十二",
+  };
+
+  // 匹配 1-12/1-31 的格式
+  return text.replace(/(\d{1,2})\/(\d{1,2})/g, (match, month, day) => {
+    // 檢查月份和日期是否有效
+    const monthNum = parseInt(month);
+    const dayNum = parseInt(day);
+
+    if (monthNum >= 1 && monthNum <= 12 && dayNum >= 1 && dayNum <= 31) {
+      // 轉換月份
+      let monthStr = numberToChineseMap[monthNum];
+
+      // 轉換日期
+      let dayStr = "";
+      if (dayNum <= 10) {
+        dayStr = numberToChineseMap[dayNum];
+      } else if (dayNum < 20) {
+        dayStr =
+          "十" + (dayNum % 10 === 0 ? "" : numberToChineseMap[dayNum % 10]);
+      } else if (dayNum < 30) {
+        dayStr =
+          "二十" + (dayNum % 10 === 0 ? "" : numberToChineseMap[dayNum % 10]);
+      } else {
+        dayStr =
+          "三十" + (dayNum % 10 === 0 ? "" : numberToChineseMap[dayNum % 10]);
+      }
+
+      return `${monthStr}月${dayStr}號`;
+    }
+    return match; // 如果不是有效日期，保持原樣
+  });
 }
 
 // 半形轉全形函數
@@ -494,6 +545,52 @@ function convertPunctuationToVertical(text) {
     .join("");
 }
 
+function transformText(text, options = {}) {
+    const {
+        byLines = false,
+        totalLines = 8,
+        charsPerLine = 12
+    } = options;
+
+    // 移除多餘的空白和換行
+    text = text.trim().replace(/[\n\s]+/g, '');
+
+    let lines = [];
+    if (byLines) {
+        // 按總行數分配
+        const charsPerLineCalc = Math.ceil(text.length / totalLines);
+        for (let i = 0; i < text.length; i += charsPerLineCalc) {
+            lines.push(text.slice(i, i + charsPerLineCalc));
+        }
+    } else {
+        // 按每行字數分配
+        for (let i = 0; i < text.length; i += charsPerLine) {
+            lines.push(text.slice(i, i + charsPerLine));
+        }
+    }
+
+    // 創建直書容器
+    const container = document.createElement('div');
+    container.style.writingMode = 'vertical-rl';
+    container.style.textOrientation = 'upright';
+    container.style.height = '100%';
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.justifyContent = 'space-between';
+    container.style.fontFamily = '"Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif';
+
+    // 添加每一行
+    lines.forEach(line => {
+        const lineDiv = document.createElement('div');
+        lineDiv.style.height = '100%';
+        lineDiv.style.margin = '0 10px';
+        lineDiv.innerHTML = convertPunctuationToVertical(halfToFull(line));
+        container.appendChild(lineDiv);
+    });
+
+    return container;
+}
+
 // 調整字體大小以極大化填充容器
 function maximizeFontSize(element, container) {
   // 移除 nowrap 設置，允許換行
@@ -616,20 +713,38 @@ function createTitleContainer(title, isShockingTitle = false) {
 
 // 生成布局函數
 function generateLayout() {
-  const leftContent = document.getElementById("leftContent");
-  const rightContent = document.getElementById("rightContent");
-  const shockingTitleOutput = document.getElementById("shockingTitle");
+    const leftContent = document.getElementById('leftContent');
+    const leftContentInput = document.getElementById('leftContentInput');
+    const rightContent = document.getElementById('rightContent');
+    const shockingTitleOutput = document.getElementById('shockingTitle');
 
-  // 清空左側內容
-  leftContent.innerHTML = "";
+    // 處理左側內容
+    if (leftContentInput.value.trim()) {
+        const byLinesOption = document.getElementById('byLinesOption');
+        const totalLines = document.getElementById('totalLines').value;
+        const charsPerLine = document.getElementById('charsPerLine').value;
 
-  // 更新右側標題顯示
-  if (shockingTitleOutput.value.trim()) {
-    rightContent.innerHTML = "";
-    const textContainer = createTitleContainer(shockingTitleOutput.value, true);
-    rightContent.appendChild(textContainer);
-    maximizeFontSize(textContainer, rightContent);
-  }
+        const options = {
+            byLines: byLinesOption.checked,
+            totalLines: parseInt(totalLines),
+            charsPerLine: parseInt(charsPerLine)
+        };
+
+        const textContainer = transformText(leftContentInput.value, options);
+        leftContent.innerHTML = '';
+        leftContent.appendChild(textContainer);
+        
+        // 調整字體大小以適應容器
+        maximizeFontSize(textContainer, leftContent);
+    }
+
+    // 更新右側標題顯示
+    if (shockingTitleOutput.value.trim()) {
+        rightContent.innerHTML = '';
+        const textContainer = createTitleContainer(shockingTitleOutput.value, true);
+        rightContent.appendChild(textContainer);
+        maximizeFontSize(textContainer, rightContent);
+    }
 }
 
 // 頁面加載完成後初始化
@@ -692,4 +807,18 @@ document.addEventListener("DOMContentLoaded", function () {
   if (transformTitleBtn) {
     transformTitleBtn.addEventListener("click", transformNewsTitle);
   }
+
+  // 監聽左側文本輸入
+  const leftContentInput = document.getElementById('leftContentInput');
+  leftContentInput.addEventListener('input', function() {
+    if (this.value.trim()) {
+      generateLayout();
+    }
+  });
+
+  // 監聽直書規則選項變化
+  document.getElementById('byLinesOption').addEventListener('change', generateLayout);
+  document.getElementById('byCharsOption').addEventListener('change', generateLayout);
+  document.getElementById('totalLines').addEventListener('input', generateLayout);
+  document.getElementById('charsPerLine').addEventListener('input', generateLayout);
 });
