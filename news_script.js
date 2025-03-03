@@ -1062,7 +1062,7 @@ function limitTextareaContent(textarea) {
   document.body.removeChild(temp);
 }
 
-// 新增純文字直書轉換函數
+// 修改 convertTextToVertical 函數，反轉段落順序
 function convertTextToVertical(text) {
   // 移除所有半形空白
   text = text.replace(/ /g, "");
@@ -1101,16 +1101,16 @@ function convertTextToVertical(text) {
     mergedParagraphs.push(currentParagraph);
   }
   
-  text = mergedParagraphs.join("\n");
-  
   // 將文字轉換為全形字符
-  text = halfToFull(text);
+  const fullwidthParagraphs = mergedParagraphs.map(p => halfToFull(p));
   
-  // 處理每個段落的直書轉換 (不添加HTML標籤)
-  const processedParagraphs = text.split("\n").filter(p => p.trim().length > 0);
+  // 反轉段落順序 (從後向前)
+  const reversedParagraphs = fullwidthParagraphs.reverse();
+  
+  // 處理每個段落的直書轉換
   const results = [];
   
-  for (let paragraph of processedParagraphs) {
+  for (let paragraph of reversedParagraphs) {
     // 使用純文字方式轉換段落
     results.push(convertParagraphToVertical(paragraph));
   }
@@ -1119,7 +1119,7 @@ function convertTextToVertical(text) {
   return results.join("\n\n");
 }
 
-// 新增段落直書轉換函數 (純文字版本)
+// 修改段落直書轉換函數，確保文字向右對齊
 function convertParagraphToVertical(paragraph) {
   // 固定每行12個字
   const charsPerLine = 12;
@@ -1127,9 +1127,9 @@ function convertParagraphToVertical(paragraph) {
   // 計算行數
   const totalLines = Math.ceil(paragraph.length / charsPerLine);
   
-  // 補足全形空格
+  // 補足全形空格使每行右對齊
   while (paragraph.length < totalLines * charsPerLine) {
-    paragraph += "　";
+    paragraph = "　" + paragraph;  // 在段落前面加空格，確保右對齊
   }
   
   // 建立矩陣並填充字符
