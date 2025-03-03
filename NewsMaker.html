@@ -1,319 +1,370 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>新聞直書圖片製作</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-        .header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #ddd;
-        }
+      .header {
+        text-align: center;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+      }
 
-        .header h1 {
-            color: #333;
-            margin: 0;
-        }
+      .header h1 {
+        color: #333;
+        margin: 0;
+      }
 
-        .top-panel {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            box-sizing: border-box;
-        }
+      .top-panel {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+      }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            margin-bottom: 20px;
-        }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 20px;
+      }
 
-        .input-item {
-            width: 100%;
-            margin-bottom: 20px;
-        }
+      .input-item {
+        width: 100%;
+        margin-bottom: 20px;
+      }
 
-        .input-item label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
+      .input-item label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 16px;
+      }
 
-        .input-item input, .input-item select, .input-item textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-            display: block;
-        }
+      .input-item input,
+      .input-item select,
+      .input-item textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        display: block;
+      }
 
-        .input-item textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
+      .input-item textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
 
-        .title-section {
-            width: 100%;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px dashed #ccc;
-        }
+      .title-section {
+        width: 100%;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed #ccc;
+      }
 
-        .title-result {
-            margin-top: 15px;
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 4px;
-            border-left: 4px solid #4CAF50;
-        }
+      .title-result {
+        margin-top: 15px;
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #4caf50;
+      }
 
-        .title-result p {
-            margin: 0 0 10px 0;
-            font-weight: bold;
-        }
+      .title-result p {
+        margin: 0 0 10px 0;
+        font-weight: bold;
+      }
 
-        .title-result textarea {
-            min-height: 12px;
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #fff;
-            font-size: 16px;
-            line-height: 1.5;
-            resize: vertical;
-        }
+      .title-result textarea {
+        min-height: 12px;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        font-size: 16px;
+        line-height: 1.5;
+        resize: vertical;
+      }
 
-        .button-container {
-            text-align: center;
-            margin-top: 30px;
-            width: 100%;
-        }
+      .button-container {
+        text-align: center;
+        margin-top: 30px;
+        width: 100%;
+      }
 
-        button {
-            padding: 15px 25px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 18px;
-            width: 100%;
-        }
+      button {
+        padding: 15px 25px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 18px;
+        width: 100%;
+      }
 
-        button:hover {
-            background-color: #45a049;
-        }
+      button:hover {
+        background-color: #45a049;
+      }
 
-        .bottom-panel {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            justify-content: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
+      .bottom-panel {
+        display: flex;
+        flex: 1;
+        padding: 20px;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+      }
 
+      .content-area {
+        flex: 1;
+        display: flex;
+        background-color: white;
+        position: relative;
+        overflow: hidden;
+        min-height: 500px;
+        width: 100%;
+        aspect-ratio: 4/3;
+      }
+
+      .left-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ddd;
+      }
+
+      .right-content {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        padding: 20px 10px;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+      }
+
+      .vertical-block {
+        flex: 1;
+        border-bottom: 1px dashed #ccc;
+        padding: 10px;
+        overflow: auto;
+      }
+
+      .vertical-block:last-child {
+        border-bottom: none;
+      }
+
+      .vertical-block textarea {
+        width: 100%;
+        height: 100%;
+        border: none;
+        resize: none;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      .download-container {
+        text-align: center;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ddd;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .download-button {
+        background-color: #2196f3;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .download-button:hover {
+        background-color: #0b7dda;
+      }
+
+      @media (max-width: 768px) {
         .content-area {
-            flex: 1;
-            display: flex;
-            background-color: white;
-            position: relative;
-            overflow: hidden;
-            min-height: 500px;
-            width: 100%;
-            aspect-ratio: 4/3;
+          flex-direction: column;
+          aspect-ratio: auto;
+          min-height: auto;
         }
-
+        
         .left-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #ddd;
+          flex: 1;
+          min-height: 300px;
+          width: 100%;
         }
-
+        
         .right-content {
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            padding: 20px 10px;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ddd;
+          writing-mode: vertical-rl;
+          text-orientation: upright;
+          width: 100% !important;
+          min-height: 150px;
+          padding: 10px;
+          margin-top: 10px;
+          border-top: 1px solid #ddd;
         }
+      }
 
-        .vertical-block {
-            flex: 1;
-            border-bottom: 1px dashed #ccc;
-            padding: 10px;
-            overflow: auto;
-        }
+      .vpunct {
+        display: inline-block;
+        position: relative;
+        width: 1em;
+        text-align: center;
+      }
 
-        .vertical-block:last-child {
-            border-bottom: none;
-        }
+      .vpunct.period {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.pause {
+        transform: translateX(-0.1em);
+      }
+      .vpunct.comma {
+        transform: translateX(-0.1em);
+      }
+      .vpunct.colon {
+        transform: translateX(-0.1em);
+      }
+      .vpunct.semicolon {
+        transform: translateX(-0.1em);
+      }
+      .vpunct.exclaim {
+        transform: translateX(-0.05em);
+      }
+      .vpunct.question {
+        transform: translateX(-0.05em);
+      }
 
-        .vertical-block textarea {
-            width: 100%;
-            height: 100%;
-            border: none;
-            resize: none;
-            padding: 10px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+      .vpunct.quote-left {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.quote-right {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.bracket-left {
+        transform: translateX(-0.2em);
+      }
+      .vpunct.bracket-right {
+        transform: translateX(-0.2em);
+      }
+      .vpunct.paren-left {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.paren-right {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.book-left {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.book-right {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.angle-left {
+        transform: translateX(-0.15em);
+      }
+      .vpunct.angle-right {
+        transform: translateX(-0.15em);
+      }
 
-        .download-container {
-            text-align: center;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ddd;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .download-button {
-            background-color: #2196F3;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .download-button:hover {
-            background-color: #0b7dda;
-        }
-
-        @media (max-width: 768px) {
-            .bottom-panel {
-                flex-direction: column;
-            }
-            
-            .right-content {
-                writing-mode: horizontal-tb;
-                text-orientation: mixed;
-                width: 100% !important;
-                min-height: 60px;
-            }
-        }
-
-        .vpunct {
-            display: inline-block;
-            position: relative;
-            width: 1em;
-            text-align: center;
-        }
-        
-        .vpunct.comma {
-            transform: translateX(-0.1em);
-        }
-        
-        .vpunct.pause {
-            transform: translateX(-0.1em);
-        }
-        
-        .vpunct.period {
-            transform: translateX(-0.15em);
-        }
-        
-        .vpunct.colon {
-            transform: translateX(-0.1em);
-        }
-        
-        .vpunct.semicolon {
-            transform: translateX(-0.1em);
-        }
-        
-        .vpunct.exclaim {
-            transform: translateX(-0.05em);
-        }
-        
-        .vpunct.question {
-            transform: translateX(-0.05em);
-        }
+      /* 確保直書容器在所有設備上都正確顯示 */
+      .right-content > div {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="news_script.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="header">
-        <h1>新聞直書圖片製作</h1>
+      <h1>新聞直書圖片製作</h1>
     </div>
 
     <div class="top-panel">
-        <div class="title-section">
-            <div class="input-item">
-                <label for="newsTitle">新聞標題</label>
-                <input type="text" id="newsTitle" placeholder="請輸入新聞標題...">
-            </div>
-            <div class="button-container">
-                <button id="transformTitleBtn" onclick="transformNewsTitle()">標題驚悚化</button>
-            </div>
-            <div class="title-result">
-                <p>驚悚化結果：</p>
-                <textarea id="shockingTitle" readonly></textarea>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <div class="input-item">
-                <label for="blockCount">垂直布局幾個區塊</label>
-                <input type="number" id="blockCount" min="1" max="3" value="1">
-            </div>
-            <div class="input-item">
-                <label for="lineLength">直書每一行長度</label>
-                <input type="number" id="lineLength" min="12" max="16" value="12">
-            </div>
-            <div class="input-item">
-                <label for="titleWidth">標題佔畫面寬度</label>
-                <select id="titleWidth">
-                    <option value="10">10%</option>
-                    <option value="15">15%</option>
-                    <option value="20">20%</option>
-                </select>
-            </div>
+      <div class="title-section">
+        <div class="input-item">
+          <label for="newsTitle">新聞標題</label>
+          <input type="text" id="newsTitle" placeholder="請輸入新聞標題..." />
         </div>
         <div class="button-container">
-            <button id="generateLayout">新聞排版生成</button>
+          <button id="transformTitleBtn" onclick="transformNewsTitle()">
+            標題驚悚化
+          </button>
         </div>
+        <div class="title-result">
+          <p>驚悚化結果：</p>
+          <textarea id="shockingTitle" readonly></textarea>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-item">
+          <label for="blockCount">垂直布局幾個區塊</label>
+          <input type="number" id="blockCount" min="1" max="3" value="1" />
+        </div>
+        <div class="input-item">
+          <label for="lineLength">直書每一行長度</label>
+          <input type="number" id="lineLength" min="12" max="16" value="12" />
+        </div>
+        <div class="input-item">
+          <label for="titleWidth">標題佔畫面寬度</label>
+          <select id="titleWidth">
+            <option value="10">10%</option>
+            <option value="15">15%</option>
+            <option value="20">20%</option>
+          </select>
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="generateLayout">新聞排版生成</button>
+      </div>
     </div>
 
     <div class="bottom-panel">
-        <div class="content-area" id="contentArea">
-            <div class="left-content" id="leftContent">
-                <!-- 垂直區塊將在這裡動態生成 -->
-            </div>
-            <div class="right-content" id="rightContent">
+      <div class="content-area" id="contentArea">
+        <div class="left-content" id="leftContent">
+          <!-- 垂直區塊將在這裡動態生成 -->
+        </div>
+        <div class="right-content" id="rightContent">
+            <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                 請輸入標題
             </div>
         </div>
+      </div>
     </div>
 
     <div class="download-container">
-        <button id="downloadImage" class="download-button">生成圖片下載</button>
+      <button id="downloadImage" class="download-button">生成圖片下載</button>
     </div>
-</body>
-
-</html> 
+  </body>
+</html>
