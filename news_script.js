@@ -1265,7 +1265,81 @@ function initializeLayout() {
   leftContent.appendChild(textareaContainer);
 }
 
-// 修改 convertToVerticalLayout 函數，解決字體大小和內容溢出問題
+// 添加阿拉伯數字轉中文數字函數
+function convertNumbersToChinese(text) {
+  // 數字對照表
+  const numberMap = {
+    '0': '零', '1': '一', '2': '二', '3': '三', '4': '四', 
+    '5': '五', '6': '六', '7': '七', '8': '八', '9': '九'
+  };
+  
+  // 數量單位對照表
+  const unitMap = {
+    '10': '十', '100': '百', '1000': '千',
+    '10000': '萬', '100000000': '億'
+  };
+  
+  // 替換簡單的數字 (1-9)
+  let result = text.replace(/\b[0-9]\b/g, match => {
+    return numberMap[match] || match;
+  });
+  
+  // 替換年份 (例如2024年 -> 二零二四年)
+  result = result.replace(/\b([0-9]{4})年\b/g, (match, year) => {
+    return year.split('').map(digit => numberMap[digit] || digit).join('') + '年';
+  });
+  
+  // 替換兩位數 (例如25% -> 二十五%)
+  result = result.replace(/\b([0-9]{2})([^\d]|$)/g, (match, num, suffix) => {
+    const tens = Math.floor(parseInt(num) / 10);
+    const ones = parseInt(num) % 10;
+    
+    let chineseNum = '';
+    if (tens === 1) {
+      chineseNum = '十';
+    } else {
+      chineseNum = numberMap[tens] + '十';
+    }
+    
+    if (ones !== 0) {
+      chineseNum += numberMap[ones];
+    }
+    
+    return chineseNum + suffix;
+  });
+  
+  // 處理日期 (例如3月4日 -> 三月四日)
+  result = result.replace(/\b([0-9]{1,2})月([0-9]{1,2})日\b/g, (match, month, day) => {
+    return numberMap[month] + '月' + numberMap[day] + '日';
+  });
+  
+  // 處理百分比 (例如25% -> 二十五%)
+  result = result.replace(/\b([0-9]{1,2})%/g, (match, num) => {
+    if (num.length === 1) {
+      return numberMap[num] + '%';
+    } else {
+      const tens = Math.floor(parseInt(num) / 10);
+      const ones = parseInt(num) % 10;
+      
+      let chineseNum = '';
+      if (tens === 1) {
+        chineseNum = '十';
+      } else {
+        chineseNum = numberMap[tens] + '十';
+      }
+      
+      if (ones !== 0) {
+        chineseNum += numberMap[ones];
+      }
+      
+      return chineseNum + '%';
+    }
+  });
+  
+  return result;
+}
+
+// 修改 convertToVerticalLayout 函數，加入數字轉換
 function convertToVerticalLayout() {
   // 獲取輸入框
   const textarea = document.getElementById("leftContentInput");
@@ -1299,7 +1373,11 @@ function convertToVerticalLayout() {
   }
   
   // 分析文本並分段
-  const text = textarea.value.trim();
+  let text = textarea.value.trim();
+  
+  // 將阿拉伯數字轉換為中文數字
+  text = convertNumbersToChinese(text);
+  
   let paragraphs = text.split(/\n\s*\n/); // 按空行分段
   
   // 如果沒有空行，嘗試按單個換行符分段
