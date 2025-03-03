@@ -1006,34 +1006,6 @@ function convertToVerticalLayout() {
   }
 }
 
-// 修改 DOMContentLoaded 事件處理函數
-document.addEventListener("DOMContentLoaded", function () {
-  // ... 現有代碼 ...
-  
-  // 移除設置預設每行字數的代碼
-  // if (charsPerLineInput) {
-  //   charsPerLineInput.value = "20";
-  // }
-  
-  // ... 現有代碼 ...
-  
-  // 移除監聽每行字數變化的代碼
-  // if (charsPerLineInput) {
-  //   charsPerLineInput.addEventListener("input", generateLayout);
-  // }
-  
-  // ... 現有代碼 ...
-  
-  // 修改必要元素檢查列表，移除 charsPerLine
-  const necessaryElements = [
-    // "charsPerLine", // 已移除
-    "convertToVerticalBtn",
-    // 其他必要元素...
-  ];
-  
-  // ... 現有代碼 ...
-});
-
 // 修改 clearContent 函數，確保能正確清空內容
 function clearContent() {
   const leftContent = document.getElementById("leftContent");
@@ -1119,6 +1091,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const downloadImageButton = document.getElementById("downloadImage");
   const newsTitleInput = document.getElementById("newsTitle");
   const clearContentButton = document.getElementById("clearContent");
+  const convertToVerticalBtn = document.getElementById("convertToVerticalBtn");
 
   // 設置標題寬度
   function updateTitleWidth() {
@@ -1161,25 +1134,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 監聽左側文本輸入
+  // 移除左側文本輸入的自動轉換事件
   const leftContentInput = document.getElementById("leftContentInput");
-  if (leftContentInput) {
-    leftContentInput.addEventListener("input", function () {
-      if (this.value.trim()) {
-        generateLayout();
-      }
-    });
-  }
-
+  
   // 清空按鈕點擊事件
   if (clearContentButton) {
     clearContentButton.addEventListener("click", clearContent);
   }
 
+  // 添加轉換直書按鈕的事件監聽器
+  if (convertToVerticalBtn) {
+    convertToVerticalBtn.addEventListener("click", convertToVerticalLayout);
+  } else {
+    console.warn("無法找到轉換直書按鈕元素");
+  }
+
   // 確保所有必要元素都存在
   const necessaryElements = [
     "convertToVerticalBtn",
-    // 其他必要元素...
+    "leftContentInput",
+    "rightContent",
+    "newsTitle",
+    "shockingTitle",
+    "downloadImage"
   ];
 
   let missingElements = [];
