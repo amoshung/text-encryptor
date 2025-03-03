@@ -1069,35 +1069,11 @@ function updateRightContent() {
   }
 }
 
-// 修改 generateLayout 函數
-function generateLayout() {
-  // 獲取左側內容
-  const leftContentInput = document.getElementById("leftContentInput");
-  const leftContent = document.getElementById("leftContent");
-  
-  if (leftContentInput && leftContentInput.value.trim()) {
-    const text = leftContentInput.value.trim();
-    const verticalContainer = transformText(text);
-    
-    // 清空現有內容
-    leftContent.innerHTML = "";
-    
-    // 添加新的直書內容
-    leftContent.appendChild(verticalContainer);
-  } else {
-    // 如果沒有輸入，初始化布局
-    initializeLayout();
-  }
-  
-  // 更新右側標題內容
-  updateRightContent();
-}
 
 // 頁面加載完成後執行
 document.addEventListener("DOMContentLoaded", function () {
   // 獲取元素
   const titleWidthSelect = document.getElementById("titleWidth");
-  const generateLayoutButton = document.getElementById("generateLayout");
   const downloadImageButton = document.getElementById("downloadImage");
   const newsTitleInput = document.getElementById("newsTitle");
   const clearContentButton = document.getElementById("clearContent");
@@ -1128,9 +1104,6 @@ document.addEventListener("DOMContentLoaded", function () {
   newsTitleInput.addEventListener("input", function () {
     updateRightContent();
   });
-
-  // 排版生成按鈕點擊事件
-  generateLayoutButton.addEventListener("click", generateLayout);
 
   // 生成圖片下載按鈕點擊事件
   downloadImageButton.addEventListener("click", generateAndDownloadImage);
