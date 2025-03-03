@@ -241,10 +241,11 @@
         position: relative;
         width: 1em;
         text-align: center;
+        vertical-align: middle;
       }
 
       .vpunct.period {
-        transform: translateX(-0.15em);
+        transform: translateX(-0.1em);
       }
       .vpunct.pause {
         transform: translateX(-0.1em);
@@ -271,11 +272,13 @@
       .vpunct.quote-right {
         transform: translateX(-0.15em);
       }
-      .vpunct.bracket-left {
-        transform: translateX(-0.2em);
-      }
+      .vpunct.bracket-left,
       .vpunct.bracket-right {
-        transform: translateX(-0.2em);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 1em;
+        transform: none;
       }
       .vpunct.paren-left {
         transform: translateX(-0.15em);
