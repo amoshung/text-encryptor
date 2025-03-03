@@ -846,24 +846,20 @@ document.addEventListener("DOMContentLoaded", function () {
 // 修改 clearContent 函數，確保能正確清空內容
 function clearContent() {
   const leftContent = document.getElementById("leftContent");
+  const leftContentInput = document.getElementById("leftContentInput");
   
-  // 檢查是否有文本區域
-  const textarea = document.getElementById("contentTextarea");
-  if (textarea) {
-    textarea.value = ""; // 清空文本內容
-  } else {
-    // 如果沒有文本區域，重新初始化
-    initializeLayout();
+  if (leftContentInput) {
+    leftContentInput.value = ""; // 清空文本內容
   }
   
-  // 移除已轉換的直書內容
-  const verticalContent = leftContent.querySelector(".vertical-content");
-  if (verticalContent) {
-    verticalContent.remove();
-  }
+  // 重新初始化左側內容
+  initializeLayout();
+  
+  // 更新右側標題內容
+  updateRightContent();
 }
 
-// 添加一個函數來更新右側標題內容
+// 修改 updateRightContent 函數，確保正確調整字體大小
 function updateRightContent() {
   const newsTitleInput = document.getElementById("newsTitle");
   const rightContent = document.getElementById("rightContent");
@@ -884,7 +880,11 @@ function updateRightContent() {
     const isShockingTitle = titleText.startsWith("【") && titleText.endsWith("】");
     const textContainer = createTitleContainer(titleText, isShockingTitle);
     rightContent.appendChild(textContainer);
-    maximizeFontSize(textContainer, rightContent);
+    
+    // 確保調用 maximizeFontSize 來調整字體大小
+    setTimeout(() => {
+      maximizeFontSize(textContainer, rightContent);
+    }, 0);
   } else {
     rightContent.innerHTML = `
       <div style="writing-mode: vertical-rl; text-orientation: upright; width: 100%; height: 100%; 
