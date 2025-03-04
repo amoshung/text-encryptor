@@ -111,27 +111,84 @@
       }
 
       button {
-        padding: 15px 25px;
-        background-color: #4caf50;
-        color: white;
         border: none;
         border-radius: 4px;
+        padding: 10px 15px;
+        margin: 5px;
+        font-size: 16px;
         cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 18px;
-        width: 100%;
+        transition: all 0.3s ease;
+        color: white;
       }
 
-      button:hover {
-        background-color: #45a049;
+      /* 主要按鈕 - 淡藍灰色 */
+      #convertToVerticalBtn {
+        background-color: #8EABC0; /* 莫蘭迪淡藍灰 */
+      }
+      #convertToVerticalBtn:hover {
+        background-color: #7A99AD;
       }
 
+      /* 清空按鈕 - 淡紅色 */
+      #clearContent {
+        background-color: #D8A9A9; /* 莫蘭迪淡紅 */
+      }
       #clearContent:hover {
-        background-color: #da190b;
+        background-color: #C79696;
       }
 
-      .button-container button + button {
-        margin-top: 10px;
+      /* 標題轉換按鈕 - 淡綠色 */
+      #transformTitleBtn, #transformTitlePositiveBtn {
+        background-color: #A9C8A9; /* 莫蘭迪淡綠 */
+      }
+      #transformTitleBtn:hover, #transformTitlePositiveBtn:hover {
+        background-color: #96B596;
+      }
+
+      /* 鎖定按鈕 - 淡紫色 */
+      #lock-news {
+        background-color: #B0A9C8; /* 莫蘭迪淡紫 */
+      }
+      #lock-news:hover {
+        background-color: #9D96B5;
+      }
+
+      /* 解鎖按鈕 - 淡黃色 */
+      #unlock-news {
+        background-color: #D8CFA9; /* 莫蘭迪淡黃 */
+      }
+      #unlock-news:hover {
+        background-color: #C7BE96;
+      }
+
+      /* 輸入框和選擇框 */
+      input, select, textarea {
+        border: 1px solid #D1D1D1;
+        border-radius: 4px;
+        padding: 8px;
+        background-color: #F8F8F8;
+      }
+
+      /* 文字框控制按鈕 */
+      .text-box-controls div, .resize-btn {
+        background-color: rgba(174, 184, 192, 0.8); /* 半透明莫蘭迪灰 */
+      }
+      .text-box-controls div:hover, .resize-btn:hover {
+        background-color: rgba(150, 160, 168, 0.9);
+      }
+
+      /* 刪除按鈕特殊顏色 */
+      .delete-btn {
+        background-color: rgba(216, 169, 169, 0.8) !important; /* 半透明莫蘭迪淡紅 */
+      }
+      .delete-btn:hover {
+        background-color: rgba(199, 150, 150, 0.9) !important;
+      }
+
+      /* 完成容器按鈕 */
+      .finish-container button {
+        padding: 15px 25px;
+        font-size: 18px;
       }
 
       .bottom-panel {
@@ -144,72 +201,142 @@
         font-family: "Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif;
       }
 
-      .content-area {
-        flex: 1;
-        display: flex;
+      .canvas-container {
+        width: 95vw;
+        height: 95vh;
         background-color: white;
         position: relative;
-        overflow: hidden;
-        min-height: 500px;
-        width: 100%;
-        aspect-ratio: 4/3;
-        font-family: inherit;
-      }
-
-      .left-content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
         border: 1px solid #ddd;
-        font-family: inherit;
-        padding: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
       }
 
-      .left-content textarea {
+      /* 文字框包裝容器 */
+      .text-box-wrapper {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 文字框本身 */
+      .text-box {
+        position: relative;
+        border: 1px solid #ddd;
+        background-color: white;
+        min-width: 60px;
+        min-height: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: text;
         width: 100%;
         height: 100%;
-        border: none;
-        resize: none;
-        padding: 10px;
-        font-family: inherit;
-        font-size: 16px;
       }
 
-      .right-content {
-        writing-mode: vertical-rl;
-        text-orientation: upright;
-        padding: 20px 10px;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
+      /* 控制按鈕容器 */
+      .text-box-controls {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        height: 0;
+        display: flex;
+        justify-content: space-between;
+        z-index: 11;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .text-box-wrapper:hover .text-box-controls {
+        opacity: 1;
+      }
+
+      /* 移動按鈕 - 右上角外部 */
+      .move-btn {
+        width: 16px;
+        height: 16px;
+        background-color: #2196f3;
+        color: white;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #ddd;
-        font-family: inherit;
+        cursor: move;
+        font-size: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       }
 
-      .vertical-block {
-        flex: 1;
-        border-bottom: 1px dashed #ccc;
-        padding: 10px;
-        overflow: auto;
-        font-family: inherit;
+      /* 縮放按鈕 - 右下角外部 */
+      .resize-btn {
+        position: absolute;
+        bottom: -8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: se-resize;
+        font-size: 8px;
+        z-index: 11;
+        opacity: 0;
+        transition: opacity 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       }
 
-      .vertical-block:last-child {
-        border-bottom: none;
+      .text-box-wrapper:hover .resize-btn {
+        opacity: 1;
       }
 
-      .vertical-block textarea {
+      .title-wrapper {
+        right: 20px;
+        top: 20px;
+        width: 120px;
+        height: 400px;
+      }
+
+      .title-box {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .title-controls {
+        justify-content: flex-end;
+      }
+
+      .box-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 60px;
+        color: rgba(0, 0, 0, 0.15);
+        font-weight: bold;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .text-content {
         width: 100%;
         height: 100%;
-        border: none;
-        resize: none;
-        padding: 10px;
+        padding: 30px 10px 30px 10px;
         box-sizing: border-box;
-        font-size: 16px;
-        font-family: inherit;
+        outline: none;
+        overflow: hidden;
+        position: relative;
+        z-index: 5;
+        background: transparent;
+        font-size: inherit !important;
+      }
+
+      .vertical-text-box {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        aspect-ratio: 1/1;
       }
 
       .download-container {
@@ -232,22 +359,14 @@
       }
 
       @media (max-width: 768px) {
-        .content-area {
+        .canvas-container {
           flex-direction: row;
           aspect-ratio: auto;
           min-height: 500px;
         }
 
-        .left-content {
-          flex: 1;
+        .text-box {
           width: 100%;
-        }
-
-        .right-content {
-          writing-mode: vertical-rl;
-          text-orientation: upright;
-          padding: 10px;
-          border-left: 1px solid #ddd;
         }
       }
 
@@ -313,7 +432,7 @@
       }
 
       /* 確保直書容器在所有設備上都正確顯示 */
-      .right-content > div {
+      .text-box > div {
         writing-mode: vertical-rl;
         text-orientation: upright;
         width: 100%;
@@ -324,20 +443,88 @@
       }
 
       /* 動態設置右側內容寬度 */
-      #contentArea {
+      #canvasContainer {
         position: relative;
       }
 
-      #rightContent {
+      #titleBox {
         width: var(--title-width, 15%);
       }
 
-      #leftContent {
+      #canvasContainer {
         width: calc(100% - var(--title-width, 15%));
+      }
+
+      /* 文字輸入提示樣式 */
+      .text-content:empty:before {
+        content: attr(data-placeholder);
+        color: #999;
+      }
+
+      /* 標題框特殊樣式 */
+      .text-box-wrapper[data-id="0"] {
+        right: 20px;
+        top: 20px;
+        width: 120px;
+        height: 400px;
+      }
+
+      .text-box-wrapper[data-id="0"] .text-box {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      /* 標題和正文的字體大小控制類 */
+      .title-text {
+        font-size: var(--title-font-size, 28px) !important;
+      }
+
+      .body-text {
+        font-size: var(--body-font-size, 16px) !important;
+      }
+
+      /* 強制應用字體大小控制 */
+      .text-box-wrapper[data-id="0"] .text-content {
+        font-size: var(--title-font-size, 28px) !important;
+      }
+
+      .text-box-wrapper:not([data-id="0"]) .text-content {
+        font-size: var(--body-font-size, 16px) !important;
+      }
+
+      /* 垂直文本容器樣式 */
+      .vertical-text-container {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        letter-spacing: 0.1em;
+        font-family: "Microsoft JhengHei Light", "微軟正黑體 Light", sans-serif;
+      }
+
+      /* 垂直標點符號樣式 */
+      .vertical-punct {
+        transform: rotate(90deg);
+        display: inline-block;
+        margin: 0.2em 0;
+      }
+
+      /* 特定標點符號的微調 */
+      .vertical-punct.comma,
+      .vertical-punct.period {
+        margin-top: 0.5em;
+      }
+
+      .vertical-punct.exclamation,
+      .vertical-punct.question {
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
       }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="news_script.js"></script>
+    <script src="canvas_script.js"></script>
   </head>
 
   <body>
@@ -353,7 +540,12 @@
         </div>
         <div class="button-container">
           <button id="transformTitleBtn">標題驚悚化</button>
-          <button id="transformTitlePositiveBtn" style="margin-top: 10px; background-color: #2196f3;">標題正面化</button>
+          <button
+            id="transformTitlePositiveBtn"
+            style="margin-top: 10px; background-color: #2196f3"
+          >
+            標題正面化
+          </button>
         </div>
         <div class="title-result">
           <p>轉換結果：</p>
@@ -363,58 +555,24 @@
 
       <div class="input-group">
         <div class="input-item">
-          <label for="charsize">字體大小</label>
+          <label for="charsize">正文字體大小</label>
           <input type="number" id="charsize" value="16" min="10" max="40" />
         </div>
         <div class="input-item">
-          <label for="titleWidth">標題佔畫面寬度</label>
-          <select id="titleWidth">
-            <option value="10">10%</option>
-            <option value="15">15%</option>
-            <option value="20">20%</option>
-          </select>
+          <label for="titlesize">標題字體大小</label>
+          <input type="number" id="titlesize" value="28" min="16" max="64" />
         </div>
       </div>
       <div class="button-container">
-        <button id="convertToVerticalBtn">新聞內容轉換直書</button>
-        <button id="directionToggleBtn" style="margin-top: 10px; background-color: #9c27b0;">段落由右至左</button>
-        <button id="clearContent" style="margin-top: 10px; background-color: #f44336;">清空新聞內容</button>
+        <button id="toggle-lock" class="toggle-lock" style="z-index: 1000; background-color: #cfa9d8;">鎖定畫布禁止編輯</button>
+        <button id="clearContent" style="margin-top: 10px; background-color: #D8A9A9;">清空新聞內容</button>
       </div>
     </div>
 
     <div class="bottom-panel">
-      <div class="content-area" id="contentArea">
-        <div class="left-content" id="leftContent">
-          <textarea
-            id="leftContentInput"
-            placeholder="請輸入要轉換為直書的文字..."
-            style="overflow: hidden; resize: none;"
-          ></textarea>
-          <div id="verticalContainer" class="vertical-container"></div>
-        </div>
-        <div class="right-content" id="rightContent">
-          <div
-            style="
-              writing-mode: vertical-rl;
-              text-orientation: upright;
-              width: 100%;
-              height: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-family: 'Microsoft JhengHei Light', '微軟正黑體 Light',
-                sans-serif;
-              font-weight: normal;
-            "
-          >
-            請輸入標題
-          </div>
-        </div>
+      <div class="canvas-container" id="canvasContainer">
+        <!-- 移除標題框，將由JavaScript動態創建 -->
       </div>
-    </div>
-
-    <div class="download-container">
-      <button id="downloadImage" class="download-button">生成圖片下載</button>
     </div>
   </body>
 </html>
