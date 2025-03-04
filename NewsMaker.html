@@ -369,7 +369,7 @@
         background-color: #0b7dda;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 768px), (hover: none) and (pointer: coarse) {
         .canvas-container {
           flex-direction: row;
           aspect-ratio: auto;
@@ -378,6 +378,36 @@
 
         .text-box {
           width: 100%;
+        }
+
+        /* 增加按鈕大小，提高可點擊性 */
+        button {
+          padding: 12px 18px;
+          font-size: 18px;
+          margin: 8px;
+        }
+        
+        /* 增大控制按鈕的點擊區域 */
+        .text-box-controls div,
+        .resize-btn {
+          min-width: 36px;
+          min-height: 36px;
+          margin: 6px;
+        }
+        
+        /* 對齊線加粗增加可見性 */
+        .horizontal-alignment-line {
+          border-top-width: 4px !important;
+        }
+        
+        .vertical-alignment-line {
+          border-left-width: 4px !important;
+        }
+        
+        /* 在觸控設備上增加文字框的透明度變化 */
+        .text-box-wrapper:active {
+          opacity: 0.8 !important;
+          transition: opacity 0.2s ease;
         }
       }
 
@@ -534,33 +564,33 @@
         margin-bottom: 0.3em;
       }
 
-      /* 觸控操作時的視覺反饋 */
-      @media (hover: none) and (pointer: coarse) {
-        /* 在觸控設備上加大控制按鈕的點擊區域 */
-        .text-box-controls div,
-        .resize-btn {
-          min-width: 30px;
-          min-height: 30px;
-          margin: 5px;
-        }
-        
-        /* 使對齊線在觸控設備上更加明顯 */
-        .horizontal-alignment-line {
-          border-top-width: 3px !important;
-        }
-        
-        .vertical-alignment-line {
-          border-left-width: 3px !important;
-        }
-      }
-
-      /* 提示元素的動畫效果 */
+      /* 提示元素樣式優化 */
       .drag-hint, .resize-hint {
+        position: absolute;
+        background-color: rgba(0,0,0,0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 2000;
+        pointer-events: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         animation: fadeInOut 2s ease infinite;
       }
 
+      .drag-hint {
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .resize-hint {
+        bottom: -40px;
+        right: 0;
+      }
+
       @keyframes fadeInOut {
-        0%, 100% { opacity: 0.7; }
+        0%, 100% { opacity: 0.8; }
         50% { opacity: 1; }
       }
     </style>

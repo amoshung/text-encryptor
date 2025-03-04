@@ -2,6 +2,9 @@
 let canvasContainer;
 let boxCounter = 0;
 
+// 添加設備檢測功能 - 放在文件開頭
+let isTouchDevice = false;
+
 // ============= 從 news_script.js 移植的關鍵詞數組 =============
 
 // 驚悚化標題關鍵詞
@@ -884,6 +887,12 @@ function transformNewsTitlePositive() {
 // ============= DOM完全加載後初始化 =============
 
 document.addEventListener("DOMContentLoaded", function () {
+  // 檢測觸控設備
+  detectTouchDevice();
+  
+  // 根據設備類型應用不同樣式
+  applyDeviceSpecificStyles();
+  
   // 重置計數器，確保從1開始（標題框是0）
   boxCounter = 1;
 
@@ -1386,7 +1395,7 @@ function setupButtonHoverEffects(deleteBtn, moveBtn, resizeBtn) {
   });
 }
 
-// 修改 setupDraggable 函數以支援觸控操作
+// 重新實現 setupDraggable 函數，恢復智慧對齊功能並添加觸控支援
 function setupDraggable(wrapper, moveBtn) {
   // 檢查參數
   if (!wrapper || !moveBtn) return;
@@ -1399,13 +1408,39 @@ function setupDraggable(wrapper, moveBtn) {
   let closestBox = null; // 最近的文字框
   let alignmentType = null; // 對齊類型：'horizontal' 或 'vertical'
   
-  // 創建對齊線元素(如果尚未創建)
-  if (!horizontalAlignmentLine) {
-    horizontalAlignmentLine = createHorizontalAlignmentLine();
+  // 創建水平對齊線元素(紅色)
+  function createHorizontalAlignmentLine() {
+    const line = document.createElement("div");
+    line.className = "horizontal-alignment-line";
+    line.style.position = "absolute";
+    line.style.height = "2px";
+    line.style.backgroundColor = "transparent";
+    line.style.borderTop = "2px dashed red";
+    line.style.pointerEvents = "none";
+    line.style.zIndex = "1000";
+    line.style.display = "none";
+    canvasContainer.appendChild(line);
+    return line;
   }
-  if (!verticalAlignmentLine) {
-    verticalAlignmentLine = createVerticalAlignmentLine();
+  
+  // 創建垂直對齊線元素(藍色)
+  function createVerticalAlignmentLine() {
+    const line = document.createElement("div");
+    line.className = "vertical-alignment-line";
+    line.style.position = "absolute";
+    line.style.width = "2px";
+    line.style.backgroundColor = "transparent";
+    line.style.borderLeft = "2px dashed blue";
+    line.style.pointerEvents = "none";
+    line.style.zIndex = "1000";
+    line.style.display = "none";
+    canvasContainer.appendChild(line);
+    return line;
   }
+  
+  // 確保對齊線已創建
+  horizontalAlignmentLine = createHorizontalAlignmentLine();
+  verticalAlignmentLine = createVerticalAlignmentLine();
   
   // ========== 滑鼠事件處理 ==========
   
@@ -1417,78 +1452,9 @@ function setupDraggable(wrapper, moveBtn) {
     // 檢查是否鎖定
     if (canvasContainer.classList.contains("locked")) return;
     
-    startDrag(e.clientX, e.clientY);
-    
-    // 添加全局滑鼠移動和釋放事件
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  });
-  
-  // 處理滑鼠移動事件
-  function handleMouseMove(e) {
-    if (!isDragging) return;
-    drag(e.clientX, e.clientY);
-  }
-  
-  // 處理滑鼠釋放事件
-  function handleMouseUp(e) {
-    if (!isDragging) return;
-    endDrag();
-    
-    // 移除全局事件監聽器
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-  }
-  
-  // ========== 觸控事件處理 ==========
-  
-  // 處理觸控開始事件
-  moveBtn.addEventListener("touchstart", function(e) {
-    e.preventDefault(); // 防止滾動和其他觸控默認行為
-    e.stopPropagation();
-    
-    // 檢查是否鎖定
-    if (canvasContainer.classList.contains("locked")) return;
-    
-    // 獲取第一個觸控點
-    const touch = e.touches[0];
-    startDrag(touch.clientX, touch.clientY);
-    
-    // 不需要添加全局事件監聽器，觸控事件會跟隨手指移動
-  });
-  
-  // 處理觸控移動事件
-  moveBtn.addEventListener("touchmove", function(e) {
-    if (!isDragging) return;
-    
-    e.preventDefault();
-    const touch = e.touches[0];
-    drag(touch.clientX, touch.clientY);
-  });
-  
-  // 處理觸控結束事件
-  moveBtn.addEventListener("touchend", function(e) {
-    if (!isDragging) return;
-    
-    e.preventDefault();
-    endDrag();
-  });
-  
-  // 處理觸控取消事件(當觸控被系統打斷時)
-  moveBtn.addEventListener("touchcancel", function(e) {
-    if (!isDragging) return;
-    
-    e.preventDefault();
-    endDrag();
-  });
-  
-  // ========== 通用拖曳功能 ==========
-  
-  // 開始拖曳
-  function startDrag(clientX, clientY) {
     isDragging = true;
-    startX = clientX;
-    startY = clientY;
+    startX = e.clientX;
+    startY = e.clientY;
     
     // 獲取文字框當前位置
     const rect = wrapper.getBoundingClientRect();
@@ -1500,15 +1466,18 @@ function setupDraggable(wrapper, moveBtn) {
     wrapper.style.opacity = "0.8";
     moveBtn.style.backgroundColor = "#e0e0ff";
     
-    // 顯示提示(在觸控設備上特別有用)
-    showDragHint(wrapper);
-  }
+    // 添加全局滑鼠移動和釋放事件
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  });
   
-  // 執行拖曳
-  function drag(clientX, clientY) {
+  // 處理滑鼠移動事件
+  function handleMouseMove(e) {
+    if (!isDragging) return;
+    
     // 計算新位置
-    const dx = clientX - startX;
-    const dy = clientY - startY;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
     
     let newPosX = startPosX + dx;
     let newPosY = startPosY + dy;
@@ -1517,7 +1486,7 @@ function setupDraggable(wrapper, moveBtn) {
     const canvasRect = canvasContainer.getBoundingClientRect();
     newPosX = Math.max(0, Math.min(newPosX, canvasRect.width - wrapper.offsetWidth));
     newPosY = Math.max(0, Math.min(newPosY, canvasRect.height - wrapper.offsetHeight));
-    
+  
     // 檢查是否為標題框，標題框只能上下移動
     if (wrapper.dataset.id === "0") {
       newPosX = startPosX; // 保持X位置不變
@@ -1534,7 +1503,188 @@ function setupDraggable(wrapper, moveBtn) {
     updateAlignmentLines(newPosX, newPosY, wrapper.offsetWidth, wrapper.offsetHeight);
   }
   
-  // 結束拖曳
+  // 處理滑鼠釋放事件
+  function handleMouseUp(e) {
+    if (!isDragging) return;
+    endDrag();
+    
+    // 移除全局事件監聽器
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  }
+  
+  // ========== 觸控事件處理 ==========
+  
+  // 處理觸控開始事件
+  moveBtn.addEventListener("touchstart", function(e) {
+    // 檢查是否鎖定
+    if (canvasContainer.classList.contains("locked")) return;
+    
+    e.preventDefault(); // 防止滾動
+    e.stopPropagation();
+    
+    isDragging = true;
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    
+    // 獲取文字框當前位置
+    const rect = wrapper.getBoundingClientRect();
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    startPosX = rect.left - canvasRect.left;
+    startPosY = rect.top - canvasRect.top;
+    
+    // 添加視覺反饋
+    wrapper.style.opacity = "0.8";
+    moveBtn.style.backgroundColor = "#e0e0ff";
+    
+    // 顯示提示
+    showDragHint(wrapper);
+  });
+  
+  // 處理觸控移動事件
+  moveBtn.addEventListener("touchmove", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    // 計算新位置
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    
+    let newPosX = startPosX + dx;
+    let newPosY = startPosY + dy;
+    
+    // 確保不超出畫布邊界
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    newPosX = Math.max(0, Math.min(newPosX, canvasRect.width - wrapper.offsetWidth));
+    newPosY = Math.max(0, Math.min(newPosY, canvasRect.height - wrapper.offsetHeight));
+  
+    // 檢查是否為標題框，標題框只能上下移動
+    if (wrapper.dataset.id === "0") {
+      newPosX = startPosX; // 保持X位置不變
+    }
+    
+    // 應用新位置
+    wrapper.style.left = newPosX + "px";
+    wrapper.style.top = newPosY + "px";
+    
+    // 找出距離右上角最近的文字框
+    findClosestBoxToTopRight(newPosX, newPosY, wrapper.offsetWidth, wrapper.offsetHeight);
+    
+    // 更新對齊線位置
+    updateAlignmentLines(newPosX, newPosY, wrapper.offsetWidth, wrapper.offsetHeight);
+  });
+  
+  // 處理觸控結束事件
+  moveBtn.addEventListener("touchend", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    endDrag();
+  });
+  
+  // 處理觸控取消事件
+  moveBtn.addEventListener("touchcancel", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    endDrag();
+  });
+  
+  // ========== 智慧對齊功能 ==========
+  
+  // 找出距離右上角最近的文字框
+  function findClosestBoxToTopRight(currentX, currentY, currentWidth, currentHeight) {
+    const boxes = document.querySelectorAll(".text-box-wrapper");
+    let minDistance = Infinity;
+    closestBox = null;
+    alignmentType = null;
+    
+    // 計算當前文字框右上角坐標
+    const currentTopRightX = currentX + currentWidth;
+    const currentTopRightY = currentY;
+    
+    boxes.forEach(box => {
+      if (box === wrapper) return; // 跳過當前拖曳的文字框
+      
+      const rect = box.getBoundingClientRect();
+      const canvasRect = canvasContainer.getBoundingClientRect();
+      
+      // 計算其他文字框右上角坐標
+      const boxTopRightX = (rect.left - canvasRect.left) + box.offsetWidth;
+      const boxTopRightY = rect.top - canvasRect.top;
+      
+      // 計算水平和垂直距離
+      const horizontalDist = Math.abs(boxTopRightX - currentTopRightX);
+      const verticalDist = Math.abs(boxTopRightY - currentTopRightY);
+      
+      // 計算總距離（歐氏距離）
+      const totalDist = Math.sqrt(horizontalDist * horizontalDist + verticalDist * verticalDist);
+      
+      if (totalDist < minDistance && totalDist < 400) { // 只考慮150px以內的文字框
+        minDistance = totalDist;
+        closestBox = box;
+        
+        // 確定對齊類型 - 根據水平和垂直距離比較
+        alignmentType = horizontalDist < verticalDist ? 'vertical' : 'horizontal';
+      }
+    });
+  }
+  
+  // 更新對齊線位置
+  function updateAlignmentLines(currentX, currentY, currentWidth, currentHeight) {
+    // 隱藏兩條對齊線
+    horizontalAlignmentLine.style.display = "none";
+    verticalAlignmentLine.style.display = "none";
+    
+    if (!closestBox) return;
+    
+    // 獲取最近文字框的右上角位置
+    const rect = closestBox.getBoundingClientRect();
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    const boxTopRightX = (rect.left - canvasRect.left) + closestBox.offsetWidth;
+    const boxTopRightY = rect.top - canvasRect.top;
+    
+    // 獲取當前文字框的右上角位置
+    const currentTopRightX = currentX + currentWidth;
+    const currentTopRightY = currentY;
+    
+    if (alignmentType === 'horizontal') {
+      // 顯示水平(紅色)對齊線 - 從當前文字框頂部到目標文字框頂部
+      horizontalAlignmentLine.style.display = "block";
+      horizontalAlignmentLine.style.top = boxTopRightY + "px";
+      
+      // 如果目標文字框在右側
+      if (boxTopRightX > currentTopRightX) {
+        horizontalAlignmentLine.style.left = currentTopRightX + "px";
+        horizontalAlignmentLine.style.width = (boxTopRightX - currentTopRightX) + "px";
+      } 
+      // 如果目標文字框在左側
+      else {
+        horizontalAlignmentLine.style.left = boxTopRightX + "px";
+        horizontalAlignmentLine.style.width = (currentTopRightX - boxTopRightX) + "px";
+      }
+    } else {
+      // 顯示垂直(藍色)對齊線 - 從當前文字框右側到目標文字框右側
+      verticalAlignmentLine.style.display = "block";
+      verticalAlignmentLine.style.left = boxTopRightX + "px";
+      
+      // 如果目標文字框在上方
+      if (boxTopRightY < currentTopRightY) {
+        verticalAlignmentLine.style.top = boxTopRightY + "px";
+        verticalAlignmentLine.style.height = (currentTopRightY - boxTopRightY) + "px";
+      } 
+      // 如果目標文字框在下方
+      else {
+        verticalAlignmentLine.style.top = currentTopRightY + "px";
+        verticalAlignmentLine.style.height = (boxTopRightY - currentTopRightY) + "px";
+      }
+    }
+  }
+  
+  // 結束拖曳，執行對齊
   function endDrag() {
     isDragging = false;
     
@@ -1542,7 +1692,7 @@ function setupDraggable(wrapper, moveBtn) {
     wrapper.style.opacity = "1";
     moveBtn.style.backgroundColor = "#f8f8f8";
     
-    // 根據顯示的對齊線進行對齊
+    // 如果有最近的文字框，執行對齊
     if (closestBox) {
       // 獲取最近文字框的右上角位置
       const rect = closestBox.getBoundingClientRect();
@@ -1566,12 +1716,9 @@ function setupDraggable(wrapper, moveBtn) {
     // 隱藏提示
     hideDragHint();
   }
-  
-  // 其他輔助函數保持不變
-  // ...
 }
 
-// 修改 setupResizable 函數以支援觸控操作
+// 設置縮放功能，支援滑鼠和觸控設備
 function setupResizable(wrapper) {
   const resizeBtn = wrapper.querySelector("div[style*='position: absolute'][style*='bottom: 0'][style*='right: 0']");
   const textBox = wrapper.querySelector(".text-box");
@@ -1581,90 +1728,88 @@ function setupResizable(wrapper) {
   let isResizing = false;
   let startX, startY;
   let startWidth, startHeight;
+  let isTouchDevice = false;
   
   // 禁用自動調整大小功能標記
   wrapper.dataset.manuallyResized = "false";
   
-  // ========== 滑鼠事件處理 ==========
+  // 檢測設備類型
+  isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   
-  // 處理滑鼠按下事件
-  resizeBtn.addEventListener("mousedown", function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    
-    // 檢查是否鎖定
-    if (canvasContainer.classList.contains("locked")) return;
-    
-    startResize(e.clientX, e.clientY);
-    
-    // 添加全局滑鼠移動和釋放事件
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  });
+  // ===== 滑鼠事件處理 =====
   
-  // 處理滑鼠移動事件
+  // 滑鼠按下 - 只在非觸控設備上監聽
+  if (!isTouchDevice) {
+    resizeBtn.addEventListener("mousedown", function(e) {
+      if (canvasContainer.classList.contains("locked")) return;
+      e.preventDefault();
+      e.stopPropagation();
+      
+      startResize(e.clientX, e.clientY);
+      
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    });
+  }
+  
   function handleMouseMove(e) {
     if (!isResizing) return;
+    e.preventDefault();
     resize(e.clientX, e.clientY);
   }
   
-  // 處理滑鼠釋放事件
   function handleMouseUp(e) {
     if (!isResizing) return;
+    e.preventDefault();
     endResize();
     
-    // 移除全局事件監聽器
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
   }
   
-  // ========== 觸控事件處理 ==========
+  // ===== 觸控事件處理 =====
   
-  // 處理觸控開始事件
+  // 觸控開始
   resizeBtn.addEventListener("touchstart", function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    
-    // 檢查是否鎖定
     if (canvasContainer.classList.contains("locked")) return;
+    e.preventDefault();
+    e.stopPropagation();
     
-    // 獲取第一個觸控點
     const touch = e.touches[0];
     startResize(touch.clientX, touch.clientY);
+    
+    // 標記為觸控設備
+    isTouchDevice = true;
   });
   
-  // 處理觸控移動事件
+  // 觸控移動
   resizeBtn.addEventListener("touchmove", function(e) {
     if (!isResizing) return;
-    
     e.preventDefault();
+    
     const touch = e.touches[0];
     resize(touch.clientX, touch.clientY);
   });
   
-  // 處理觸控結束事件
+  // 觸控結束
   resizeBtn.addEventListener("touchend", function(e) {
     if (!isResizing) return;
-    
     e.preventDefault();
     endResize();
   });
   
-  // 處理觸控取消事件
+  // 觸控取消
   resizeBtn.addEventListener("touchcancel", function(e) {
     if (!isResizing) return;
-    
     e.preventDefault();
     endResize();
   });
   
-  // ========== 通用縮放功能 ==========
+  // ===== 共用縮放邏輯 =====
   
-  // 開始縮放
   function startResize(clientX, clientY) {
     isResizing = true;
     
-    // 記錄起始位置和尺寸
     startX = clientX;
     startY = clientY;
     startWidth = wrapper.offsetWidth;
@@ -1674,20 +1819,19 @@ function setupResizable(wrapper) {
     resizeBtn.style.backgroundColor = "#e0e0ff";
     wrapper.style.opacity = "0.8";
     
-    // 設置標記，表示正在手動調整大小
+    // 設置標記
     wrapper.dataset.manuallyResized = "true";
     
-    // 顯示提示(在觸控設備上特別有用)
-    showResizeHint(wrapper);
+    // 在觸控設備上顯示提示
+    if (isTouchDevice) {
+      showResizeHint(wrapper);
+    }
   }
   
-  // 執行縮放
   function resize(clientX, clientY) {
-    // 計算新尺寸
     const dx = clientX - startX;
     const dy = clientY - startY;
     
-    // 計算新寬度和高度
     let newWidth = startWidth + dx;
     let newHeight = startHeight + dy;
     
@@ -1700,7 +1844,6 @@ function setupResizable(wrapper) {
     wrapper.style.height = newHeight + "px";
   }
   
-  // 結束縮放
   function endResize() {
     isResizing = false;
     
@@ -1708,10 +1851,8 @@ function setupResizable(wrapper) {
     resizeBtn.style.backgroundColor = "#f8f8f8";
     wrapper.style.opacity = "1";
     
-    // 保持手動調整大小的標記
+    // 保存手動調整的尺寸
     wrapper.dataset.manuallyResized = "true";
-    
-    // 強制保存當前尺寸，防止自動調整覆蓋
     const currentWidth = wrapper.offsetWidth;
     const currentHeight = wrapper.offsetHeight;
     
@@ -1722,7 +1863,9 @@ function setupResizable(wrapper) {
     }, 50);
     
     // 隱藏提示
-    hideResizeHint();
+    if (isTouchDevice) {
+      hideResizeHint();
+    }
   }
 }
 
@@ -1782,372 +1925,6 @@ function hideResizeHint() {
   document.querySelectorAll(".resize-hint").forEach(hint => {
     hint.remove();
   });
-}
-
-// 設置拖曳功能，並添加智能對齊功能
-function setupDraggable(wrapper, moveBtn) {
-  // 檢查參數
-  if (!wrapper || !moveBtn) return;
-
-  let isDragging = false;
-  let startX, startY;
-  let startPosX, startPosY;
-  let horizontalAlignmentLine = null; // 水平(紅色)對齊線元素
-  let verticalAlignmentLine = null; // 垂直(藍色)對齊線元素
-  let closestBox = null; // 最近的文字框
-  let alignmentType = null; // 對齊類型：'horizontal' 或 'vertical'
-
-  // 創建水平對齊線元素(紅色)
-  function createHorizontalAlignmentLine() {
-    const line = document.createElement("div");
-    line.className = "horizontal-alignment-line";
-    line.style.position = "absolute";
-    line.style.height = "2px";
-    line.style.backgroundColor = "transparent";
-    line.style.borderTop = "2px dashed red";
-    line.style.pointerEvents = "none";
-    line.style.zIndex = "1000";
-    line.style.display = "none";
-    canvasContainer.appendChild(line);
-    return line;
-  }
-
-  // 創建垂直對齊線元素(藍色)
-  function createVerticalAlignmentLine() {
-    const line = document.createElement("div");
-    line.className = "vertical-alignment-line";
-    line.style.position = "absolute";
-    line.style.width = "2px";
-    line.style.backgroundColor = "transparent";
-    line.style.borderLeft = "2px dashed blue";
-    line.style.pointerEvents = "none";
-    line.style.zIndex = "1000";
-    line.style.display = "none";
-    canvasContainer.appendChild(line);
-    return line;
-  }
-
-  // 處理鼠標按下事件
-  moveBtn.addEventListener("mousedown", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // 檢查是否鎖定
-    if (canvasContainer.classList.contains("locked")) return;
-
-    isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-
-    // 獲取文字框當前位置
-    const rect = wrapper.getBoundingClientRect();
-    const canvasRect = canvasContainer.getBoundingClientRect();
-    startPosX = rect.left - canvasRect.left;
-    startPosY = rect.top - canvasRect.top;
-
-    // 創建對齊線
-    if (!horizontalAlignmentLine) {
-      horizontalAlignmentLine = createHorizontalAlignmentLine();
-    }
-    if (!verticalAlignmentLine) {
-      verticalAlignmentLine = createVerticalAlignmentLine();
-    }
-
-    // 添加視覺反饋
-    wrapper.style.opacity = "0.8";
-    moveBtn.style.backgroundColor = "#e0e0ff";
-
-    // 添加全局鼠標移動和釋放事件
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  });
-
-  // 處理鼠標移動事件
-  function handleMouseMove(e) {
-    if (!isDragging) return;
-
-    // 計算新位置
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    let newPosX = startPosX + dx;
-    let newPosY = startPosY + dy;
-
-    // 確保不超出畫布邊界
-  const canvasRect = canvasContainer.getBoundingClientRect();
-    newPosX = Math.max(
-      0,
-      Math.min(newPosX, canvasRect.width - wrapper.offsetWidth)
-    );
-    newPosY = Math.max(
-      0,
-      Math.min(newPosY, canvasRect.height - wrapper.offsetHeight)
-    );
-
-    // 檢查是否為標題框，標題框只能上下移動
-  if (wrapper.dataset.id === "0") {
-      newPosX = startPosX; // 保持X位置不變
-    }
-
-    // 應用新位置
-    wrapper.style.left = newPosX + "px";
-    wrapper.style.top = newPosY + "px";
-
-    // 找出距離右上角最近的文字框
-    findClosestBoxToTopRight(
-      newPosX,
-      newPosY,
-      wrapper.offsetWidth,
-      wrapper.offsetHeight
-    );
-
-    // 更新對齊線位置
-    updateAlignmentLines(
-      newPosX,
-      newPosY,
-      wrapper.offsetWidth,
-      wrapper.offsetHeight
-    );
-  }
-
-  // 找出距離右上角最近的文字框
-  function findClosestBoxToTopRight(
-    currentX,
-    currentY,
-    currentWidth,
-    currentHeight
-  ) {
-    const boxes = document.querySelectorAll(".text-box-wrapper");
-    let minDistance = Infinity;
-    closestBox = null;
-    alignmentType = null;
-
-    // 計算當前文字框右上角坐標
-    const currentTopRightX = currentX + currentWidth;
-    const currentTopRightY = currentY;
-
-    boxes.forEach((box) => {
-      if (box === wrapper) return; // 跳過當前拖曳的文字框
-
-      const rect = box.getBoundingClientRect();
-      const canvasRect = canvasContainer.getBoundingClientRect();
-
-      // 計算其他文字框右上角坐標
-      const boxTopRightX = rect.left - canvasRect.left + box.offsetWidth;
-      const boxTopRightY = rect.top - canvasRect.top;
-
-      // 計算水平和垂直距離
-      const horizontalDist = Math.abs(boxTopRightX - currentTopRightX);
-      const verticalDist = Math.abs(boxTopRightY - currentTopRightY);
-
-      // 計算總距離（歐氏距離）
-      const totalDist = Math.sqrt(
-        horizontalDist * horizontalDist + verticalDist * verticalDist
-      );
-
-      if (totalDist < minDistance) {
-        minDistance = totalDist;
-        closestBox = box;
-
-        // 確定對齊類型 - 根據水平和垂直距離比較
-        alignmentType =
-          horizontalDist < verticalDist ? "vertical" : "horizontal";
-      }
-    });
-  }
-  
-  // 更新對齊線位置
-  function updateAlignmentLines(
-    currentX,
-    currentY,
-    currentWidth,
-    currentHeight
-  ) {
-    // 隱藏兩條對齊線
-    horizontalAlignmentLine.style.display = "none";
-    verticalAlignmentLine.style.display = "none";
-
-    if (!closestBox) return;
-
-    // 獲取最近文字框的右上角位置
-    const rect = closestBox.getBoundingClientRect();
-    const canvasRect = canvasContainer.getBoundingClientRect();
-    const boxTopRightX = rect.left - canvasRect.left + closestBox.offsetWidth;
-    const boxTopRightY = rect.top - canvasRect.top;
-
-    // 獲取當前文字框的右上角位置
-    const currentTopRightX = currentX + currentWidth;
-    const currentTopRightY = currentY;
-
-    if (alignmentType === "horizontal") {
-      // 顯示水平(紅色)對齊線 - 從當前文字框頂部到目標文字框頂部
-      horizontalAlignmentLine.style.display = "block";
-      horizontalAlignmentLine.style.top = boxTopRightY + "px";
-
-      // 如果目標文字框在右側
-      if (boxTopRightX > currentTopRightX) {
-        horizontalAlignmentLine.style.left = currentTopRightX + "px";
-        horizontalAlignmentLine.style.width =
-          boxTopRightX - currentTopRightX + "px";
-      }
-      // 如果目標文字框在左側
-      else {
-        horizontalAlignmentLine.style.left = boxTopRightX + "px";
-        horizontalAlignmentLine.style.width =
-          currentTopRightX - boxTopRightX + "px";
-      }
-    } else {
-      // 顯示垂直(藍色)對齊線 - 從當前文字框右側到目標文字框右側
-      verticalAlignmentLine.style.display = "block";
-      verticalAlignmentLine.style.left = boxTopRightX + "px";
-
-      // 如果目標文字框在上方
-      if (boxTopRightY < currentTopRightY) {
-        verticalAlignmentLine.style.top = boxTopRightY + "px";
-        verticalAlignmentLine.style.height =
-          currentTopRightY - boxTopRightY + "px";
-      }
-      // 如果目標文字框在下方
-      else {
-        verticalAlignmentLine.style.top = currentTopRightY + "px";
-        verticalAlignmentLine.style.height =
-          boxTopRightY - currentTopRightY + "px";
-      }
-    }
-  }
-
-  // 處理鼠標釋放事件
-  function handleMouseUp(e) {
-    if (!isDragging) return;
-
-    isDragging = false;
-
-    // 移除視覺反饋
-    wrapper.style.opacity = "1";
-    moveBtn.style.backgroundColor = "#f8f8f8";
-
-    // 根據顯示的對齊線進行對齊
-    if (closestBox) {
-      // 獲取最近文字框的右上角位置
-      const rect = closestBox.getBoundingClientRect();
-      const canvasRect = canvasContainer.getBoundingClientRect();
-      const boxTopRightX = rect.left - canvasRect.left + closestBox.offsetWidth;
-      const boxTopRightY = rect.top - canvasRect.top;
-
-      if (alignmentType === "horizontal") {
-        // 水平對齊 - 頂部對齊
-        wrapper.style.top = boxTopRightY + "px";
-      } else {
-        // 垂直對齊 - 右側對齊
-        wrapper.style.left = boxTopRightX - wrapper.offsetWidth + "px";
-      }
-    }
-
-    // 隱藏對齊線
-    horizontalAlignmentLine.style.display = "none";
-    verticalAlignmentLine.style.display = "none";
-
-    // 移除全局事件監聽器
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-  }
-}
-
-// 設置文字框縮放功能
-function setupResizable(wrapper) {
-  const resizeBtn = wrapper.querySelector(
-    "div[style*='position: absolute'][style*='bottom: 0'][style*='right: 0']"
-  );
-  const textBox = wrapper.querySelector(".text-box");
-
-  if (!resizeBtn || !textBox) return;
-
-  let isResizing = false;
-  let startX, startY;
-  let startWidth, startHeight;
-
-  // 禁用自動調整大小功能標記
-  wrapper.dataset.manuallyResized = "false";
-
-  // 處理滑鼠按下事件
-  resizeBtn.addEventListener("mousedown", function (e) {
-    // 阻止事件冒泡和默認行為
-    e.stopPropagation();
-    e.preventDefault();
-
-    // 檢查是否鎖定
-    if (canvasContainer.classList.contains("locked")) return;
-
-    // 開始縮放
-    isResizing = true;
-
-    // 記錄起始位置和尺寸
-    startX = e.clientX;
-    startY = e.clientY;
-    startWidth = wrapper.offsetWidth;
-    startHeight = wrapper.offsetHeight;
-
-    // 添加視覺反饋
-    resizeBtn.style.backgroundColor = "#e0e0ff";
-    wrapper.style.opacity = "0.8";
-
-    // 設置標記，表示正在手動調整大小
-    wrapper.dataset.manuallyResized = "true";
-
-    // 添加全局滑鼠移動和釋放事件
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  });
-
-  // 處理滑鼠移動事件
-  function handleMouseMove(e) {
-    if (!isResizing) return;
-
-    // 計算新尺寸
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    // 計算新寬度和高度
-    let newWidth = startWidth + dx;
-    let newHeight = startHeight + dy;
-
-    // 設置最小尺寸
-    newWidth = Math.max(80, newWidth);
-    newHeight = Math.max(80, newHeight);
-
-    // 應用新尺寸
-    wrapper.style.width = newWidth + "px";
-    wrapper.style.height = newHeight + "px";
-  }
-
-  // 處理滑鼠釋放事件
-  function handleMouseUp(e) {
-    if (!isResizing) return;
-
-    // 結束縮放
-    isResizing = false;
-
-    // 移除視覺反饋
-    resizeBtn.style.backgroundColor = "#f8f8f8";
-    wrapper.style.opacity = "1";
-
-    // 移除全局事件監聽器
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-
-    // 保持手動調整大小的標記
-    wrapper.dataset.manuallyResized = "true";
-
-    // 強制保存當前尺寸，防止自動調整覆蓋
-    const currentWidth = wrapper.offsetWidth;
-    const currentHeight = wrapper.offsetHeight;
-
-    // 使用延時器確保尺寸被保留
-    setTimeout(() => {
-      wrapper.style.width = currentWidth + "px";
-      wrapper.style.height = currentHeight + "px";
-    }, 50);
-  }
 }
 
 // 設置刪除功能
@@ -2601,4 +2378,34 @@ function adjustTitleBoxSize() {
   
   // 更新 CSS 變量
   document.documentElement.style.setProperty('--title-width', `${titleWidthRatio * 100}%`);
+}
+
+// 檢測觸控設備
+function detectTouchDevice() {
+  // 使用多種方法進行檢測，提高準確性
+  isTouchDevice = (('ontouchstart' in window) || 
+                   (navigator.maxTouchPoints > 0) || 
+                   (navigator.msMaxTouchPoints > 0));
+  
+  // 添加設備類型標記到 body
+  if (isTouchDevice) {
+    document.body.classList.add('touch-device');
+  } else {
+    document.body.classList.add('mouse-device');
+  }
+  
+  console.log("設備類型檢測: ", isTouchDevice ? "觸控設備" : "非觸控設備");
+}
+
+// 根據設備類型應用特定樣式
+function applyDeviceSpecificStyles() {
+  if (isTouchDevice) {
+    // 調整觸控設備上的 UI 元素大小
+    document.documentElement.style.setProperty('--control-size', '36px');
+    document.documentElement.style.setProperty('--alignment-line-width', '4px');
+  } else {
+    // 滑鼠設備的默認大小
+    document.documentElement.style.setProperty('--control-size', '24px');
+    document.documentElement.style.setProperty('--alignment-line-width', '2px');
+  }
 }
