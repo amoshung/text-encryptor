@@ -8,396 +8,396 @@ let boxCounter = 0;
 const shocking_title_keywords_restructured = {
   startKeyword: [
     "天啊！藍營又來亂了！",
-    "OMG！藍白聯盟出事了！",
-    "太扯了！白營大膽挑釁！",
-    "真假？藍營主席失言！",
-    "不可信！藍白合作翻車！",
-    "超狂！藍營立委集體行動！",
-    "嚇死人！白營政策大轉彎！",
-    "傻眼！藍白聯盟被抓包！",
-    "不敢信！藍營秘密會議！",
-    "太誇張！白營內部分裂！",
-    "看傻了！藍白合作破裂！",
-    "驚呆了！藍營挑戰民意！",
-    "快看！白營主席大舌頭！",
-    "全網傳！藍白聯盟醜聞！",
-    "太離譜！藍營立委缺席！",
-    "大事了！白營政策遭譴責！",
-    "爆炸了！藍白惹眾怒！",
-    "剛知道！藍營高層互鬥！",
-    "完蛋了！白營內鬥失控！",
-    "震撼！時力揭穿藍白陰謀！",
-    "超驚人！藍營再次出包！",
-    "前所未見！白營大膽宣言！",
-    "爆紅！藍白合作引公憤！",
-    "太大膽！藍營叫囂失控！",
-    "全震驚！白營行為太過分！",
-    "全場傻！藍白聯手搞事！",
-    "震撼彈！藍營主席亂講話！",
-    "嚇壞人！白營主席胡言亂語！",
-    "全傻眼！藍白合作惹民怨！",
-    "全崩潰！藍營立委瘋了！",
-    "太瘋狂！藍營又亂搞！",
-    "怎會這樣！白營激進操作！",
-    "瞬間傻眼！時力開轟了！",
-    "超噁心！藍白合明顯造假！",
-    "好扯！藍營立委玩政治！",
-    "驚呆了！白營說謊被抓！",
-    "狂怒！時力直指藍白騙局！",
-    "膽大包天！藍白聯合做壞事！",
-    "深感崩潰！藍營主席失控！",
-    "太過分！白營政客曝醜聞！",
-    "嚇破膽！時力痛批藍白！",
-    "全民怒！藍白合作大騙局！",
-    "無法原諒！藍營立委鬧劇！",
-    "看不下去！白營政策大錯！",
-    "怒火中燒！時力轟藍白！",
-    "不敢相信！藍白罔顧民意！",
-    "瞠目結舌！藍營輸不起！",
-    "太荒謬！白營亂改政策！",
-    "火大！時力直播爆料！",
-    "超惡劣！藍白疑買網軍！",
-    "驚人消息！藍營又撒謊！",
-    "太奇怪！白營挑釁執政黨！",
-    "痛心！時力揭藍白黑幕！",
-    "無比震驚！藍白密室政治！",
-    "天理何在！藍營嚴重失言！",
-    "徹底失望！白營竟敢欺騙！",
-    "大事不妙！時力重砲直轟！",
-    "快訊！藍白合作大危機！",
-    "可恥至極！藍營惡意抹黑！",
-    "憤怒爆發！白營立委脫序！",
-    "難以置信！時力拆穿謊言！",
-    "嚴重警告！藍白遭徹底揭露！",
-    "天啊！藍營主席言行失當！",
-    "求證屬實！白營政策被批！",
-    "太扯淡了！時力轟藍白亂搞！",
-    "見鬼了！藍白合作大醜聞！",
-    "全民公敵！藍營挑戰底線！",
-    "抓到了！白營立委造謠！",
-    "狂轟猛炸！時力痛批藍白！",
-    "無恥至極！藍白聯手陰謀！",
-    "全面曝光！藍營黑幕重重！",
-    "炸開了！白營內鬥上演！",
-    "爆料連環！時力曝藍白醜事！",
-    "太離譜了！藍白聯手惡搞！",
-    "全網震怒！藍營私相授受！",
-    "嚴重指控！白營亂搞一通！",
-    "快翻了！時力提重大證據！",
-    "猝不及防！藍白災難現形！",
-    "血淋淋！藍營被打臉！",
-    "不可理喻！白營竟然說謊！",
-    "天啊！",
-    "OMG！",
-    "這也太扯了吧！",
-    "真的嗎？",
-    "我不敢相信！",
-    "超狂！",
-    "嚇死人了！",
-    "真的假的？",
-    "你沒看錯！",
-    "怎麼可能！",
-    "傻眼貓咪！",
-    "驚呆了！",
-    "快看！",
-    "全網瘋傳！",
-    "無法置信！",
-    "大事發生了！",
-    "爆炸性消息！",
-    "剛剛才知道！",
-    "這下完蛋了！",
-    "快來看！",
-    "超驚人！",
-    "史無前例！",
-    "爆紅！",
-    "讓人直呼不可能！",
-    "世界都震動了！",
-    "全場安靜！",
-    "OMG震撼彈！",
-    "嚇得腿軟！",
-    "整個傻掉！",
-    "全世界都瘋了！",
-    "不可置信！",
-    "刷新三觀！",
-    "讓人崩潰！",
-    "超乎想像！",
-    "沒見過這樣的！",
-    "太驚悚了！",
-    "無敵誇張！",
-    "超級無敵爆炸！",
-    "不可思議的發展！",
-    "讓人懷疑人生！",
-    "你絕對猜不到！",
-    "這次玩大了！",
-    "這下糟了！",
-    "嚇破膽了！",
-    "爆炸新聞！",
-    "一秒驚呆！",
-    "讓人說不出話！",
-    "爆紅全網！",
-    "大家都在討論！",
-    "不敢相信自己的眼睛！",
-    "這消息太驚人！",
-    "全網都炸了！",
-    "笑到噴淚！",
-    "讓人無言以對！",
-    "太震撼了！",
-    "所有人都愣住！",
-    "讓人雞皮疙瘩掉滿地！",
-    "誇張到不行！",
-    "讓人發毛！",
-    "大驚失色！",
-    "馬上告訴大家！",
-    "驚天大新聞！",
-    "世界大震撼！",
-    "這個消息不得了！",
-    "全場鴉雀無聲！",
-    "眼睛業障重了！",
-    "我腦袋當機了！",
-    "超級爆炸消息！",
-    "太誇張了吧！",
-    "怎麼會這樣！",
-    "神展開！",
-    "讓人傻眼到地板！",
-    "腦洞大開！",
-    "全場爆笑！",
-    "這是真的嗎？",
-    "他一句話不忍了！",
-    "她看完當場暴怒！",
-    "專家都看傻了！",
-    "醫生都嚇壞了！",
-    "老師直接跪了！",
-    "他一個動作震驚全場！",
-    "她一個眼神嚇壞眾人！",
-    "專家看完沉默了！",
-    "他們都慌了！",
-    "老闆當場摔桌子！",
-    "父母看完都哭了！",
-    "孩子們都嚇呆了！",
-    "他一個決定改變一切！",
-    "她一句話讓全場沸騰！",
-    "他們都不敢相信！",
-    "政府緊急出手！",
-    "專家組都傻眼了！",
-    "科學家無法解釋！",
-    "警方立刻行動！",
-    "醫院全員出動！",
-    "他一個舉動讓人心碎！",
-    "她的反應讓人落淚！",
-    "他們的遭遇讓人心痛！",
-    "老人家看完都氣炸！",
-    "孩子們都嚇哭了！",
-    "專家組都看呆了！",
-    "研究人員都震驚了！",
-    "他一個選擇毀了一切！",
-    "她一個決定救了所有人！",
-    "他們的發現顛覆認知！",
-    "權威專家都沉默了！",
-    "資深醫師都搖頭！",
-    "教授們都驚呆了！",
-    "他一個動作感動千萬人！",
-    "她一句話讓人淚崩！",
-    "他們的故事讓人窒息！",
-    "老師們都看傻了！",
-    "家長們都坐不住了！",
-    "專家看完都冒冷汗！",
-    "他一個舉動改變命運！",
-    "她一個決定震撼全國！",
-    "他們的行為嚇壞所有人！",
-    "醫生看完都沉默了！",
-    "科學家都無法理解！",
-    "專家組都爭論不休！",
-    "他一個發現驚動高層！",
-    "她一個舉動感動全球！",
-    "他們的遭遇讓人心驚！",
-    "專家都不敢置信！",
+      "OMG！藍白聯盟出事了！",
+      "太扯了！白營大膽挑釁！",
+      "真假？藍營主席失言！",
+      "不可信！藍白合作翻車！",
+      "超狂！藍營立委集體行動！",
+      "嚇死人！白營政策大轉彎！",
+      "傻眼！藍白聯盟被抓包！",
+      "不敢信！藍營秘密會議！",
+      "太誇張！白營內部分裂！",
+      "看傻了！藍白合作破裂！",
+      "驚呆了！藍營挑戰民意！",
+      "快看！白營主席大舌頭！",
+      "全網傳！藍白聯盟醜聞！",
+      "太離譜！藍營立委缺席！",
+      "大事了！白營政策遭譴責！",
+      "爆炸了！藍白惹眾怒！",
+      "剛知道！藍營高層互鬥！",
+      "完蛋了！白營內鬥失控！",
+      "震撼！時力揭穿藍白陰謀！",
+      "超驚人！藍營再次出包！",
+      "前所未見！白營大膽宣言！",
+      "爆紅！藍白合作引公憤！",
+      "太大膽！藍營叫囂失控！",
+      "全震驚！白營行為太過分！",
+      "全場傻！藍白聯手搞事！",
+      "震撼彈！藍營主席亂講話！",
+      "嚇壞人！白營主席胡言亂語！",
+      "全傻眼！藍白合作惹民怨！",
+      "全崩潰！藍營立委瘋了！",
+      "太瘋狂！藍營又亂搞！",
+      "怎會這樣！白營激進操作！",
+      "瞬間傻眼！時力開轟了！",
+      "超噁心！藍白合明顯造假！",
+      "好扯！藍營立委玩政治！",
+      "驚呆了！白營說謊被抓！",
+      "狂怒！時力直指藍白騙局！",
+      "膽大包天！藍白聯合做壞事！",
+      "深感崩潰！藍營主席失控！",
+      "太過分！白營政客曝醜聞！",
+      "嚇破膽！時力痛批藍白！",
+      "全民怒！藍白合作大騙局！",
+      "無法原諒！藍營立委鬧劇！",
+      "看不下去！白營政策大錯！",
+      "怒火中燒！時力轟藍白！",
+      "不敢相信！藍白罔顧民意！",
+      "瞠目結舌！藍營輸不起！",
+      "太荒謬！白營亂改政策！",
+      "火大！時力直播爆料！",
+      "超惡劣！藍白疑買網軍！",
+      "驚人消息！藍營又撒謊！",
+      "太奇怪！白營挑釁執政黨！",
+      "痛心！時力揭藍白黑幕！",
+      "無比震驚！藍白密室政治！",
+      "天理何在！藍營嚴重失言！",
+      "徹底失望！白營竟敢欺騙！",
+      "大事不妙！時力重砲直轟！",
+      "快訊！藍白合作大危機！",
+      "可恥至極！藍營惡意抹黑！",
+      "憤怒爆發！白營立委脫序！",
+      "難以置信！時力拆穿謊言！",
+      "嚴重警告！藍白遭徹底揭露！",
+      "天啊！藍營主席言行失當！",
+      "求證屬實！白營政策被批！",
+      "太扯淡了！時力轟藍白亂搞！",
+      "見鬼了！藍白合作大醜聞！",
+      "全民公敵！藍營挑戰底線！",
+      "抓到了！白營立委造謠！",
+      "狂轟猛炸！時力痛批藍白！",
+      "無恥至極！藍白聯手陰謀！",
+      "全面曝光！藍營黑幕重重！",
+      "炸開了！白營內鬥上演！",
+      "爆料連環！時力曝藍白醜事！",
+      "太離譜了！藍白聯手惡搞！",
+      "全網震怒！藍營私相授受！",
+      "嚴重指控！白營亂搞一通！",
+      "快翻了！時力提重大證據！",
+      "猝不及防！藍白災難現形！",
+      "血淋淋！藍營被打臉！",
+      "不可理喻！白營竟然說謊！",
+      "天啊！",
+      "OMG！",
+      "這也太扯了吧！",
+      "真的嗎？",
+      "我不敢相信！",
+      "超狂！",
+      "嚇死人了！",
+      "真的假的？",
+      "你沒看錯！",
+      "怎麼可能！",
+      "傻眼貓咪！",
+      "驚呆了！",
+      "快看！",
+      "全網瘋傳！",
+      "無法置信！",
+      "大事發生了！",
+      "爆炸性消息！",
+      "剛剛才知道！",
+      "這下完蛋了！",
+      "快來看！",
+      "超驚人！",
+      "史無前例！",
+      "爆紅！",
+      "讓人直呼不可能！",
+      "世界都震動了！",
+      "全場安靜！",
+      "OMG震撼彈！",
+      "嚇得腿軟！",
+      "整個傻掉！",
+      "全世界都瘋了！",
+      "不可置信！",
+      "刷新三觀！",
+      "讓人崩潰！",
+      "超乎想像！",
+      "沒見過這樣的！",
+      "太驚悚了！",
+      "無敵誇張！",
+      "超級無敵爆炸！",
+      "不可思議的發展！",
+      "讓人懷疑人生！",
+      "你絕對猜不到！",
+      "這次玩大了！",
+      "這下糟了！",
+      "嚇破膽了！",
+      "爆炸新聞！",
+      "一秒驚呆！",
+      "讓人說不出話！",
+      "爆紅全網！",
+      "大家都在討論！",
+      "不敢相信自己的眼睛！",
+      "這消息太驚人！",
+      "全網都炸了！",
+      "笑到噴淚！",
+      "讓人無言以對！",
+      "太震撼了！",
+      "所有人都愣住！",
+      "讓人雞皮疙瘩掉滿地！",
+      "誇張到不行！",
+      "讓人發毛！",
+      "大驚失色！",
+      "馬上告訴大家！",
+      "驚天大新聞！",
+      "世界大震撼！",
+      "這個消息不得了！",
+      "全場鴉雀無聲！",
+      "眼睛業障重了！",
+      "我腦袋當機了！",
+      "超級爆炸消息！",
+      "太誇張了吧！",
+      "怎麼會這樣！",
+      "神展開！",
+      "讓人傻眼到地板！",
+      "腦洞大開！",
+      "全場爆笑！",
+      "這是真的嗎？",
+      "他一句話不忍了！",
+      "她看完當場暴怒！",
+      "專家都看傻了！",
+      "醫生都嚇壞了！",
+      "老師直接跪了！",
+      "他一個動作震驚全場！",
+      "她一個眼神嚇壞眾人！",
+      "專家看完沉默了！",
+      "他們都慌了！",
+      "老闆當場摔桌子！",
+      "父母看完都哭了！",
+      "孩子們都嚇呆了！",
+      "他一個決定改變一切！",
+      "她一句話讓全場沸騰！",
+      "他們都不敢相信！",
+      "政府緊急出手！",
+      "專家組都傻眼了！",
+      "科學家無法解釋！",
+      "警方立刻行動！",
+      "醫院全員出動！",
+      "他一個舉動讓人心碎！",
+      "她的反應讓人落淚！",
+      "他們的遭遇讓人心痛！",
+      "老人家看完都氣炸！",
+      "孩子們都嚇哭了！",
+      "專家組都看呆了！",
+      "研究人員都震驚了！",
+      "他一個選擇毀了一切！",
+      "她一個決定救了所有人！",
+      "他們的發現顛覆認知！",
+      "權威專家都沉默了！",
+      "資深醫師都搖頭！",
+      "教授們都驚呆了！",
+      "他一個動作感動千萬人！",
+      "她一句話讓人淚崩！",
+      "他們的故事讓人窒息！",
+      "老師們都看傻了！",
+      "家長們都坐不住了！",
+      "專家看完都冒冷汗！",
+      "他一個舉動改變命運！",
+      "她一個決定震撼全國！",
+      "他們的行為嚇壞所有人！",
+      "醫生看完都沉默了！",
+      "科學家都無法理解！",
+      "專家組都爭論不休！",
+      "他一個發現驚動高層！",
+      "她一個舉動感動全球！",
+      "他們的遭遇讓人心驚！",
+      "專家都不敢置信！",
     "研究人員都嚇傻了！",
   ],
   endKeyword: [
     "藍營形象全毀了！",
-    "白營支持度崩盤！",
-    "藍白合作即將滅亡！",
-    "藍營內部全面崩壞！",
-    "白營信任危機爆發！",
-    "藍白聯盟遭全民棄！",
-    "藍營主席下台危機！",
-    "白營主席急救火！",
-    "藍白合作成泡影！",
-    "藍營立委集體道歉！",
-    "白營政策全面檢討！",
-    "藍白聯盟民調崩塌！",
-    "藍營高層急開會！",
-    "白營內部大地震！",
-    "藍白合作終宣告死亡！",
-    "藍營面臨嚴峻挑戰！",
-    "白營主席承諾改革！",
-    "藍白聯盟引發抗議！",
-    "藍營立委遭圍剿！",
-    "白營政策大翻盤！",
-    "藍白合作遭質疑！",
-    "藍營高層集體下台！",
-    "白營陷重大危機！",
-    "時力重炮轟藍白！",
-    "藍營形象跌谷底！",
-    "白營支持度跌到零！",
-    "藍白合作徹底崩解！",
-    "藍營分裂無法挽回！",
-    "白營陷信任危機！",
-    "藍白聯盟被全民唾棄！",
-    "藍營形象掉到谷底！",
-    "白營支持者都跑光了！",
-    "時力緊急發聲痛批！",
-    "藍白合遭民眾唾棄！",
-    "藍營黨內正互相撕咬！",
-    "白營議員紛紛跳船！",
-    "時力強勢反擊拆穿謊言！",
-    "藍白合作已無法挽回！",
-    "藍營主席地位岌岌可危！",
-    "白營政策被全民打臉！",
-    "時力支持度突然飆升！",
-    "藍白合作已被判死刑！",
-    "藍營高層紛紛求去！",
-    "白營陷入空前危機！",
-    "時力正式提告藍白！",
-    "藍白選民都憤怒了！",
-    "藍營被迫道歉認錯！",
-    "白營面臨重大整改！",
-    "時力爆出更多證據！",
-    "藍白合作徹底散場！",
-    "藍營已無人願挺！",
-    "白營政客遭嚴厲批判！",
-    "時力要求徹查到底！",
-    "藍白騙局全被揭穿！",
-    "藍營選情雪上加霜！",
-    "白營內鬥全面爆發！",
-    "時力已掌握關鍵證據！",
-    "藍白聯盟正式宣布解散！",
-    "藍營支持度創歷史新低！",
-    "白營主席面臨不信任！",
-    "時力獲得各界支持！",
-    "藍白合作已成過去式！",
-    "藍營立委集體被罵爆！",
-    "白營緊急開會滅火！",
-    "時力宣布全面戰鬥！",
-    "藍白聯盟已名存實亡！",
-    "藍營政策全被否定！",
-    "白營黨員退黨潮起！",
-    "時力揭露更多真相！",
-    "藍白謊言全被拆穿！",
-    "藍營主席準備下台！",
-    "白營全面潰不成軍！",
-    "時力正義聲援湧現！",
-    "藍白選票正在流失！",
-    "藍營資深委員出走！",
-    "白營被迫徹底改組！",
-    "時力已成最大贏家！",
-    "藍白合作破裂不可修復！",
-    "藍營選民憤而轉向！",
-    "白營黨魁已無威信！",
-    "你一定要看！",
-    "絕對不會後悔！",
-    "超乎你的想像！",
-    "讓你目瞪口呆！",
-    "真的太猛了！",
-    "快點分享！",
-    "錯過會後悔！",
-    "一定要收藏！",
-    "再不看就來不及了！",
-    "現在知道還不晚！",
-    "真相終於揭曉！",
-    "不得不看！",
-    "超震撼結局！",
-    "意想不到的結尾！",
-    "結局會讓你嚇傻！",
-    "絕對想不到的真相！",
-    "讓人毛骨悚然的故事！",
-    "千萬別錯過！",
-    "真相讓人背脊發涼！",
-    "這個結果讓人難以忘懷！",
-    "秒懂！",
-    "讓你瞬間清醒！",
-    "讓人沉默三秒！",
-    "這波反轉絕了！",
-    "結局超反轉！",
-    "這次真的不一樣！",
-    "馬上分享給朋友！",
-    "必須轉發！",
-    "你看懂了嗎？",
-    "別人都知道了！",
-    "驚人的結局！",
-    "原來真相是這樣！",
-    "超出預期的發展！",
-    "最終的秘密揭開了！",
-    "這個真相你絕對想不到！",
-    "看到最後才知道！",
-    "這結局讓人毛骨悚然！",
-    "太誇張了吧！",
-    "一定要告訴大家！",
-    "最後一秒超反轉！",
-    "你絕對猜不到的結尾！",
-    "這真相簡直炸裂！",
-    "笑到最後的才是贏家！",
-    "讓你大開眼界！",
-    "這個結局絕了！",
-    "結果讓你欲罷不能！",
-    "這次真的不得了！",
-    "結局讓人淚流滿面！",
-    "這個反轉超級精彩！",
-    "最後的結果讓你震撼！",
-    "別眨眼，否則錯過！",
-    "這故事將永遠留在你心中！",
-    "讓你久久不能平靜！",
-    "結尾藏著超大彩蛋！",
-    "看完心情久久不能平復！",
-    "他最後的決定讓人震驚！",
-    "她的真相終於大白！",
-    "專家的結論讓人不寒而慄！",
-    "醫生的診斷讓人絕望！",
-    "老師的話讓所有人沉默！",
-    "他們最後的結局讓人心碎！",
-    "她最後的選擇讓人落淚！",
-    "專家組的報告讓人恐懼！",
-    "他們的真相終於揭曉！",
-    "老闆的反應讓所有人震驚！",
-    "父母的決定改變了一切！",
-    "孩子們的未來因此改變！",
-    "他的最後一句話讓人心碎！",
-    "她的真相讓人淚崩！",
-    "他們的結局讓人無法接受！",
-    "政府的最終決定讓人震驚！",
-    "專家組的最終報告讓人恐懼！",
-    "科學家的最終發現顛覆認知！",
-    "警方的調查結果讓人心寒！",
-    "醫院的最終診斷讓人絕望！",
-    "他的真相讓人心碎！",
-    "她的結局讓人淚流滿面！",
-    "他們的故事讓人久久不能平靜！",
-    "老人家的話讓所有人沉默！",
-    "孩子們的未來因此被改變！",
-    "專家組的結論讓人不寒而慄！",
-    "研究人員的發現改變了科學史！",
-    "他的最終選擇讓人震驚！",
-    "她的最後一刻讓人心碎！",
-    "他們的真相讓世界震驚！",
-    "權威專家的最終結論讓人恐懼！",
-    "資深醫師的診斷讓人絕望！",
-    "教授們的研究結果顛覆認知！",
-    "他的最後舉動讓人淚崩！",
-    "她的最終真相讓人心碎！",
-    "他們的結局讓人毛骨悚然！",
-    "老師們的最終決定改變了一切！",
-    "家長們的反應讓人心碎！",
-    "專家的最終報告讓人恐懼！",
-    "他的最終結局讓人震驚！",
-    "她的真相終於水落石出！",
-    "他們的故事將永遠被銘記！",
-    "醫生的最終診斷讓人絕望！",
-    "科學家的最終發現讓人震驚！",
-    "專家組的最終結論讓人恐懼！",
-    "他的最後一刻讓人心碎！",
-    "她的最終選擇感動了所有人！",
-    "他們的真相讓人無法接受！",
-    "專家的最終報告讓人不寒而慄！",
+      "白營支持度崩盤！",
+      "藍白合作即將滅亡！",
+      "藍營內部全面崩壞！",
+      "白營信任危機爆發！",
+      "藍白聯盟遭全民棄！",
+      "藍營主席下台危機！",
+      "白營主席急救火！",
+      "藍白合作成泡影！",
+      "藍營立委集體道歉！",
+      "白營政策全面檢討！",
+      "藍白聯盟民調崩塌！",
+      "藍營高層急開會！",
+      "白營內部大地震！",
+      "藍白合作終宣告死亡！",
+      "藍營面臨嚴峻挑戰！",
+      "白營主席承諾改革！",
+      "藍白聯盟引發抗議！",
+      "藍營立委遭圍剿！",
+      "白營政策大翻盤！",
+      "藍白合作遭質疑！",
+      "藍營高層集體下台！",
+      "白營陷重大危機！",
+      "時力重炮轟藍白！",
+      "藍營形象跌谷底！",
+      "白營支持度跌到零！",
+      "藍白合作徹底崩解！",
+      "藍營分裂無法挽回！",
+      "白營陷信任危機！",
+      "藍白聯盟被全民唾棄！",
+      "藍營形象掉到谷底！",
+      "白營支持者都跑光了！",
+      "時力緊急發聲痛批！",
+      "藍白合遭民眾唾棄！",
+      "藍營黨內正互相撕咬！",
+      "白營議員紛紛跳船！",
+      "時力強勢反擊拆穿謊言！",
+      "藍白合作已無法挽回！",
+      "藍營主席地位岌岌可危！",
+      "白營政策被全民打臉！",
+      "時力支持度突然飆升！",
+      "藍白合作已被判死刑！",
+      "藍營高層紛紛求去！",
+      "白營陷入空前危機！",
+      "時力正式提告藍白！",
+      "藍白選民都憤怒了！",
+      "藍營被迫道歉認錯！",
+      "白營面臨重大整改！",
+      "時力爆出更多證據！",
+      "藍白合作徹底散場！",
+      "藍營已無人願挺！",
+      "白營政客遭嚴厲批判！",
+      "時力要求徹查到底！",
+      "藍白騙局全被揭穿！",
+      "藍營選情雪上加霜！",
+      "白營內鬥全面爆發！",
+      "時力已掌握關鍵證據！",
+      "藍白聯盟正式宣布解散！",
+      "藍營支持度創歷史新低！",
+      "白營主席面臨不信任！",
+      "時力獲得各界支持！",
+      "藍白合作已成過去式！",
+      "藍營立委集體被罵爆！",
+      "白營緊急開會滅火！",
+      "時力宣布全面戰鬥！",
+      "藍白聯盟已名存實亡！",
+      "藍營政策全被否定！",
+      "白營黨員退黨潮起！",
+      "時力揭露更多真相！",
+      "藍白謊言全被拆穿！",
+      "藍營主席準備下台！",
+      "白營全面潰不成軍！",
+      "時力正義聲援湧現！",
+      "藍白選票正在流失！",
+      "藍營資深委員出走！",
+      "白營被迫徹底改組！",
+      "時力已成最大贏家！",
+      "藍白合作破裂不可修復！",
+      "藍營選民憤而轉向！",
+      "白營黨魁已無威信！",
+      "你一定要看！",
+      "絕對不會後悔！",
+      "超乎你的想像！",
+      "讓你目瞪口呆！",
+      "真的太猛了！",
+      "快點分享！",
+      "錯過會後悔！",
+      "一定要收藏！",
+      "再不看就來不及了！",
+      "現在知道還不晚！",
+      "真相終於揭曉！",
+      "不得不看！",
+      "超震撼結局！",
+      "意想不到的結尾！",
+      "結局會讓你嚇傻！",
+      "絕對想不到的真相！",
+      "讓人毛骨悚然的故事！",
+      "千萬別錯過！",
+      "真相讓人背脊發涼！",
+      "這個結果讓人難以忘懷！",
+      "秒懂！",
+      "讓你瞬間清醒！",
+      "讓人沉默三秒！",
+      "這波反轉絕了！",
+      "結局超反轉！",
+      "這次真的不一樣！",
+      "馬上分享給朋友！",
+      "必須轉發！",
+      "你看懂了嗎？",
+      "別人都知道了！",
+      "驚人的結局！",
+      "原來真相是這樣！",
+      "超出預期的發展！",
+      "最終的秘密揭開了！",
+      "這個真相你絕對想不到！",
+      "看到最後才知道！",
+      "這結局讓人毛骨悚然！",
+      "太誇張了吧！",
+      "一定要告訴大家！",
+      "最後一秒超反轉！",
+      "你絕對猜不到的結尾！",
+      "這真相簡直炸裂！",
+      "笑到最後的才是贏家！",
+      "讓你大開眼界！",
+      "這個結局絕了！",
+      "結果讓你欲罷不能！",
+      "這次真的不得了！",
+      "結局讓人淚流滿面！",
+      "這個反轉超級精彩！",
+      "最後的結果讓你震撼！",
+      "別眨眼，否則錯過！",
+      "這故事將永遠留在你心中！",
+      "讓你久久不能平靜！",
+      "結尾藏著超大彩蛋！",
+      "看完心情久久不能平復！",
+      "他最後的決定讓人震驚！",
+      "她的真相終於大白！",
+      "專家的結論讓人不寒而慄！",
+      "醫生的診斷讓人絕望！",
+      "老師的話讓所有人沉默！",
+      "他們最後的結局讓人心碎！",
+      "她最後的選擇讓人落淚！",
+      "專家組的報告讓人恐懼！",
+      "他們的真相終於揭曉！",
+      "老闆的反應讓所有人震驚！",
+      "父母的決定改變了一切！",
+      "孩子們的未來因此改變！",
+      "他的最後一句話讓人心碎！",
+      "她的真相讓人淚崩！",
+      "他們的結局讓人無法接受！",
+      "政府的最終決定讓人震驚！",
+      "專家組的最終報告讓人恐懼！",
+      "科學家的最終發現顛覆認知！",
+      "警方的調查結果讓人心寒！",
+      "醫院的最終診斷讓人絕望！",
+      "他的真相讓人心碎！",
+      "她的結局讓人淚流滿面！",
+      "他們的故事讓人久久不能平靜！",
+      "老人家的話讓所有人沉默！",
+      "孩子們的未來因此被改變！",
+      "專家組的結論讓人不寒而慄！",
+      "研究人員的發現改變了科學史！",
+      "他的最終選擇讓人震驚！",
+      "她的最後一刻讓人心碎！",
+      "他們的真相讓世界震驚！",
+      "權威專家的最終結論讓人恐懼！",
+      "資深醫師的診斷讓人絕望！",
+      "教授們的研究結果顛覆認知！",
+      "他的最後舉動讓人淚崩！",
+      "她的最終真相讓人心碎！",
+      "他們的結局讓人毛骨悚然！",
+      "老師們的最終決定改變了一切！",
+      "家長們的反應讓人心碎！",
+      "專家的最終報告讓人恐懼！",
+      "他的最終結局讓人震驚！",
+      "她的真相終於水落石出！",
+      "他們的故事將永遠被銘記！",
+      "醫生的最終診斷讓人絕望！",
+      "科學家的最終發現讓人震驚！",
+      "專家組的最終結論讓人恐懼！",
+      "他的最後一刻讓人心碎！",
+      "她的最終選擇感動了所有人！",
+      "他們的真相讓人無法接受！",
+      "專家的最終報告讓人不寒而慄！",
     "研究人員的最終發現改變了一切！",
   ],
 };
@@ -405,7 +405,7 @@ const shocking_title_keywords_restructured = {
 // 正面化標題關鍵詞
 const shocking_title_keywords_restructured_GOOD = {
   startKeyword: [
-    "太感人！民進黨全力以赴！",
+   "太感人！民進黨全力以赴！",
     "振奮人心！民進黨再創奇蹟！",
     "大突破！民進黨改革成功！",
     "令人敬佩！賴總統英明決策！",
@@ -670,7 +670,7 @@ function convertPunctuationToVertical(text) {
   if (text.includes('<span class="vpunct')) {
     return text;
   }
-
+  
   const punctuationMap = {
     "，": '<span class="vpunct comma">、</span>',
     "。": '<span class="vpunct period">。</span>',
@@ -778,12 +778,12 @@ function convertNumbersToChinese(text) {
     8: "八",
     9: "九",
   };
-
+  
   // 替換簡單的數字 (1-9)
   let result = text.replace(/\b[0-9]\b/g, (match) => {
     return numberMap[match] || match;
   });
-
+  
   // 替換年份 (例如2024年 -> 二零二四年)
   result = result.replace(/\b([0-9]{4})年\b/g, (match, year) => {
     return (
@@ -793,26 +793,26 @@ function convertNumbersToChinese(text) {
         .join("") + "年"
     );
   });
-
+  
   // 替換兩位數 (例如25% -> 二十五%)
   result = result.replace(/\b([0-9]{2})([^\d]|$)/g, (match, num, suffix) => {
     const tens = Math.floor(parseInt(num) / 10);
     const ones = parseInt(num) % 10;
-
+    
     let chineseNum = "";
     if (tens === 1) {
       chineseNum = "十";
     } else {
       chineseNum = numberMap[tens] + "十";
     }
-
+    
     if (ones !== 0) {
       chineseNum += numberMap[ones];
     }
-
+    
     return chineseNum + suffix;
   });
-
+  
   // 處理日期和百分比
   result = result.replace(
     /\b([0-9]{1,2})月([0-9]{1,2})日\b/g,
@@ -820,7 +820,7 @@ function convertNumbersToChinese(text) {
       return numberMap[month] + "月" + numberMap[day] + "日";
     }
   );
-
+  
   return result;
 }
 
@@ -836,13 +836,13 @@ function transformNewsTitle() {
   const randomEndIndex = Math.floor(
     Math.random() * shocking_title_keywords_restructured.endKeyword.length
   );
-
+  
   // 獲取關鍵詞並確保其為純文本
   let startKeyword =
     shocking_title_keywords_restructured.startKeyword[randomStartIndex];
   let endKeyword =
     shocking_title_keywords_restructured.endKeyword[randomEndIndex];
-
+  
   // 根據標題長度選擇處理方式
   let combinedTitle = "";
   // 添加空格分隔
@@ -865,13 +865,13 @@ function transformNewsTitlePositive() {
   const randomEndIndex = Math.floor(
     Math.random() * shocking_title_keywords_restructured_GOOD.endKeyword.length
   );
-
+  
   // 獲取關鍵詞並確保其為純文本
   let startKeyword =
     shocking_title_keywords_restructured_GOOD.startKeyword[randomStartIndex];
   let endKeyword =
     shocking_title_keywords_restructured_GOOD.endKeyword[randomEndIndex];
-
+  
   // 根據標題長度選擇處理方式
   let combinedTitle = "";
   // 添加空格分隔
@@ -889,36 +889,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 獲取畫布容器
   canvasContainer = document.getElementById("canvasContainer");
-
+  
   // 初始化畫布
   if (canvasContainer) {
-    initializeCanvas();
+  initializeCanvas();
   }
-
+  
   // 連接標題轉換功能到標題框
   connectTitleFunctions();
-
+  
   // 初始化下載按鈕
   initializeDownloadButton();
 
   // 在 DOM 載入後初始化 CSS 變數
   document.documentElement.style.setProperty("--body-font-size", "16px");
   document.documentElement.style.setProperty("--title-font-size", "28px");
-
+  
   // 設置標題寬度
   const titleWidthSelect = document.getElementById("titleWidth");
   if (titleWidthSelect) {
     titleWidthSelect.addEventListener("change", function () {
       const width = this.value + "%";
       document.documentElement.style.setProperty("--title-width", width);
-
+      
       // 調整標題框的尺寸
       const titleBox = document.querySelector(".text-box-wrapper[data-id='0']");
       if (titleBox) {
         titleBox.style.width = `calc(${width} * 0.8)`;
       }
     });
-
+    
     // 初始設置
     document.documentElement.style.setProperty(
       "--title-width",
@@ -931,6 +931,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 初始化清空內容按鈕
   initializeClearButton();
+
+  // 添加窗口大小變化事件監聽器
+  window.addEventListener('resize', adjustTitleBoxSize);
+  
+  // 初始調用一次以確保正確設置
+  adjustTitleBoxSize();
 });
 
 // 初始化畫布功能
@@ -942,18 +948,18 @@ function initializeCanvas() {
 
   // 只有在不存在標題框時才創建
   if (!existingTitleBox) {
-    // 創建標題文字框 (編號0)
-    createNewTextBox(20, 20, true);
+  // 創建標題文字框 (編號0)
+  createNewTextBox(20, 20, true);
   }
-
+  
   // 雙擊畫布創建新文字框
   canvasContainer.addEventListener("dblclick", canvasDoubleClickHandler);
 
   // 初始化字體大小監聽器
   initializeFontSizeListeners();
 }
-
-// 監聽字體大小變化
+  
+  // 監聽字體大小變化
 function initializeFontSizeListeners() {
   const charsizeInput = document.getElementById("charsize");
   const titlesizeInput = document.getElementById("titlesize");
@@ -966,13 +972,13 @@ function initializeFontSizeListeners() {
 
       console.log("正文字體大小變化為:", fontSize);
 
-      // 強制更新CSS變量
+    // 強制更新CSS變量
       document.documentElement.style.setProperty(
         "--body-font-size",
         `${fontSize}px`
       );
-
-      // 直接給所有正文文字框設置字體大小
+    
+    // 直接給所有正文文字框設置字體大小
       const textBoxes = document.querySelectorAll(
         ".text-box-wrapper:not([data-id='0'])"
       );
@@ -982,7 +988,7 @@ function initializeFontSizeListeners() {
           // 使用 !important 確保樣式被應用
           textContent.style.cssText += `font-size: ${fontSize}px !important;`;
 
-          // 強制重新計算框大小
+      // 強制重新計算框大小
           setTimeout(() => autoResizeTextBox(textContent), 50);
         }
       });
@@ -1009,13 +1015,13 @@ function initializeFontSizeListeners() {
 
       console.log("標題字體大小變化為:", titleSize);
 
-      // 強制更新CSS變量
+    // 強制更新CSS變量
       document.documentElement.style.setProperty(
         "--title-font-size",
         `${titleSize}px`
       );
-
-      // 直接給標題文字框設置字體大小
+    
+    // 直接給標題文字框設置字體大小
       const titleBox = document.querySelector(".text-box-wrapper[data-id='0']");
       if (titleBox) {
         const textContent = titleBox.querySelector(".text-content");
@@ -1023,7 +1029,7 @@ function initializeFontSizeListeners() {
           // 使用 !important 確保樣式被應用
           textContent.style.cssText += `font-size: ${titleSize}px !important;`;
 
-          // 強制重新計算框大小
+      // 強制重新計算框大小
           setTimeout(() => autoResizeTextBox(textContent), 50);
         }
       }
@@ -1160,12 +1166,12 @@ function autoResizeTextBox(textElement) {
   // 移除臨時元素
   document.body.removeChild(temp);
 }
-
-// 創建新文字框的函數
-function createNewTextBox(x, y, isTitle = false) {
-  // 創建外層包裝容器
-  const wrapper = document.createElement("div");
-  wrapper.className = "text-box-wrapper";
+  
+  // 創建新文字框的函數
+  function createNewTextBox(x, y, isTitle = false) {
+    // 創建外層包裝容器
+    const wrapper = document.createElement("div");
+    wrapper.className = "text-box-wrapper";
 
   // 設置正確的ID
   if (isTitle) {
@@ -1173,18 +1179,18 @@ function createNewTextBox(x, y, isTitle = false) {
   } else {
     wrapper.dataset.id = boxCounter.toString(); // 普通文字框使用當前計數器值
   }
-
-  // 如果是標題框，添加額外的類
-  if (isTitle) {
-    wrapper.classList.add("title-wrapper");
-  }
-
-  // 創建文字框
-  const newBox = document.createElement("div");
-  newBox.className = "text-box vertical-text-box";
-
-  // 創建控制按鈕容器
-  const controls = document.createElement("div");
+    
+    // 如果是標題框，添加額外的類
+    if (isTitle) {
+      wrapper.classList.add("title-wrapper");
+    }
+    
+    // 創建文字框
+    const newBox = document.createElement("div");
+    newBox.className = "text-box vertical-text-box";
+    
+    // 創建控制按鈕容器
+    const controls = document.createElement("div");
   controls.style.position = "absolute";
   controls.style.top = "0";
   controls.style.right = "-40px";
@@ -1194,9 +1200,9 @@ function createNewTextBox(x, y, isTitle = false) {
   controls.style.zIndex = "100";
 
   // 創建刪除按鈕
-  const deleteBtn = document.createElement("div");
-  deleteBtn.title = "刪除";
-  deleteBtn.innerHTML = "×";
+    const deleteBtn = document.createElement("div");
+    deleteBtn.title = "刪除";
+    deleteBtn.innerHTML = "×";
   // 設置刪除按鈕樣式
   deleteBtn.style.width = "30px";
   deleteBtn.style.height = "30px";
@@ -1216,10 +1222,10 @@ function createNewTextBox(x, y, isTitle = false) {
   if (isTitle) {
     deleteBtn.style.display = "none";
   }
-
-  // 創建移動按鈕
-  const moveBtn = document.createElement("div");
-  moveBtn.title = "移動";
+    
+    // 創建移動按鈕
+    const moveBtn = document.createElement("div");
+    moveBtn.title = "移動";
   moveBtn.innerHTML = "+";
   // 設置移動按鈕樣式
   moveBtn.style.width = "30px";
@@ -1235,15 +1241,15 @@ function createNewTextBox(x, y, isTitle = false) {
   moveBtn.style.fontWeight = "bold";
   moveBtn.style.color = "#3366ff";
   moveBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
-
-  // 添加按鈕到控制容器
-  controls.appendChild(deleteBtn);
-  controls.appendChild(moveBtn);
-
-  // 創建縮放按鈕
-  const resizeBtn = document.createElement("div");
-  resizeBtn.title = "調整大小";
-  resizeBtn.innerHTML = "⤡";
+    
+    // 添加按鈕到控制容器
+    controls.appendChild(deleteBtn);
+    controls.appendChild(moveBtn);
+    
+    // 創建縮放按鈕
+    const resizeBtn = document.createElement("div");
+    resizeBtn.title = "調整大小";
+    resizeBtn.innerHTML = "⤡";
   // 設置縮放按鈕樣式
   resizeBtn.style.position = "absolute";
   resizeBtn.style.bottom = "0";
@@ -1262,40 +1268,40 @@ function createNewTextBox(x, y, isTitle = false) {
   resizeBtn.style.color = "#3366ff";
   resizeBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
   resizeBtn.style.zIndex = "100";
-
-  // 創建文字內容區域
-  const textContent = document.createElement("div");
-  textContent.className = "text-content";
-  textContent.contentEditable = true;
-
+    
+    // 創建文字內容區域
+    const textContent = document.createElement("div");
+    textContent.className = "text-content";
+    textContent.contentEditable = true;
+    
   // 設置預設文字
   const placeholder = isTitle ? "請輸入標題..." : "請輸入內容...";
   textContent.dataset.placeholder = placeholder;
   textContent.innerHTML = placeholder;
-
-  // 創建編號
-  const boxNumber = document.createElement("div");
-  boxNumber.className = "box-number";
+    
+    // 創建編號
+    const boxNumber = document.createElement("div");
+    boxNumber.className = "box-number";
   boxNumber.innerHTML = isTitle ? "" : boxCounter;
-
+    
   // 添加編號到文字框
   newBox.appendChild(boxNumber);
 
   // 設置字體大小
-  if (isTitle) {
-    const titleSize = document.getElementById("titlesize").value || 28;
+    if (isTitle) {
+      const titleSize = document.getElementById("titlesize").value || 28;
     // 使用 cssText 和 !important 確保樣式被應用
     textContent.style.cssText += `font-size: ${titleSize}px !important;`;
 
     // 設置標題框位置和大小
-    wrapper.style.right = "20px";
-    wrapper.style.top = "20px";
-    wrapper.style.left = "auto"; // 清除left屬性
+      wrapper.style.right = "20px";
+      wrapper.style.top = "20px";
+      wrapper.style.left = "auto"; // 清除left屬性
     wrapper.style.width = "120px";
     wrapper.style.height = "400px";
     wrapper.id = "titleBox"; // 添加ID以便後續引用
-  } else {
-    const fontSize = document.getElementById("charsize").value || 16;
+    } else {
+      const fontSize = document.getElementById("charsize").value || 16;
     // 使用 cssText 和 !important 確保樣式被應用
     textContent.style.cssText += `font-size: ${fontSize}px !important;`;
 
@@ -1308,38 +1314,38 @@ function createNewTextBox(x, y, isTitle = false) {
 
   // 添加縮放按鈕和文字內容到文字框
   newBox.appendChild(resizeBtn);
-  newBox.appendChild(textContent);
-
+    newBox.appendChild(textContent);
+    
   // 添加文字框和控制按鈕到包裝容器
-  wrapper.appendChild(newBox);
-  wrapper.appendChild(controls);
-
-  // 添加到畫布
-  canvasContainer.appendChild(wrapper);
-
+    wrapper.appendChild(newBox);
+    wrapper.appendChild(controls);
+    
+    // 添加到畫布
+    canvasContainer.appendChild(wrapper);
+    
   // 只有在不是標題框時才增加計數器
   if (!isTitle) {
     boxCounter++;
   }
-
+    
   // 設置拖曳功能，並添加智能對齊功能
   setupDraggable(wrapper, moveBtn);
-
+    
   // 設置縮放功能 - 直接傳遞需要的元素
   setupResizable(wrapper, resizeBtn);
-
+    
   // 設置刪除功能 - 直接傳遞需要的元素
   setupDeleteFunction(wrapper, deleteBtn);
-
-  // 設置文字輸入事件
-  setupTextEvents(textContent);
+    
+    // 設置文字輸入事件
+    setupTextEvents(textContent);
 
   // 設置按鈕懸停效果
   setupButtonHoverEffects(deleteBtn, moveBtn, resizeBtn);
-
-  return wrapper;
-}
-
+    
+    return wrapper;
+  }
+  
 // 設置按鈕懸停效果
 function setupButtonHoverEffects(deleteBtn, moveBtn, resizeBtn) {
   // 刪除按鈕懸停效果
@@ -1377,6 +1383,404 @@ function setupButtonHoverEffects(deleteBtn, moveBtn, resizeBtn) {
   resizeBtn.addEventListener("mouseleave", function () {
     this.style.backgroundColor = "#f8f8f8";
     this.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+  });
+}
+
+// 修改 setupDraggable 函數以支援觸控操作
+function setupDraggable(wrapper, moveBtn) {
+  // 檢查參數
+  if (!wrapper || !moveBtn) return;
+  
+  let isDragging = false;
+  let startX, startY;
+  let startPosX, startPosY;
+  let horizontalAlignmentLine = null; // 水平(紅色)對齊線元素
+  let verticalAlignmentLine = null; // 垂直(藍色)對齊線元素
+  let closestBox = null; // 最近的文字框
+  let alignmentType = null; // 對齊類型：'horizontal' 或 'vertical'
+  
+  // 創建對齊線元素(如果尚未創建)
+  if (!horizontalAlignmentLine) {
+    horizontalAlignmentLine = createHorizontalAlignmentLine();
+  }
+  if (!verticalAlignmentLine) {
+    verticalAlignmentLine = createVerticalAlignmentLine();
+  }
+  
+  // ========== 滑鼠事件處理 ==========
+  
+  // 處理滑鼠按下事件
+  moveBtn.addEventListener("mousedown", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // 檢查是否鎖定
+    if (canvasContainer.classList.contains("locked")) return;
+    
+    startDrag(e.clientX, e.clientY);
+    
+    // 添加全局滑鼠移動和釋放事件
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  });
+  
+  // 處理滑鼠移動事件
+  function handleMouseMove(e) {
+    if (!isDragging) return;
+    drag(e.clientX, e.clientY);
+  }
+  
+  // 處理滑鼠釋放事件
+  function handleMouseUp(e) {
+    if (!isDragging) return;
+    endDrag();
+    
+    // 移除全局事件監聽器
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  }
+  
+  // ========== 觸控事件處理 ==========
+  
+  // 處理觸控開始事件
+  moveBtn.addEventListener("touchstart", function(e) {
+    e.preventDefault(); // 防止滾動和其他觸控默認行為
+    e.stopPropagation();
+    
+    // 檢查是否鎖定
+    if (canvasContainer.classList.contains("locked")) return;
+    
+    // 獲取第一個觸控點
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+    
+    // 不需要添加全局事件監聽器，觸控事件會跟隨手指移動
+  });
+  
+  // 處理觸控移動事件
+  moveBtn.addEventListener("touchmove", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    const touch = e.touches[0];
+    drag(touch.clientX, touch.clientY);
+  });
+  
+  // 處理觸控結束事件
+  moveBtn.addEventListener("touchend", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    endDrag();
+  });
+  
+  // 處理觸控取消事件(當觸控被系統打斷時)
+  moveBtn.addEventListener("touchcancel", function(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    endDrag();
+  });
+  
+  // ========== 通用拖曳功能 ==========
+  
+  // 開始拖曳
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    startX = clientX;
+    startY = clientY;
+    
+    // 獲取文字框當前位置
+    const rect = wrapper.getBoundingClientRect();
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    startPosX = rect.left - canvasRect.left;
+    startPosY = rect.top - canvasRect.top;
+    
+    // 添加視覺反饋
+    wrapper.style.opacity = "0.8";
+    moveBtn.style.backgroundColor = "#e0e0ff";
+    
+    // 顯示提示(在觸控設備上特別有用)
+    showDragHint(wrapper);
+  }
+  
+  // 執行拖曳
+  function drag(clientX, clientY) {
+    // 計算新位置
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    
+    let newPosX = startPosX + dx;
+    let newPosY = startPosY + dy;
+    
+    // 確保不超出畫布邊界
+    const canvasRect = canvasContainer.getBoundingClientRect();
+    newPosX = Math.max(0, Math.min(newPosX, canvasRect.width - wrapper.offsetWidth));
+    newPosY = Math.max(0, Math.min(newPosY, canvasRect.height - wrapper.offsetHeight));
+    
+    // 檢查是否為標題框，標題框只能上下移動
+    if (wrapper.dataset.id === "0") {
+      newPosX = startPosX; // 保持X位置不變
+    }
+    
+    // 應用新位置
+    wrapper.style.left = newPosX + "px";
+    wrapper.style.top = newPosY + "px";
+    
+    // 找出距離右上角最近的文字框
+    findClosestBoxToTopRight(newPosX, newPosY, wrapper.offsetWidth, wrapper.offsetHeight);
+    
+    // 更新對齊線位置
+    updateAlignmentLines(newPosX, newPosY, wrapper.offsetWidth, wrapper.offsetHeight);
+  }
+  
+  // 結束拖曳
+  function endDrag() {
+    isDragging = false;
+    
+    // 移除視覺反饋
+    wrapper.style.opacity = "1";
+    moveBtn.style.backgroundColor = "#f8f8f8";
+    
+    // 根據顯示的對齊線進行對齊
+    if (closestBox) {
+      // 獲取最近文字框的右上角位置
+      const rect = closestBox.getBoundingClientRect();
+      const canvasRect = canvasContainer.getBoundingClientRect();
+      const boxTopRightX = (rect.left - canvasRect.left) + closestBox.offsetWidth;
+      const boxTopRightY = rect.top - canvasRect.top;
+      
+      if (alignmentType === 'horizontal') {
+        // 水平對齊 - 頂部對齊
+        wrapper.style.top = boxTopRightY + "px";
+      } else {
+        // 垂直對齊 - 右側對齊
+        wrapper.style.left = (boxTopRightX - wrapper.offsetWidth) + "px";
+      }
+    }
+    
+    // 隱藏對齊線
+    horizontalAlignmentLine.style.display = "none";
+    verticalAlignmentLine.style.display = "none";
+    
+    // 隱藏提示
+    hideDragHint();
+  }
+  
+  // 其他輔助函數保持不變
+  // ...
+}
+
+// 修改 setupResizable 函數以支援觸控操作
+function setupResizable(wrapper) {
+  const resizeBtn = wrapper.querySelector("div[style*='position: absolute'][style*='bottom: 0'][style*='right: 0']");
+  const textBox = wrapper.querySelector(".text-box");
+  
+  if (!resizeBtn || !textBox) return;
+  
+  let isResizing = false;
+  let startX, startY;
+  let startWidth, startHeight;
+  
+  // 禁用自動調整大小功能標記
+  wrapper.dataset.manuallyResized = "false";
+  
+  // ========== 滑鼠事件處理 ==========
+  
+  // 處理滑鼠按下事件
+  resizeBtn.addEventListener("mousedown", function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    // 檢查是否鎖定
+    if (canvasContainer.classList.contains("locked")) return;
+    
+    startResize(e.clientX, e.clientY);
+    
+    // 添加全局滑鼠移動和釋放事件
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  });
+  
+  // 處理滑鼠移動事件
+  function handleMouseMove(e) {
+    if (!isResizing) return;
+    resize(e.clientX, e.clientY);
+  }
+  
+  // 處理滑鼠釋放事件
+  function handleMouseUp(e) {
+    if (!isResizing) return;
+    endResize();
+    
+    // 移除全局事件監聽器
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  }
+  
+  // ========== 觸控事件處理 ==========
+  
+  // 處理觸控開始事件
+  resizeBtn.addEventListener("touchstart", function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    // 檢查是否鎖定
+    if (canvasContainer.classList.contains("locked")) return;
+    
+    // 獲取第一個觸控點
+    const touch = e.touches[0];
+    startResize(touch.clientX, touch.clientY);
+  });
+  
+  // 處理觸控移動事件
+  resizeBtn.addEventListener("touchmove", function(e) {
+    if (!isResizing) return;
+    
+    e.preventDefault();
+    const touch = e.touches[0];
+    resize(touch.clientX, touch.clientY);
+  });
+  
+  // 處理觸控結束事件
+  resizeBtn.addEventListener("touchend", function(e) {
+    if (!isResizing) return;
+    
+    e.preventDefault();
+    endResize();
+  });
+  
+  // 處理觸控取消事件
+  resizeBtn.addEventListener("touchcancel", function(e) {
+    if (!isResizing) return;
+    
+    e.preventDefault();
+    endResize();
+  });
+  
+  // ========== 通用縮放功能 ==========
+  
+  // 開始縮放
+  function startResize(clientX, clientY) {
+    isResizing = true;
+    
+    // 記錄起始位置和尺寸
+    startX = clientX;
+    startY = clientY;
+    startWidth = wrapper.offsetWidth;
+    startHeight = wrapper.offsetHeight;
+    
+    // 添加視覺反饋
+    resizeBtn.style.backgroundColor = "#e0e0ff";
+    wrapper.style.opacity = "0.8";
+    
+    // 設置標記，表示正在手動調整大小
+    wrapper.dataset.manuallyResized = "true";
+    
+    // 顯示提示(在觸控設備上特別有用)
+    showResizeHint(wrapper);
+  }
+  
+  // 執行縮放
+  function resize(clientX, clientY) {
+    // 計算新尺寸
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    
+    // 計算新寬度和高度
+    let newWidth = startWidth + dx;
+    let newHeight = startHeight + dy;
+    
+    // 設置最小尺寸
+    newWidth = Math.max(80, newWidth);
+    newHeight = Math.max(80, newHeight);
+    
+    // 應用新尺寸
+    wrapper.style.width = newWidth + "px";
+    wrapper.style.height = newHeight + "px";
+  }
+  
+  // 結束縮放
+  function endResize() {
+    isResizing = false;
+    
+    // 移除視覺反饋
+    resizeBtn.style.backgroundColor = "#f8f8f8";
+    wrapper.style.opacity = "1";
+    
+    // 保持手動調整大小的標記
+    wrapper.dataset.manuallyResized = "true";
+    
+    // 強制保存當前尺寸，防止自動調整覆蓋
+    const currentWidth = wrapper.offsetWidth;
+    const currentHeight = wrapper.offsetHeight;
+    
+    // 使用延時器確保尺寸被保留
+    setTimeout(() => {
+      wrapper.style.width = currentWidth + "px";
+      wrapper.style.height = currentHeight + "px";
+    }, 50);
+    
+    // 隱藏提示
+    hideResizeHint();
+  }
+}
+
+// 顯示拖曳提示
+function showDragHint(wrapper) {
+  // 創建提示元素
+  const hint = document.createElement("div");
+  hint.className = "drag-hint";
+  hint.textContent = "拖曳移動中...";
+  hint.style.position = "absolute";
+  hint.style.top = "-30px";
+  hint.style.left = "0";
+  hint.style.backgroundColor = "rgba(0,0,0,0.7)";
+  hint.style.color = "white";
+  hint.style.padding = "5px 10px";
+  hint.style.borderRadius = "4px";
+  hint.style.fontSize = "12px";
+  hint.style.zIndex = "1000";
+  hint.style.pointerEvents = "none";
+  
+  // 添加到文字框
+  wrapper.appendChild(hint);
+}
+
+// 隱藏拖曳提示
+function hideDragHint() {
+  // 移除所有拖曳提示
+  document.querySelectorAll(".drag-hint").forEach(hint => {
+    hint.remove();
+  });
+}
+
+// 顯示縮放提示
+function showResizeHint(wrapper) {
+  // 創建提示元素
+  const hint = document.createElement("div");
+  hint.className = "resize-hint";
+  hint.textContent = "調整大小中...";
+  hint.style.position = "absolute";
+  hint.style.bottom = "-30px";
+  hint.style.right = "0";
+  hint.style.backgroundColor = "rgba(0,0,0,0.7)";
+  hint.style.color = "white";
+  hint.style.padding = "5px 10px";
+  hint.style.borderRadius = "4px";
+  hint.style.fontSize = "12px";
+  hint.style.zIndex = "1000";
+  hint.style.pointerEvents = "none";
+  
+  // 添加到文字框
+  wrapper.appendChild(hint);
+}
+
+// 隱藏縮放提示
+function hideResizeHint() {
+  // 移除所有縮放提示
+  document.querySelectorAll(".resize-hint").forEach(hint => {
+    hint.remove();
   });
 }
 
@@ -1470,7 +1874,7 @@ function setupDraggable(wrapper, moveBtn) {
     let newPosY = startPosY + dy;
 
     // 確保不超出畫布邊界
-    const canvasRect = canvasContainer.getBoundingClientRect();
+  const canvasRect = canvasContainer.getBoundingClientRect();
     newPosX = Math.max(
       0,
       Math.min(newPosX, canvasRect.width - wrapper.offsetWidth)
@@ -1481,7 +1885,7 @@ function setupDraggable(wrapper, moveBtn) {
     );
 
     // 檢查是否為標題框，標題框只能上下移動
-    if (wrapper.dataset.id === "0") {
+  if (wrapper.dataset.id === "0") {
       newPosX = startPosX; // 保持X位置不變
     }
 
@@ -1551,7 +1955,7 @@ function setupDraggable(wrapper, moveBtn) {
       }
     });
   }
-
+  
   // 更新對齊線位置
   function updateAlignmentLines(
     currentX,
@@ -2169,4 +2573,32 @@ function initializeDownloadButton() {
       });
     });
   }
+}
+
+// 添加窗口大小變化時重新調整標題框尺寸的功能
+function adjustTitleBoxSize() {
+  const titleBox = document.querySelector('.text-box-wrapper[data-id="0"]');
+  if (!titleBox) return;
+  
+  // 獲取畫布容器的尺寸
+  const canvasRect = canvasContainer.getBoundingClientRect();
+  const canvasWidth = canvasRect.width;
+  const canvasHeight = canvasRect.height;
+  
+  // 根據畫布比例決定標題框寬度
+  let titleWidthRatio;
+  if (canvasWidth < canvasHeight) {
+    // 直版畫布 - 寬度為畫布的1/4
+    titleWidthRatio = 0.25;
+  } else {
+    // 橫版畫布 - 寬度為畫布的1/8
+    titleWidthRatio = 0.125; 
+  }
+  
+  // 設置標題框的寬度
+  const titleWidth = Math.round(canvasWidth * titleWidthRatio);
+  titleBox.style.width = `${titleWidth}px`;
+  
+  // 更新 CSS 變量
+  document.documentElement.style.setProperty('--title-width', `${titleWidthRatio * 100}%`);
 }
