@@ -2409,3 +2409,84 @@ function applyDeviceSpecificStyles() {
     document.documentElement.style.setProperty('--alignment-line-width', '2px');
   }
 }
+
+// 更新 createNewParagraph 函數，確保在所有設備上段落格式一致
+function createNewParagraph(text) {
+  // 清理輸入文本，處理潛在的HTML
+  const cleanedText = text.trim();
+  if (!cleanedText) return "";
+  
+  // 將文本按行分割成段落
+  const paragraphs = cleanedText.split(/\n+/);
+  
+  // 處理每個段落
+  return paragraphs.map(paragraph => {
+    if (!paragraph.trim()) return ""; // 跳過空段落
+    
+    // 添加兩個全形空格作為縮排，並進行標點符號處理
+    const indentedText = "　　" + paragraph.trim();
+    const convertedText = convertPunctuationToVertical(indentedText);
+    
+    // 始終使用水平展開的方式包裝段落
+    return `<div class="paragraph horizontal-para">${convertedText}</div>`;
+  }).join("");
+}
+
+// 更新文本處理函數，處理粘貼進來的內容
+function processTextInput(input) {
+  // 清理輸入，移除多餘空白行等
+  const cleanedInput = input.trim();
+  if (!cleanedInput) return "";
+  
+  // 分割段落
+  const paragraphs = cleanedInput.split(/\n+/);
+  
+  // 處理每個段落，統一使用水平布局
+  let processedText = "";
+  paragraphs.forEach(para => {
+    if (para.trim()) {
+      // 始終添加兩個全形空格縮排，無論設備類型
+      const indentedPara = "　　" + para.trim();
+      const convertedPara = convertPunctuationToVertical(indentedPara);
+      processedText += `<div class="paragraph horizontal-para">${convertedPara}</div>`;
+    }
+  });
+  
+  return processedText;
+}
+
+// 添加 CSS 樣式，確保段落始終水平展開
+function addParagraphStyles() {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = `
+    /* 確保所有設備上段落都水平展開 */
+    .paragraph, .horizontal-para {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      white-space: normal;
+      margin-left: 0.8em;
+    }
+    
+    /* 防止移動設備上的段落被垂直堆疊 */
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+      .paragraph, .horizontal-para {
+        writing-mode: vertical-rl !important;
+        text-orientation: upright !important;
+      }
+      
+      /* 修正觸控設備上的文字框邊距 */
+      .text-box {
+        padding: 10px !important;
+      }
+    }
+  `;
+  document.head.appendChild(styleElement);
+}
+
+// 在文檔加載時添加樣式
+document.addEventListener("DOMContentLoaded", function() {
+  // 添加確保段落格式一致的樣式
+  addParagraphStyles();
+  
+  // 其他初始化代碼...
+});
