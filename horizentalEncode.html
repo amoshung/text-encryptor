@@ -33,7 +33,8 @@
       }
 
       textarea,
-      input[type="number"] {
+      input[type="number"],
+      input[type="text"] {
         width: 100%;
         resize: none;
         overflow: hidden;
@@ -91,6 +92,42 @@
         border-radius: 10px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       }
+      
+      .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .input-group input {
+        flex: 1;
+        margin-bottom: 0;
+      }
+      
+      .input-group button {
+        width: auto;
+        margin-top: 0;
+        white-space: nowrap;
+        padding: 12px 20px;
+      }
+
+      #keywords {
+        max-height: 150px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+      
+      .keywords-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .keywords-actions button {
+        flex: 1;
+        margin-top: 0;
+      }
     </style>
   </head>
   <script src="horizontal_script.js"></script>
@@ -99,9 +136,17 @@
       <h1>橫書加密法</h1>
 
       <label for="keywords">要加密的關鍵字，以;號隔開：</label>
-      <textarea id="keywords" rows="3" oninput="autoResize(this)">
-盧秀燕;傅崐萁;侯友宜;國民黨;黃國昌;台北;臺北;新北;桃園;台中;臺中;雙北;自殺;跳樓;死亡;兇殺;殺害;雲林;彰化;張麗善;顏清標;</textarea
-      >
+      <textarea id="keywords" rows="3" oninput="autoResize(this)"></textarea>
+      
+      <div class="keywords-actions">
+        <button onclick="saveKeywords()">儲存關鍵字變更</button>
+        <button onclick="resetKeywords()">重設為預設關鍵字</button>
+      </div>
+      
+      <div class="input-group">
+        <input type="text" id="newKeyword" placeholder="輸入新關鍵字" />
+        <button onclick="addKeyword()">新增關鍵字</button>
+      </div>
 
       <label for="lineWidth">每行幾個字：</label>
       <input type="number" id="lineWidth" value="12" min="1" />
