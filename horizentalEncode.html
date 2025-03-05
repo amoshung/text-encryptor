@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>橫書加密法</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f5f5f3;
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #6d8086;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #d0d7d9;
+            padding-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: #6d7a73;
+            font-weight: 500;
+        }
+        
+        textarea, input[type="number"] {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #d0ccc5;
+            background-color: #f2eee8;
+            color: #5a5a5a;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #b0a79f;
+            box-shadow: 0 0 0 3px rgba(176, 167, 159, 0.2);
+        }
+        
+        input[type="number"] {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #a5b1aa;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        button:hover {
+            background-color: #8d9a93;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        #encodedResult {
+            background-color: #edeae3;
+            margin-top: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<script src="horizontal_script.js"></script>
+<body>
+    <div class="container">
+        <h1>橫書加密法</h1>
+        
+        <label for="keywords">要加密的關鍵字，以;號隔開：</label>
+        <textarea id="keywords" rows="2" oninput="autoResize(this)">盧秀燕;傅崐萁;侯友宜;國民黨;黃國昌;台北;臺北;新北;桃園;台中;臺中;雙北</textarea>
+        
+        <label for="lineWidth">每行幾個字：</label>
+        <input type="number" id="lineWidth" value="12" min="1">
+        
+        <label for="originalText">原文：</label>
+        <textarea id="originalText" rows="4" oninput="autoResize(this)"></textarea>
+        
+        <button onclick="encodeText()">進行加密轉換</button>
+        
+        <label for="encodedResult">加密結果：</label>
+        <textarea id="encodedResult" rows="4" readonly></textarea>
+        
+        <button onclick="copyResult()">複製加密結果</button>
+    </div>
+</body>
+</html>
